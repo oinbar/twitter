@@ -4,7 +4,7 @@
 
 <div class="inner-container">
 	<ul class="feeds-nav">
-		<li><a href="#">Add Feed</a></li>
+		<li><a href="/edit_feed">Add Feed</a></li>
 		<li><a href="#">...</a></li>
 		<li><a href="#">...</a></li>		
 	</ul>
@@ -12,10 +12,13 @@
 
 <div>
     <ul class="feeds-items">
-		<li><a href="/feed/Feed1">Feed1 <br>Feed description</br> </a></li>
-		<li><a href="/feed/Feed2">Feed2 <br>Feed description</br> </a></li>
-		<li><a href="/feed/Feed3">Feed3 <br>Feed description</br> </a></li>
 
+    	@foreach($feeds as $feed)
+    		<b>{{ $feed['name'] }}</b>
+			<li><a href="{{ url('/edit_feed/'.$feed['_id']) }}"> edit </a></li>
+			<li><a href="{{ url('/delete_feed/'.$feed['_id']) }}"> delete </a></li>
+			<li><a href="{{ url('/view_feed/'.$feed['_id']) }}"> view </a></li>
+		@endforeach
 	</ul>
 </div>
 

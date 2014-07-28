@@ -17,15 +17,25 @@ return array(
 	| choice installed on your machine before you begin development.
 	|
 	*/
+	'default' => 'mongodb',
 
 	'connections' => array(
+
+		'mongodb' => array(
+		    'driver'   => 'mongodb',
+		    'host'     => 'localhost',
+		    'port'     => 27017,
+		    'username' => 'username',
+		    'password' => 'password',
+		    'database' => 'twitterintelDB',
+		),
 
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'homestead',
-			'username'  => 'homestead',
-			'password'  => 'secret',
+			'database'  => 'test_db',
+			'username'  => 'Orr',
+			'password'  => 'password',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',

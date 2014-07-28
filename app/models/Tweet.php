@@ -5,10 +5,10 @@ use Jenssegers\Mongodb\Model as Eloquent;
 class Tweet extends Eloquent {
 
 //    protected $collection = 'mycollection';
-	protected $collection = 'tweets';
-	
-	public function user() {
-		return $this->belongsTo('User');	
+	protected $collection = 'data1';
+
+	public function feeds() {
+		return this->belongsToMany('Feed');
 	}
 }
 

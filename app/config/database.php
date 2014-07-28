@@ -50,9 +50,9 @@ return array(
 		    'driver'   => 'mongodb',
 		    'host'     => 'localhost',
 		    'port'     => 27017,
-		    'username' => 'twitterintelDB',
-		    'password' => '',
-		    'database' => 'database'
+		    'username' => 'username',
+		    'password' => 'password',
+		    'database' => 'twitterintelDB',
 		),
 
 
@@ -65,9 +65,9 @@ return array(
 		'mysql' => array(
 			'driver'    => 'mysql',
 			'host'      => 'localhost',
-			'database'  => 'forge',
-			'username'  => 'forge',
-			'password'  => '',
+			'database'  => 'test_db',
+			'username'  => 'Orr',
+			'password'  => 'password',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
