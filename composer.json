@@ -6,7 +6,9 @@
 	"require": {
 		"laravel/framework": "4.2.*",
 		"paste/pre": "dev-master",
-		"jenssegers/mongodb": "*"
+		"jenssegers/mongodb": "*",
+		"iron-io/iron_mq": "dev-master"
+
 	},
 	"autoload": {
 		"classmap": [

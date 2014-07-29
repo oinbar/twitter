@@ -11,8 +11,6 @@
 |
 */
 
-require "twitter_fetch.php";
-
 Route::get('/', function() {
 	return View::make('hello');
 });
@@ -69,64 +67,29 @@ Route::get('/delete_feed/{feed_id}', function($feed_id){
 });
 
 Route::get('/view_feed/{feed_id}', function($feed_id){	
-	$data = DB::collection('data1')->where('_id', $feed_id)->get();
+	$data = DB::collection('data1')->whereIn('feeds', array($feed_id))->get();
 
 	$statuses = array();
-	foreach ($data as $status) {
-		echo print_r($status);
-		die();
-		array_push($statuses, $status['text']);		
+	if (!empty($data)){
+		foreach ($data as $status) {
+			array_push($statuses, $status['text']);		
+		}
 	}
 
-	
-
 	return View::make('feed')
+	->with('num_records', count($data))
 	->with('statuses', $statuses)
 	->with('feed_id', $feed_id)
 	->with('start', '123')
 	->with('end', '123');
-
 });
+
 
 Route::get('/fetch/{feed_id}', function($feed_id){
-	require_once('twitter-api-php/TwitterAPIExchange.php');
-	$settings = array(
-	    'oauth_access_token' => "2492151342-mRMDlwJGaij2yZQB5CHyU2FbaymXnIcEhYnhcgC",
-	    'oauth_access_token_secret' => "sDCCPbYt39Uii76de2HcSMbcTFffby1BwxjAEheL6b4dk",
-	    'consumer_key' => "x393VwuVLnnixX6Ld7panxSp8",
-	    'consumer_secret' => "qglHdDR9gcwpyhdFSF37hPpMwXSrIchkmp9DV8TZ8iOzLNt95u"
-	);
-	// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
-	$getfield = '?q=' . DB::collection('data1')->where('_id', $feed_id)->first()['feed_criteria'];
-	$url = 'https://api.twitter.com/1.1/search/tweets.json';
-	$requestMethod = 'GET';
-	$twitter = new TwitterAPIExchange($settings);
-	$json = $twitter->setGetfield($getfield)
-	             ->buildOauth($url, $requestMethod)
-	             ->performRequest();	             
-	
-	$data = json_decode($json, true);  
-	foreach ($data['statuses'] as $status){
-		//ADD MONGOID
-		$status['_id'] = $status['id'];
-		if (DB::collection('data1')->where('_id', $feed_id)->first()) {
-			// ADD REFERENCE TO FEED
-			array_push($status['feeds'], $feed_id);	
-		} else {
-			// ADD REFERENCE TO FEED AND INSERT STATUS INTO DB
-			$status['feeds'] = array($feed_id);
-			DB::collection('data1')->insert($status);
-		} 
-	}
+	Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
+	return 'pushed to the queue';
 });
 
-Route::get('/test', function(){
-	print_r( DB::collection('data1')->where('_id', '1234567')->get());
-
-	DB::collection('data1')->where('_id', '1234567')->update(array('name' => 'name'));
-	
-	print_r( DB::collection('data1')->where('_id', '1234567')->get());
-});
 
 Route::get('/feed/{feed_id?}/{start?}/{end?}', function($feed_id = null,
 														$start= 0,
