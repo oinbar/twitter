@@ -23,8 +23,8 @@ return array(
 
 		'mongodb' => array(
 		    'driver'   => 'mongodb',
-		    'host'     => 'mongodb://$OPENSHIFT_MONGODB_DB_HOST:$OPENSHIFT_MONGODB_DB_PORT/',
-		    'port'     => '',
+		    'host'     => 'mongodb://$OPENSHIFT_MONGODB_DB_HOST',
+		    'port'     => '$OPENSHIFT_MONGODB_DB_PORT/',
 		    'username' => 'admin',
 		    'password' => 'FdCPdQ4jTl3j',
 		    'database' => 'twitter',
