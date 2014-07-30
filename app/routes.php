@@ -22,9 +22,10 @@ Route::get('/feeds', function() {
 });
 
 Route::get('/edit_feed/{feed_id?}', function($feed_id = null) {
-	if ($feed_id){		
+	if ($feed_id){	
 		$feed = DB::collection('data1')->where('_id', $feed_id)->first();		
 		return View::make('edit_feed')
+			->with('feed_id', $feed['_id'])
 			->with('name', $feed['name'])
 			->with('feed_criteria', $feed['feed_criteria'])
 			->with('update_rate', $feed['update_rate'])
@@ -32,6 +33,7 @@ Route::get('/edit_feed/{feed_id?}', function($feed_id = null) {
 	}
 	else {
 		return View::make('edit_feed')
+			->with('feed_id', '')
 			->with('name', '')
 			->with('feed_criteria', '')
 			->with('update_rate', '')
@@ -41,9 +43,8 @@ Route::get('/edit_feed/{feed_id?}', function($feed_id = null) {
 
 Route::post('/edit_feed', function(){
 	$feed = array(
-		'_id' => Input::get('name'),
-		'type' => 'feed',
 		'name' => Input::get('name'),
+		'type' => 'feed',
 		'update_rate' => Input::get('update_rate'),
 		'feed_criteria' => Input::get('feed_criteria')
 	);
@@ -51,13 +52,13 @@ Route::post('/edit_feed', function(){
 	return Redirect::to('feeds');
 });
 
-Route::put('/edit_feed', function(){
+Route::put('/edit_feed/{feed_id}', function($feed_id){
 	$feed = array(
 		'name' => Input::get('name'),
 		'update_rate' => Input::get('update_rate'),
 		'feed_criteria' => Input::get('feed_criteria')
 	);
-	DB::collection('data1')->update($feed);
+	DB::collection('data1')->where('_id', $feed_id)->update($feed);
 	return Redirect::to('feeds');
 });
 
@@ -67,17 +68,21 @@ Route::get('/delete_feed/{feed_id}', function($feed_id){
 });
 
 Route::get('/view_feed/{feed_id}', function($feed_id){	
-	$data = DB::collection('data1')->whereIn('feeds', array($feed_id))->get();
+	$data = DB::collection('data1')->whereIn('feeds', array($feed_id))->take(5)->get();
+    $count = DB::collection('data1')->whereIn('feeds', array($feed_id))->count();
 
 	$statuses = array();
 	if (!empty($data)){
 		foreach ($data as $status) {
-			array_push($statuses, $status['text']);		
+			array_push($statuses, $status['created_at'] . ' - ' . 
+								  $status['user']['name'] . ' - ' . 
+					   			  $status['user']['location'] . ' - ' .
+ 					   			  $status['text']);		
 		}
 	}
 
 	return View::make('feed')
-	->with('num_records', count($data))
+	->with('num_records', $count)
 	->with('statuses', $statuses)
 	->with('feed_id', $feed_id)
 	->with('start', '123')
@@ -85,11 +90,10 @@ Route::get('/view_feed/{feed_id}', function($feed_id){
 });
 
 
-Route::get('/fetch/{feed_id}', function($feed_id){
+ Route::get('/fetch/{feed_id}', function($feed_id){
 	Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
 	return 'pushed to the queue';
 });
-
 
 Route::get('/feed/{feed_id?}/{start?}/{end?}', function($feed_id = null,
 														$start= 0,
@@ -100,64 +104,7 @@ Route::get('/feed/{feed_id?}/{start?}/{end?}', function($feed_id = null,
 	->with('end', $end);
 });
 
-Route::get('/twitter_test', function() {
-	require_once('twitter-api-php/TwitterAPIExchange.php');
-	$settings = array(
-	    'oauth_access_token' => "2492151342-mRMDlwJGaij2yZQB5CHyU2FbaymXnIcEhYnhcgC",
-	    'oauth_access_token_secret' => "sDCCPbYt39Uii76de2HcSMbcTFffby1BwxjAEheL6b4dk",
-	    'consumer_key' => "x393VwuVLnnixX6Ld7panxSp8",
-	    'consumer_secret' => "qglHdDR9gcwpyhdFSF37hPpMwXSrIchkmp9DV8TZ8iOzLNt95u"
-	);
-	
-	$url = 'https://api.twitter.com/1.1/search/tweets.json';
-	$getfield = '?q=israel';
-	$requestMethod = 'GET';
-	$twitter = new TwitterAPIExchange($settings);
-	$json = $twitter->setGetfield($getfield)
-	             ->buildOauth($url, $requestMethod)
-	             ->performRequest();	             
-	  
-	
-	$data = json_decode($json, true);
-	$i = 0;
-	foreach ($data['statuses'] as $status){
-		$statuses[$i] = $status['text'];
-		$i++;
-	}
-	
-	
-	return View::make('feed')
-	->with('statuses', $statuses)
-	->with('feed_id', '123')
-	->with('start', '123')
-	->with('end', '123');
-});
 
-Route::get('/twitter_test2', function(){
-	// LOAD TWEETS INTO DB
-	require_once('twitter-api-php/TwitterAPIExchange.php');
-	$settings = array(
-	    'oauth_access_token' => "2492151342-mRMDlwJGaij2yZQB5CHyU2FbaymXnIcEhYnhcgC",
-	    'oauth_access_token_secret' => "sDCCPbYt39Uii76de2HcSMbcTFffby1BwxjAEheL6b4dk",
-	    'consumer_key' => "x393VwuVLnnixX6Ld7panxSp8",
-	    'consumer_secret' => "qglHdDR9gcwpyhdFSF37hPpMwXSrIchkmp9DV8TZ8iOzLNt95u"
-	);
-	
-	$url = 'https://api.twitter.com/1.1/search/tweets.json';
-	$getfield = '?q=israel';
-	$requestMethod = 'GET';
-	$twitter = new TwitterAPIExchange($settings);
-	$json = $twitter->setGetfield($getfield)
-	             ->buildOauth($url, $requestMethod)
-	             ->performRequest();
-
-	$data = json_decode($json, true);
-	$i = 0;
-	foreach ($data['statuses'] as $status){
-		DB::collection('data1')->insert($status);
-		$i++;
-	}
-});
 
 Route::get('/debug', function() {
 
@@ -207,6 +154,11 @@ Route::get('/debug', function() {
     }
 
     echo '</pre>';
+
+});
+
+Route::get('/test', function(){
+
 
 });
 

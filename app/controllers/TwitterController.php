@@ -17,8 +17,6 @@ class TwitterController extends BaseController {
 
 	public function send_search_query($feed_id) {
 
-		$feed_id = 'israel_feed';
-
 		require_once __DIR__.'/../twitter-api-php/TwitterAPIExchange.php';
 		$settings = array(
 		    'oauth_access_token' => "2492151342-mRMDlwJGaij2yZQB5CHyU2FbaymXnIcEhYnhcgC",
@@ -27,7 +25,8 @@ class TwitterController extends BaseController {
 		    'consumer_secret' => "qglHdDR9gcwpyhdFSF37hPpMwXSrIchkmp9DV8TZ8iOzLNt95u"
 		);
 		// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
-		$getfield = '?q=' . DB::collection('data1')->where('_id', $feed_id)->first()['feed_criteria'];
+		$getfield = '?count=100&q=' . urlencode(DB::collection('data1')->where('_id', $feed_id)->first()['feed_criteria']);
+
 		$url = 'https://api.twitter.com/1.1/search/tweets.json';
 		$requestMethod = 'GET';
 		$twitter = new TwitterAPIExchange($settings);
@@ -53,7 +52,5 @@ class TwitterController extends BaseController {
 				DB::collection('data1')->insert($status);			
 			} 
 		}
-		//return Redirect::to('/view_feed/'.$feed_id);
 	}
-
 }

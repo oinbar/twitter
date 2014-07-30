@@ -10,7 +10,7 @@
 	@endif
 </h2>
 	
-{{ Form::open(array('url'=> '/edit_feed', 
+{{ Form::open(array('url'=> '/edit_feed/' . $feed_id, 
 					'method'=>$method, 
 					'accept-charset' => 'ISO-8859-1')) }}
 {{ Form::label('name', 'Feed Name: ') }} <br>					
