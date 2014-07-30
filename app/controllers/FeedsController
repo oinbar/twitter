@@ -15,7 +15,9 @@ class FeedsController extends BaseController {
 	|
 	*/
 
-	public function send_search_query($feed_id) {
+	public function ($feed_id) {
+
+
 
 	}
 }
