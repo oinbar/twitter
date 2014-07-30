@@ -1,5 +1,5 @@
 /bootstrap/compiled.php
-
+/venndor
 composer.phar
 composer.lock
 .env.*.php
