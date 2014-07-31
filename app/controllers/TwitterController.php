@@ -16,7 +16,6 @@ class TwitterController extends BaseController {
 	*/
 
 	public function send_search_query($feed_id) {
-
 		require_once __DIR__.'/../twitter-api-php/TwitterAPIExchange.php';
 		$settings = array(
 		    'oauth_access_token' => "2492151342-mRMDlwJGaij2yZQB5CHyU2FbaymXnIcEhYnhcgC",
@@ -40,11 +39,12 @@ class TwitterController extends BaseController {
 		foreach ($data['statuses'] as $status){		
 			//ADD MONGOID
 			$status['_id'] = $status['id'];
-			$db_record = DB::collection('data1')->where('_id', $status['_id'])->first();	
+			$db_record = DB::collection('data1')->where('_id', $status['_id'])->first();
 			if ($db_record) {
 				// ADD REFERENCE TO FEED AND UPDATE RECORD
 				array_push($db_record['feeds'], $feed_id);
 				$db_record['feeds'] = array_unique($db_record['feeds']);
+				$db_record = unset($db_record['_id']); // remove _id so mongo does not try to update id
 				DB::collection('data1')->where('_id', $status['_id'])->update($db_record);
 			} else {						
 				// ADD REFERENCE TO FEED AND INSERT RECORD INTO DB
@@ -53,4 +53,3 @@ class TwitterController extends BaseController {
 			} 
 		}
 	}
-}
