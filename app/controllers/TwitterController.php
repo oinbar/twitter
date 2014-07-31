@@ -44,7 +44,7 @@ class TwitterController extends BaseController {
 				// ADD REFERENCE TO FEED AND UPDATE RECORD
 				array_push($db_record['feeds'], $feed_id);
 				$db_record['feeds'] = array_unique($db_record['feeds']);
-				$db_record = unset($db_record['_id']); // remove _id so mongo does not try to update id
+				unset($db_record['_id']); // remove _id so mongo does not try to update
 				DB::collection('data1')->where('_id', $status['_id'])->update($db_record);
 			} else {						
 				// ADD REFERENCE TO FEED AND INSERT RECORD INTO DB
