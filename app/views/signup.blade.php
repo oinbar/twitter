@@ -7,7 +7,7 @@
 {{ Form::open(array('url' => '/signup')) }}
 
     Username:<br>
-    {{ Form::username('username') }}<br><br>
+    {{ Form::text('username') }}<br><br>
 
     Password:<br>
     {{ Form::password('password') }}<br><br>

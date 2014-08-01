@@ -8,6 +8,6 @@ class QueueTasks {
 		$t = new TwitterController();
 		$t->send_search_query($data['feed_id']);
 
-		$job->release(5);
+		$job->release(10);
 	}
 }

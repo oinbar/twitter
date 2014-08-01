@@ -32,10 +32,14 @@ Route::get('/fetch/{feed_id}', 'FeedController@getFetch');
 Route::get('/feed/{feed_id?}/{start?}/{end?}', function($feed_id = null,
 														$start= 0,
 														$end = 100) {
-	return View::make('feed')	
+	return View::make('feed')		
 	->with('feed_id', $feed_id)
 	->with('start', $start)
 	->with('end', $end);
+});
+
+Route::get('/signup', function() {
+	return View::make('signup');
 });
 
 Route::get('/debug', 'AdminController@debug');
