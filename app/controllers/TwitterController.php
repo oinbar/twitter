@@ -16,7 +16,9 @@ class TwitterController extends BaseController {
 	*/
 
 	public function send_search_query($feed_id) {
-		require_once __DIR__.'/../twitter-api-php/TwitterAPIExchange.php';
+		
+		include __DIR__.'/../twitter-api-php/TwitterAPIExchange.php';
+
 		$settings = array(
 		    'oauth_access_token' => "2492151342-mRMDlwJGaij2yZQB5CHyU2FbaymXnIcEhYnhcgC",
 		    'oauth_access_token_secret' => "sDCCPbYt39Uii76de2HcSMbcTFffby1BwxjAEheL6b4dk",
@@ -24,7 +26,8 @@ class TwitterController extends BaseController {
 		    'consumer_secret' => "qglHdDR9gcwpyhdFSF37hPpMwXSrIchkmp9DV8TZ8iOzLNt95u"
 		);
 		// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
-		$getfield = '?count=100&q=' . urlencode(DB::collection('data1')->where('_id', $feed_id)->first()['feed_criteria']);
+		$getfield = '?count=100&q=' . urlencode(DB::connection('mongodb')
+										->collection('data1')->where('_id', $feed_id)->first()['feed_criteria']);
 
 		$url = 'https://api.twitter.com/1.1/search/tweets.json';
 		$requestMethod = 'GET';
@@ -39,17 +42,17 @@ class TwitterController extends BaseController {
 		foreach ($data['statuses'] as $status){		
 			//ADD MONGOID
 			$status['_id'] = $status['id'];
-			$db_record = DB::collection('data1')->where('_id', $status['_id'])->first();
+			$db_record = DB::connection('mongodb')->collection('data1')->where('_id', $status['_id'])->first();
 			if ($db_record) {
 				// ADD REFERENCE TO FEED AND UPDATE RECORD
 				array_push($db_record['feeds'], $feed_id);
 				$db_record['feeds'] = array_unique($db_record['feeds']);
 				unset($db_record['_id']); // remove _id so it does not try to update mongo id
-				DB::collection('data1')->where('_id', $status['_id'])->update($db_record);
+				DB::connection('mongodb')->collection('data1')->where('_id', $status['_id'])->update($db_record);
 			} else {						
 				// ADD REFERENCE TO FEED AND INSERT RECORD INTO DB
 				$status['feeds'] = array($feed_id);			
-				DB::collection('data1')->insert($status);			
+				DB::connection('mongodb')->collection('data1')->insert($status);			
 			} 
 		}
 	}
