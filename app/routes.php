@@ -19,15 +19,15 @@ Route::get('/feeds/', 'FeedController@getFeeds');
 
 Route::get('/edit_feed/{feed_id?}', array('before' => 'has_feed', 'uses' => 'FeedController@getEditFeed'));
 
-Route::post('/edit_feed', array('before' => 'csrf', 'uses' => 'FeedController@postEditFeed'));
+Route::post('/edit_feed', array('before' => 'csrf', 'before' => 'has_feed', 'uses' => 'FeedController@postEditFeed'));
 
-Route::put('/edit_feed/{feed_id}', 'FeedController@putEditFeed');
+Route::put('/edit_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@putEditFeed'));
 
-Route::get('/delete_feed/{feed_id}', 'FeedController@getDeleteFeed');
+Route::get('/delete_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@getDeleteFeed'));
 
-Route::get('/view_feed/{feed_id}', 'FeedController@getViewFeed');
+Route::get('/view_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@getViewFeed'));
 
-Route::get('/fetch/{feed_id}', 'FeedController@getFetch');
+Route::get('/fetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@getFetch'));
 
 Route::get('/feed/{feed_id?}/{start?}/{end?}', function($feed_id = null,
 														$start= 0,
