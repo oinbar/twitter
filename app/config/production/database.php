@@ -32,7 +32,8 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'mysql://admin1a7i5Kc:Jicpux7H78w2@127.10.55.3:3306/',
+			'host'      => 'mysql://admin1a7i5Kc:Jicpux7H78w2@127.10.55.3',
+			'port'		=> 3306,
 			'database'  => 'twitter',
 			'username'  => 'admin1a7i5Kc',
 			'password'  => 'Jicpux7H78w2',
