@@ -12,7 +12,7 @@ class CreateFeedsTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('feeds', function($table){			
+		Schema::connection('mysql')->create('feeds', function(Blueprint $table){			
 			$table->integer('id')->unsigned();
 			$table->string('criteria', 1000);			
 			$table->string('update_rate');
@@ -29,7 +29,7 @@ class CreateFeedsTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('feeds');
+		Schema::connection('mysql')->drop('feeds');
 	}
 
 }

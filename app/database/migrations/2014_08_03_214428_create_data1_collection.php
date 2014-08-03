@@ -12,7 +12,7 @@ class CreateData1Collection extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('data1', function($collection) {});
+		Schema::connection('mongodb')->create('data1', function(Blueprint $collection) {});
 	}
 
 	/**
@@ -22,7 +22,7 @@ class CreateData1Collection extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('data1');
+		Schema::connection('mongodb')->drop('data1');
 	}
 
 }

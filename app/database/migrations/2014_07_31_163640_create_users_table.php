@@ -13,7 +13,7 @@ class CreateUsersTable extends Migration {
 	 */
 	public function up()
 	{
-		Schema::create('users', function($table){
+		Schema::connection('mysql')->create('users', function(Blueprint $table){
 			$table->increments('id');
 			$table->rememberToken();
 			$table->string('username')->unique();						
@@ -32,7 +32,7 @@ class CreateUsersTable extends Migration {
 	 */
 	public function down()
 	{
-		Schema::drop('users');
+		Schema::connection('mysql')->drop('users');
 	}
 
 }

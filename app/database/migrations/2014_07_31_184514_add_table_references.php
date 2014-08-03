@@ -12,11 +12,11 @@ class AddTableReferences extends Migration {
 	 */
 	public function up()
 	{
-		Schema::table('users_feeds', function($table){
+		Schema::connection('mysql')->table('users_feeds', function(Blueprint $table){
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 		});
 
-		Schema::table('feeds', function($table){
+		Schema::connection('mysql')->table('feeds', function(Blueprint $table){
 			$table->foreign('id')->references('feed_id')->on('users_feeds')->onDelete('cascade');
 		});
 	}
@@ -28,11 +28,11 @@ class AddTableReferences extends Migration {
 	 */
 	public function down()
 	{
-		Schema::table('users_feeds', function($table){
+		Schema::connection('mysql')->table('users_feeds', function(Blueprint $table){
 			$table->dropForeign('users_feeds_user_id_foreign');
 		});
 
-		Schema::table('feeds', function($table){
+		Schema::connection('mysql')->table('feeds', function(Blueprint $table){
 			$table->dropForeign('feeds_id_foreign');
 		});
 	}
