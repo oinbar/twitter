@@ -19,7 +19,7 @@ class UserController extends BaseController {
     			->withErrors($validator);
 
     	} else {
-	    	$user = new user;
+	    	$user = new User;
 	    	$user->username = Input::get('username');
 	    	$user->password = Hash::make(Input::get('password'));
 	    	$user->email = Input::get('email');
