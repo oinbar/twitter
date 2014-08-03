@@ -32,26 +32,14 @@ return array(
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'test_db',
-			'username'  => 'Orr',
-			'password'  => 'password',
+			'host'      => 'mysql://admin1a7i5Kc:Jicpux7H78w2@127.10.55.3:3306/',
+			'database'  => 'twitter',
+			'username'  => 'admin1a7i5Kc',
+			'password'  => 'Jicpux7H78w2',
 			'charset'   => 'utf8',
 			'collation' => 'utf8_unicode_ci',
 			'prefix'    => '',
 		),
-
-		'pgsql' => array(
-			'driver'   => 'pgsql',
-			'host'     => 'localhost',
-			'database' => 'homestead',
-			'username' => 'homestead',
-			'password' => 'secret',
-			'charset'  => 'utf8',
-			'prefix'   => '',
-			'schema'   => 'public',
-		),
-
 	),
 
 );
