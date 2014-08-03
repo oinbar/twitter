@@ -23,19 +23,20 @@ return array(
 
 		'mongodb' => array(
 		    'driver'   => 'mongodb',
-		    'host'     => 'mongodb://admin:FdCPdQ4jTl3j@127.10.55.2',
-		    'port'     => 27017,
+		    'host'     => '127.3.231.3',
+		    'port'     => '27017',
 		    'username' => 'admin',
-		    'password' => 'FdCPdQ4jTl3j',
-		    'database' => 'twitter',
+		    'password' => 'irDcWgiibvx7',
+		    'database' => 'twitterintel',
 		),
 
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => '127.10.55.3',
-			'database'  => 'twitter',
-			'username'  => 'admin1a7i5Kc',
-			'password'  => 'Jicpux7H78w2',
+			'host'      => '127.3.231.2',
+			'port'		=> '3306',
+			'database'  => 'twitterintel',
+			'username'  => 'admin4nSCiYX',
+			'password'  => '4NeDJtqkssj3',
 		),
 	),
 

@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'AddTableReferences' => $baseDir . '/app/database/migrations/2014_07_31_184514_add_table_references.php',
+    'AdminController' => $baseDir . '/app/controllers/AdminController.php',
     'BaseController' => $baseDir . '/app/controllers/BaseController.php',
     'Boris\\Boris' => $vendorDir . '/d11wtq/boris/lib/Boris/Boris.php',
     'Boris\\CLIOptionsHandler' => $vendorDir . '/d11wtq/boris/lib/Boris/CLIOptionsHandler.php',
@@ -29,6 +30,7 @@ return array(
     'ClassPreloader\\Parser\\DirVisitor' => $vendorDir . '/classpreloader/classpreloader/src/ClassPreloader/Parser/DirVisitor.php',
     'ClassPreloader\\Parser\\FileVisitor' => $vendorDir . '/classpreloader/classpreloader/src/ClassPreloader/Parser/FileVisitor.php',
     'ClassPreloader\\Parser\\NodeTraverser' => $vendorDir . '/classpreloader/classpreloader/src/ClassPreloader/Parser/NodeTraverser.php',
+    'CreateData1Collection' => $baseDir . '/app/database/migrations/2014_08_03_214428_create_data1_collection.php',
     'CreateFeedsTable' => $baseDir . '/app/database/migrations/2014_07_31_182610_create_feeds_table.php',
     'CreateUsersFeedsTable' => $baseDir . '/app/database/migrations/2014_07_31_173354_create_users_feeds_table.php',
     'CreateUsersTable' => $baseDir . '/app/database/migrations/2014_07_31_163640_create_users_table.php',
@@ -45,6 +47,7 @@ return array(
     'Crypt_Twofish' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/Twofish.php',
     'DatabaseSeeder' => $baseDir . '/app/database/seeds/DatabaseSeeder.php',
     'Feed' => $baseDir . '/app/models/Feed.php',
+    'FeedController' => $baseDir . '/app/controllers/FeedController.php',
     'File_ANSI' => $vendorDir . '/phpseclib/phpseclib/phpseclib/File/ANSI.php',
     'File_ASN1' => $vendorDir . '/phpseclib/phpseclib/phpseclib/File/ASN1.php',
     'File_ASN1_Element' => $vendorDir . '/phpseclib/phpseclib/phpseclib/File/ASN1.php',
@@ -1633,6 +1636,7 @@ return array(
     'Tweet' => $baseDir . '/app/models/Tweet.php',
     'TwitterController' => $baseDir . '/app/controllers/TwitterController.php',
     'User' => $baseDir . '/app/models/User.php',
+    'UserController' => $baseDir . '/app/controllers/UserController.php',
     'Whoops\\Exception\\ErrorException' => $vendorDir . '/filp/whoops/src/Whoops/Exception/ErrorException.php',
     'Whoops\\Exception\\Formatter' => $vendorDir . '/filp/whoops/src/Whoops/Exception/Formatter.php',
     'Whoops\\Exception\\Frame' => $vendorDir . '/filp/whoops/src/Whoops/Exception/Frame.php',
