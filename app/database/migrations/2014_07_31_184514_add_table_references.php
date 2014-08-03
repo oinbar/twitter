@@ -17,7 +17,7 @@ class AddTableReferences extends Migration {
 		});
 
 		Schema::table('feeds', function($table){
-			$table->foreign('feed_id')->references('feed_id')->on('users_feeds')->onDelete('cascade');
+			$table->foreign('id')->references('feed_id')->on('users_feeds')->onDelete('cascade');
 		});
 	}
 
@@ -33,7 +33,7 @@ class AddTableReferences extends Migration {
 		});
 
 		Schema::table('feeds', function($table){
-			$table->dropForeign('feeds_feed_id_foreign');
+			$table->dropForeign('feeds_id_foreign');
 		});
 	}
 }

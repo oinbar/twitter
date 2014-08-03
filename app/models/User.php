@@ -1,6 +1,4 @@
 <?php
-use Jenssegers\Mongodb\Model as Eloquent;
-
 
 use Illuminate\Auth\UserTrait;
 use Illuminate\Auth\UserInterface;
@@ -16,7 +14,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 *
 	 * @var string
 	 */
-	protected $collection = 'data1';
+	protected $table = 'users';
 
 	/**
 	 * The attributes excluded from the model's JSON form.
@@ -25,16 +23,7 @@ class User extends Eloquent implements UserInterface, RemindableInterface {
 	 */
 	protected $hidden = array('password', 'remember_token');
 
-	public function getAuthIdentifier() {
-       return $this->getKey();
-     }
-    
-    public function getAuthPassword() {
-       return $this->password;
-     }
-	//relationship method
-	public function feeds() {
-		return this->hasMany('Feed')
+	public function feed() {
+		return $this->hasMany('Feed');
 	}
-
 }

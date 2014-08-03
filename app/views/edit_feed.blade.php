@@ -16,13 +16,17 @@
 {{ Form::label('name', 'Feed Name: ') }} <br>					
 {{ Form::text('name', $name) }} <br><br>
 
-{{ Form::label('feed_criteria', 'Feed Criteria: ') }} <br>					
-{{ Form::textarea('feed_criteria', $feed_criteria) }} <br><br>
+{{ Form::label('criteria', 'criteria: ') }} <br>					
+{{ Form::textarea('criteria', $criteria) }} <br><br>
 
 {{ Form::label('update_rate', 'Update Rate: ')}}<br>
 {{ Form::select('update_rate', array('hourly'=>'hourly', 
 									 'daily'=>'daily', 
 									 'weekly'=>'weekly'), $update_rate); }}<br><br>
+
+{{ Form::label('status', 'Status: ')}}<br>									 
+{{ Form::select('status', array('on'=>'on', 
+								'off'=>'off'), $status); }}<br><br>
 
 {{form::submit('Submit')}}
 

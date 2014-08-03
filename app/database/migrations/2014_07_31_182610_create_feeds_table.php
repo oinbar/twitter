@@ -13,12 +13,12 @@ class CreateFeedsTable extends Migration {
 	public function up()
 	{
 		Schema::create('feeds', function($table){			
-			$table->integer('feed_id')->unsigned();
-			$table->string('criteria');
-			$table->integer('version');
+			$table->integer('id')->unsigned();
+			$table->string('criteria', 1000);			
+			$table->string('update_rate');
 			$table->timestamp('created_at');
-			$table->primary(array('feed_id', 'version'));
-			$table->index('feed_id');
+			$table->primary(array('id', 'created_at'));
+			$table->index('id');
 		});
 	}
 

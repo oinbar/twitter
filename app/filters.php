@@ -88,3 +88,17 @@ Route::filter('csrf', function()
 		throw new Illuminate\Session\TokenMismatchException;
 	}
 });
+
+Route::filter('has_feed', function($route) {
+
+	$feed_id = $route->getParameter('feed_id');
+	if ($feed_id){
+		$exists = DB::connection('mysql')->table('users_feeds')
+			->where('user_id', Auth::user()->id)
+			->where('feed_id', $feed_id)->first();
+		
+		if (! $exists) {
+			throw new Exception('you do not have access to that feed');
+		}
+	}
+});

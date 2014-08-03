@@ -24,15 +24,19 @@ body {
 	float: left;	
 }
 
-.nav li a {
+.nav-right li {
+	margin-right: 50px;
+	float: right;		
+}
+
+.header-nav-a {
 	color: black;
 	font-weight: ;
 	text-decoration: none;
 }
 
 .feeds-nav {
-	list-style-type: none;
-	
+	list-style-type: none;	
 }
 
 .feeds-nav li {

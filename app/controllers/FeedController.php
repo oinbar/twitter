@@ -2,9 +2,17 @@
 
 class FeedController extends BaseController {
 
-	public function getFeeds (){
+	// public function getFeeds (){
 
-		$feeds = DB::connection('mongodb')->collection('data1')->where('type', 'feed')->get();
+	// 	$feeds = DB::connection('mongodb')->collection('data1')->where('type', 'feed')->get();
+	// 	return View::make('feeds')
+	// 		->with('feeds', $feeds);
+	// }
+
+	public function getFeeds () {
+		$feeds = DB::connection('mysql')->table('users_feeds')->where('user_id', Auth::user()->id)
+			->select('feed_id','feed_name')->get();
+
 		return View::make('feeds')
 			->with('feeds', $feeds);
 	}
@@ -12,44 +20,54 @@ class FeedController extends BaseController {
 	public function getEditFeed ($feed_id = null) {
 
 		if ($feed_id){	
-			$feed = DB::connection('mongodb')->collection('data1')->where('_id', $feed_id)->first();		
+			$feed1 = DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->first();		
+			$feed2 = DB::connection('mysql')->table('feeds')
+				->where('id', $feed_id)
+				->orderBy('created_at', 'desc')->first();
+
 			return View::make('edit_feed')
-				->with('feed_id', $feed['_id'])
-				->with('name', $feed['name'])
-				->with('feed_criteria', $feed['feed_criteria'])
-				->with('update_rate', $feed['update_rate'])
+				->with('feed_id', $feed1->feed_id)
+				->with('name', $feed1->feed_name)
+				->with('status', $feed1->feed_status)
+				->with('criteria', $feed2->criteria)
+				->with('update_rate', $feed2->update_rate)				
 				->with('method', 'put');				
 		}
 		else {
 			return View::make('edit_feed')
 				->with('feed_id', '')
 				->with('name', '')
-				->with('feed_criteria', '')
+				->with('status', '')
+				->with('criteria', '')
 				->with('update_rate', '')
 				->with('method', 'post');		
-		}	
+		}				
 	}
 
 	public function postEditFeed () {
-		$feed = array(
-			'name' => Input::get('name'),
-			'type' => 'feed',
-			'update_rate' => Input::get('update_rate'),
-			'feed_criteria' => Input::get('feed_criteria')
-		);
-		DB::connection('mongodb')->collection('data1')->insert($feed);
+		$id = DB::connection('mysql')->table('users_feeds')->insertGetId(array(
+			'user_id' => Auth::user()->id,
+			'feed_name' => Input::get('name'),
+			'feed_status' => 'on'));
+		DB::connection('mysql')->table('feeds')->insert(array(
+			'id' => $id,
+			'criteria' => Input::get('criteria'),
+			'created_at' => new DateTime));
 		return Redirect::to('feeds');
 	}
 
 	public function putEditFeed ($feed_id) {
-		$feed = array(
-			'name' => Input::get('name'),
+		DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array(
+			'feed_name' => Input::get('name'),
+			'feed_status' => Input::get('status')
+		));
+		DB::connection('mysql')->table('feeds')->where('id', $feed_id)->insert(array(
+			'id' => $feed_id,
 			'update_rate' => Input::get('update_rate'),
-			'feed_criteria' => Input::get('feed_criteria')
-		);
-		DB::connection('mongodb')->collection('data1')->where('_id', $feed_id)->update($feed);
+			'criteria' => Input::get('criteria'),
+			'created_at' => new DateTime
+		));
 		return Redirect::to('feeds');
-
 	}
 
 	public function getDeleteFeed ($feed_id) {

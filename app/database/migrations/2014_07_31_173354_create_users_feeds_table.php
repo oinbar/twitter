@@ -16,7 +16,9 @@ class CreateUsersFeedsTable extends Migration {
 			$table->increments('feed_id');
 			$table->integer('user_id')->unsigned();			
 			$table->string('feed_name');
-			$table->string('feed_status');			
+			$table->string('feed_status');
+			$table->index('feed_id');
+			$table->index('user_id');	
 		});
 	}
 

@@ -12,14 +12,14 @@
 */
 
 Route::get('/', function() {
-	return View::make('hello');
+	return View::make('master');
 });
 
-Route::get('/feeds', 'FeedController@getFeeds'); 
+Route::get('/feeds/', 'FeedController@getFeeds'); 
 
-Route::get('/edit_feed/{feed_id?}', 'FeedController@getEditFeed');
+Route::get('/edit_feed/{feed_id?}', array('before' => 'has_feed', 'uses' => 'FeedController@getEditFeed'));
 
-Route::post('/edit_feed', 'FeedController@postEditFeed');
+Route::post('/edit_feed', array('before' => 'csrf', 'uses' => 'FeedController@postEditFeed'));
 
 Route::put('/edit_feed/{feed_id}', 'FeedController@putEditFeed');
 
@@ -38,12 +38,23 @@ Route::get('/feed/{feed_id?}/{start?}/{end?}', function($feed_id = null,
 	->with('end', $end);
 });
 
-Route::get('/signup', function() {
-	return View::make('signup');
-});
+Route::get('/signup', array('before' => 'guest', 'uses' => 'UserController@getSignup'));
+
+Route::post('/signup', array('before' => 'csrf', 'uses' => 'UserController@postSignup'));
+
+Route::get('/login', array('before' => 'guest', 'uses' => 'UserController@getLogin'));
+
+Route::post('/login', array('before' => 'csrf', 'uses' => 'UserController@postLogin'));
+
+Route::get('/logout', array('before' => 'auth', 'uses' => 'UserController@getLogout'));
 
 Route::get('/debug', 'AdminController@debug');
 
 Route::get('/test', 'AdminController@test');
 
-?>
+Route::get('/startqueue', function(){
+	Artisan::call('queue:listen');
+	return Redirect::to('/');
+
+});
+

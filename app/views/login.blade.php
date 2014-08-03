@@ -2,13 +2,20 @@
 
 @section('main-content')
 
-<h1>Sign up</h1>
+<h1>Login</h1>
+
+
+@if (Session::get('flash_message'))
+	{{ Session::get('flash_message') }}
+@endif
 
 @foreach($errors->all() as $message) 
 	<div class='error'>{{ $message }}</div>
-@endforeach <br>
+@endforeach 
 
-{{ Form::open(array('url' => '/signup')) }}
+<br><br>
+
+{{ Form::open(array('url' => '/login')) }}
 
     Username:<br>
     {{ Form::text('username') }}<br><br>
@@ -16,11 +23,9 @@
     Password:<br>
     {{ Form::password('password') }}<br><br>
 
-    Email<br>
-    {{ Form::text('email') }}<br><br>
-
     {{ Form::submit('Submit') }}
 
 {{ Form::close() }}
+
 
 @stop
