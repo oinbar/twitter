@@ -26,6 +26,7 @@ class TwitterController extends BaseController {
 		    'consumer_secret' => "qglHdDR9gcwpyhdFSF37hPpMwXSrIchkmp9DV8TZ8iOzLNt95u"
 		);
 		// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
+
 		$getfield = '?count=100&q=' . urlencode(DB::connection('mysql')
 										->table('feeds')->where('id', $feed_id)->orderBy('created_at', 'desc')
 										->first()->criteria);

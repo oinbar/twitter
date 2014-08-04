@@ -27,8 +27,6 @@ Route::get('/delete_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'Fe
 
 Route::get('/view_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@getViewFeed'));
 
-Route::get('/fetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@getFetch'));
-
 Route::get('/feed/{feed_id?}/{start?}/{end?}', function($feed_id = null,
 														$start= 0,
 														$end = 100) {
@@ -48,13 +46,11 @@ Route::post('/login', array('before' => 'csrf', 'uses' => 'UserController@postLo
 
 Route::get('/logout', array('before' => 'auth', 'uses' => 'UserController@getLogout'));
 
+Route::get('/fetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'AdminController@pushFeedToQueue'));
+
 Route::get('/debug', 'AdminController@debug');
 
 Route::get('/test', 'AdminController@test');
 
-Route::get('/startqueue', function(){
-	Artisan::call('queue:listen');
-	return Redirect::to('/');
-
-});
+Route::get('/startqueue', 'AdminController@check_start_queue_listener');
 

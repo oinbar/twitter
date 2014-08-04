@@ -65,13 +65,38 @@ class AdminController extends BaseController {
 	    echo '</pre>';
 	}
 
+	public function check_start_queue_listener () {
+
+		function runCommand () {
+		    $command = 'php artisan queue:listen > /dev/null & echo $!';
+		    $number = exec($command);
+		    file_put_contents(__DIR__ . '/queue.pid', $number);
+		}
+
+		if (file_exists(__DIR__ . '/queue.pid')) {
+    		$pid = file_get_contents(__DIR__ . '/queue.pid');
+    		$result = exec('ps | grep ' . $pid);
+	    	if ($result == '') {
+	        	runCommand();
+	        }
+		} else {
+	    	runCommand();
+		}
+		return 'listening on queue';
+	}
+
+	public function pushFeedToQueue ($feed_id) {
+		Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
+		return 'pushed to the queue';
+
+	}
+
 	public function test() {
-		// try{
-			echo "Environment: ".App::environment();
-		    $foo = new Foobar;		    		    
-		// } catch (Exception $e) { 
-		// 	error_log('test error!!!', 3, __DIR__.'/../storage/logs/laravel.log'); 
-		// 	return Redirect::to('/signup');
-		// }
+	    $feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', '1')->first()->feed_status;
+	    echo $feed_status;
+
+	    $command = 'php artisan queue:listen > /dev/null & echo $!';
+	    $number = exec($command);
+	    file_put_contents(__DIR__ . '/queue.pid', $number);
 	}
 }

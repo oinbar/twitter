@@ -97,10 +97,4 @@ class FeedController extends BaseController {
 		->with('start', '123')
 		->with('end', '123');
 	}
-
-	public function getFetch ($feed_id) {
-		Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
-		return 'pushed to the queue';
-
-	}
 }
