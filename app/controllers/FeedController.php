@@ -54,7 +54,7 @@ class FeedController extends BaseController {
 			'update_rate' => Input::get('update_rate'),
 			'criteria' => Input::get('criteria'),
 			'created_at' => new DateTime));
-		return Redirect::to('feeds');
+		return Redirect::to('/feeds');
 	}
 
 	public function putEditFeed ($feed_id) {
