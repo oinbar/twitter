@@ -8,7 +8,6 @@ class UserController extends BaseController {
     }
 
     public function postSignup () {
-
     	$rules = array('username' => 'unique:users,username',
     				   'email' => 'unique:users,email');
     	$validator = Validator::make(Input::all(), $rules);
@@ -31,7 +30,7 @@ class UserController extends BaseController {
 	    	}	
 	    	Auth::login($user);
 	    	return Redirect::to('/feeds');
-    	}
+	   } 
     }	
 
     public function getLogin () {
