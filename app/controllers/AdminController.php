@@ -92,7 +92,10 @@ class AdminController extends BaseController {
 
 	public function test() {
 		Queue::push(function(){
-			echo 'test!';
+			$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
+			$t = new TwitterController();
+			$t->send_search_query($data['feed_id']);
+			$job->delete();
 		});
 	}
 }
