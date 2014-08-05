@@ -106,7 +106,13 @@ class AdminController extends BaseController {
 
 	public function test() {
 		exec('cd ~/app-root/repo');
+
+		error_log(exec('pwd'). '   ' , 3, 'debug.log');
+
 		$php = exec('which php');
+
+		error_log($php . '     '. 3, 'debug.log')
+
 		exec($php . ' artisan queue:listen > /dev/null $ echo $!');
 	}
 
