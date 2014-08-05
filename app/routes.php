@@ -47,5 +47,7 @@ Route::get('/debug', 'AdminController@debug');
 
 Route::get('/test', 'AdminController@test');
 
+Route::get('/test2', 'AdminController@test2');
+
 Route::get('/startqueue', 'AdminController@check_start_queue_listener');
 

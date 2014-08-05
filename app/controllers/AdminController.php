@@ -65,7 +65,7 @@ class AdminController extends BaseController {
 	    echo '</pre>';
 	}
 
-	public function runQueueListen () {
+	private function runQueueListener () {
 		if (App::environment()=='local') {
 		    $command = 'php artisan queue:listen > /dev/null & echo $!';
 		    $number = exec($command);			    
@@ -83,19 +83,35 @@ class AdminController extends BaseController {
     		$pid = file_get_contents(__DIR__ . '/queue.pid');
     		$result = exec('ps | grep ' . $pid);
 	    	if ($result == '') {
-	        	$this->runQueueListen();
+	        	$this->runQueueListener();
 	        }
 		} else {
-	    	$this->runQueueListen();
+	    	$this->runQueueListener();
 		}
 	}
 
 	public function test() {
 		Queue::push(function(){
 			$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
+			echo Pre::render($feed_status);
 			$t = new TwitterController();
 			$t->send_search_query($data['feed_id']);
 			$job->delete();
+		});
+
+	}
+
+	public function test2() {
+		Queue::push(function(){
+			$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
+			
+			$t = new TwitterController();
+			$t->send_search_query($data['feed_id']);
+			$job->delete();
+
+			$this->runQueueListener;
+
+			echo Pre::render($feed_status);
 		});
 	}
 }
