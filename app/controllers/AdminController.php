@@ -126,7 +126,7 @@ class AdminController extends BaseController {
 		// echo $run;
 
 		// die();
-		Artisan::call('queue:listen')
+		Artisan::call('queue:listen');
 	}
 
 }
