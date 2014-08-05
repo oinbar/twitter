@@ -81,7 +81,7 @@ class AdminController extends BaseController {
 
 		if (file_exists(__DIR__ . '/queue.pid')) {
     		$pid = file_get_contents(__DIR__ . '/queue.pid');
-    		$result = exec('pid | grep ' . $pid);
+    		$result = exec('ps | grep ' . $pid);
 	    	if ($result == '') {
 	        	$this->runQueueListen();
 	        }

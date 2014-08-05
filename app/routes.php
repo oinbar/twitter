@@ -27,18 +27,10 @@ Route::get('/delete_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'Fe
 
 Route::get('/view_feed/{feed_id}/{skip?}', array('before' => 'has_feed', 'uses' => 'FeedController@getViewFeed'));
 
-Route::get('/fetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@startFetching'));
+Route::get('/startfetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@startFetching'));
 
 Route::get('/stopfetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@stopFetching'));
 
-Route::get('/feed/{feed_id?}/{start?}/{end?}', function($feed_id = null,
-														$start= 0,
-														$end = 100) {
-	return View::make('feed')		
-	->with('feed_id', $feed_id)
-	->with('start', $start)
-	->with('end', $end);
-});
 
 Route::get('/signup', array('before' => 'guest', 'uses' => 'UserController@getSignup'));
 
@@ -49,6 +41,7 @@ Route::get('/login', array('before' => 'guest', 'uses' => 'UserController@getLog
 Route::post('/login', array('before' => 'csrf', 'uses' => 'UserController@postLogin'));
 
 Route::get('/logout', array('before' => 'auth', 'uses' => 'UserController@getLogout'));
+
 
 Route::get('/debug', 'AdminController@debug');
 
