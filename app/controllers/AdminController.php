@@ -110,7 +110,7 @@ class AdminController extends BaseController {
 		
 		// echo exec('pwd');
 
-		// $php = exec('which php');
+		$php = exec('which php');
 
 		// echo exec($php . ' artisan queue:listen');
 
