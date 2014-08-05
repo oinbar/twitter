@@ -7,19 +7,19 @@ class QueueTasks {
 
 		$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
 
-		error_log('feed_status '. $feed_status, 3, '~/app-root/logs/laravel.log')
+		error_log('feed_status '. $feed_status, 3, '~/app-root/logs/php.log')
 
 
 		if ($feed_status == 'on') {
 
-			error_log('feed status check ok' , 3, '~/app-root/logs/laravel.log');
+			error_log('feed status check ok' , 3, '~/app-root/logs/php.log');
 
 			try{
 				$t = new TwitterController();
 				$t->send_search_query($data['feed_id']);
 
 			catch (Exception $e) {
-				error_log($e , 3, '~/app-root/logs/laravel.log');
+				error_log($e , 3, '~/app-root/logs/php.log');
 			}
 
 			$job->release(10);
@@ -27,7 +27,7 @@ class QueueTasks {
 		else {
 			$job->delete();
 		}
-		error_log('job released' , 3, '~/app-root/logs/laravel.log');
+		error_log('job released' , 3, '~/app-root/logs/php.log');
 		}	
 	}
 
