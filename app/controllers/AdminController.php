@@ -117,15 +117,17 @@ class AdminController extends BaseController {
 		$artisan = exec('find ~/ -type f -name "*artisan*"');
 
 		echo $artisan;
-		die();
 
 		// error_log(exec('pwd'). '   ' , 3, 'debug.log');
 
 		// $php = exec('which php');
 
 		// error_log($php . '     ', 3, 'debug.log');
+		exec('cd /var/lib/openshift/53deaa404382ecedb100015a//app-root/runtime/repo/');
+		$run = exec($php . ' artisan queue:listen > /dev/null $ echo $!');
+		echo $run;
 
-		// exec($php . ' artisan queue:listen > /dev/null $ echo $!');
+		die();
 	}
 
 }
