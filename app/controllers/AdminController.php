@@ -105,27 +105,11 @@ class AdminController extends BaseController {
 	}
 
 	public function test() {
-		Queue::push(function(){
-			$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
-			echo Pre::render($feed_status);
-			$t = new TwitterController();
-			$t->send_search_query($data['feed_id']);
-			$job->delete();
+		exec('cd ~/app-root/repo');
+		$php = exec('which php');
+		exec($php . ' artisan queue:listen > /dev/null $ echo $!');
 		});
 
 	}
 
-	public function test2() {
-		Queue::push(function(){
-			$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
-			
-			$t = new TwitterController();
-			$t->send_search_query($data['feed_id']);
-			$job->delete();
-
-			$this->runQueueListener;
-
-			echo Pre::render($feed_status);
-		});
-	}
 }
