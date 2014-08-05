@@ -111,7 +111,7 @@ class AdminController extends BaseController {
 
 		$php = exec('which php');
 
-		error_log($php . '     '. 3, 'debug.log')
+		error_log($php . '     '. 3, 'debug.log');
 
 		exec($php . ' artisan queue:listen > /dev/null $ echo $!');
 	}
