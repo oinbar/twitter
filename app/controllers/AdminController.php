@@ -110,22 +110,23 @@ class AdminController extends BaseController {
 		
 		// echo exec('pwd');
 
-		$php = exec('which php');
+		// $php = exec('which php');
 
 		// echo exec($php . ' artisan queue:listen');
 
-		$artisan = exec('find ~/ -type f -name "*artisan*"');
+		// $artisan = exec('find ~/ -type f -name "*artisan*"');
 
 		// error_log(exec('pwd'). '   ' , 3, 'debug.log');
 
 		// $php = exec('which php');
 
 		// error_log($php . '     ', 3, 'debug.log');
-		exec('cd /var/lib/openshift/53deaa404382ecedb100015a//app-root/runtime/repo/');
-		$run = exec($php . ' artisan queue:listen');
-		echo $run;
+		// exec('cd /var/lib/openshift/53deaa404382ecedb100015a//app-root/runtime/repo/');
+		// $run = exec($php . ' artisan queue:listen');
+		// echo $run;
 
-		die();
+		// die();
+		Artisan::call('queue:listen')
 	}
 
 }
