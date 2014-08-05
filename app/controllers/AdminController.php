@@ -105,15 +105,20 @@ class AdminController extends BaseController {
 	}
 
 	public function test() {
+		
 		exec('cd ~/app-root/repo');
 
-		error_log(exec('pwd'). '   ' , 3, 'debug.log');
+		$pwd = exec('pwd');
 
-		$php = exec('which php');
+		return Pre::render($pwd);
+		
+		// error_log(exec('pwd'). '   ' , 3, 'debug.log');
 
-		error_log($php . '     ', 3, 'debug.log');
+		// $php = exec('which php');
 
-		exec($php . ' artisan queue:listen > /dev/null $ echo $!');
+		// error_log($php . '     ', 3, 'debug.log');
+
+		// exec($php . ' artisan queue:listen > /dev/null $ echo $!');
 	}
 
 }
