@@ -75,13 +75,22 @@ class AdminController extends BaseController {
 			$number = exec($php . ' artisan queue:listen > /dev/null $ echo $!');
 		}
 		file_put_contents(__DIR__ . '/queue.pid', $number);
+
+		echo $command;
+		echo $number;
 	}
 
 	public function check_start_queue_listener () {
 
 		if (file_exists(__DIR__ . '/queue.pid')) {
     		$pid = file_get_contents(__DIR__ . '/queue.pid');
+
+    		echo $pid;
+
     		$result = exec('ps | grep ' . $pid);
+
+    		echo $result;
+    		
 	    	if ($result == '') {
 	        	$this->runQueueListener();
 	        }
