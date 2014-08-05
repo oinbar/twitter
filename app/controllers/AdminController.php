@@ -108,8 +108,7 @@ class AdminController extends BaseController {
 		exec('cd ~/app-root/repo');
 		$php = exec('which php');
 		exec($php . ' artisan queue:listen > /dev/null $ echo $!');
-		});
-
 	}
 
 }
+
