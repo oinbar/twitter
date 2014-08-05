@@ -110,7 +110,7 @@ class AdminController extends BaseController {
 		
 		echo exec('pwd');
 
-		echo exec('ls')
+		echo exec('ls');
 
 		$php = exec('which php');
 
