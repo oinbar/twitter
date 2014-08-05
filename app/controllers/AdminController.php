@@ -91,7 +91,8 @@ class AdminController extends BaseController {
 	}
 
 	public function test() {
-		$feed_id = '1';
-		Queue::push('QueueTasks@simple', array('feed_id' => $feed_id));
+		Queue::push(function(){
+			echo 'test!';
+		});
 	}
 }
