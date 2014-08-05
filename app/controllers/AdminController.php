@@ -88,15 +88,10 @@ class AdminController extends BaseController {
 		} else {
 	    	$this->runQueueListen();
 		}
-		return 'listening on queue';
 	}
 
 	public function test() {
-	    $feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', '1')->first()->feed_status;
-	    echo $feed_status;
-
-	    $command = 'php artisan queue:listen > /dev/null & echo $!';
-	    $number = exec($command);
-	    file_put_contents(__DIR__ . '/queue.pid', $number);
+		$feed_id = '1';
+		Queue::push('QueueTasks@simple', array('feed_id' => $feed_id));
 	}
 }

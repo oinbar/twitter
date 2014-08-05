@@ -31,6 +31,7 @@ return array(
     'ClassPreloader\\Parser\\FileVisitor' => $vendorDir . '/classpreloader/classpreloader/src/ClassPreloader/Parser/FileVisitor.php',
     'ClassPreloader\\Parser\\NodeTraverser' => $vendorDir . '/classpreloader/classpreloader/src/ClassPreloader/Parser/NodeTraverser.php',
     'CreateData1Collection' => $baseDir . '/app/database/migrations/2014_08_03_214428_create_data1_collection.php',
+    'CreateFailedJobsTable' => $baseDir . '/app/database/migrations/2014_08_05_022732_create_failed_jobs_table.php',
     'CreateFeedsTable' => $baseDir . '/app/database/migrations/2014_07_31_182610_create_feeds_table.php',
     'CreateUsersFeedsTable' => $baseDir . '/app/database/migrations/2014_07_31_173354_create_users_feeds_table.php',
     'CreateUsersTable' => $baseDir . '/app/database/migrations/2014_07_31_163640_create_users_table.php',

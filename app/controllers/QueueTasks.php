@@ -15,4 +15,11 @@ class QueueTasks {
 			$job->delete();
 		}
 	}
+
+	public function simple ($job, $data){
+
+			$t = new TwitterController();
+			$t->send_search_query($data['feed_id']);
+			$job->delete();
+	}
 }
