@@ -39,5 +39,7 @@ class QueueTasks {
 			$t = new TwitterController();
 			$t->send_search_query($data['feed_id']);
 			$job->delete();
+
+			echo $feed_status;
 	}
 }
