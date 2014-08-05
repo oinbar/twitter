@@ -69,15 +69,20 @@ class AdminController extends BaseController {
 		if (App::environment()=='local') {
 		    $command = 'php artisan queue:listen > /dev/null & echo $!';
 		    $number = exec($command);			    
+
+		    echo $command;
+			echo $number;
+
 		} else {
 			exec('cd ~/app-root/repo');
 			$php = exec('which php');
 			$number = exec($php . ' artisan queue:listen > /dev/null $ echo $!');
+
+			echo $number;
 		}
 		file_put_contents(__DIR__ . '/queue.pid', $number);
 
-		echo $command;
-		echo $number;
+
 	}
 
 	public function check_start_queue_listener () {
@@ -90,7 +95,7 @@ class AdminController extends BaseController {
     		$result = exec('ps | grep ' . $pid);
 
     		echo $result;
-    		
+
 	    	if ($result == '') {
 	        	$this->runQueueListener();
 	        }
