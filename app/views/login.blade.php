@@ -17,10 +17,10 @@
 
 {{ Form::open(array('url' => '/login')) }}
 
-    Username:<br>
+    {{ Form::label('username', 'Username:')}}
     {{ Form::text('username') }}<br><br>
 
-    Password:<br>
+    {{ Form::label('password', 'Password:')}}
     {{ Form::password('password') }}<br><br>
 
     {{ Form::submit('Submit') }}

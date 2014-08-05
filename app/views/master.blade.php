@@ -1,4 +1,5 @@
 {{ HTML::style('/css/css.css'); }}
+{{-- HTML::style('/bootstrap/css/bootstrap.css'); --}}
 
 <!DOCTYPE html>
 <html lang="en">

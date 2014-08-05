@@ -65,30 +65,30 @@ class AdminController extends BaseController {
 	    echo '</pre>';
 	}
 
-	public function check_start_queue_listener () {
-
-		function runCommand () {
+	public function runQueueListen () {
+		if (App::environment()=='local') {
 		    $command = 'php artisan queue:listen > /dev/null & echo $!';
-		    $number = exec($command);
-		    file_put_contents(__DIR__ . '/queue.pid', $number);
+		    $number = exec($command);			    
+		} else {
+			exec('cd ~/app-root/repo');
+			$php = exec('which php');
+			$number = exec($php . 'artisan queue:listen > dev/null $ echo $!');
 		}
+		file_put_contents(__DIR__ . '/queue.pid', $number);
+	}
+
+	public function check_start_queue_listener () {
 
 		if (file_exists(__DIR__ . '/queue.pid')) {
     		$pid = file_get_contents(__DIR__ . '/queue.pid');
-    		$result = exec('ps | grep ' . $pid);
+    		$result = exec('pid | grep ' . $pid);
 	    	if ($result == '') {
-	        	runCommand();
+	        	$this->runQueueListen();
 	        }
 		} else {
-	    	runCommand();
+	    	$this->runQueueListen();
 		}
 		return 'listening on queue';
-	}
-
-	public function pushFeedToQueue ($feed_id) {
-		Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
-		return 'pushed to the queue';
-
 	}
 
 	public function test() {

@@ -76,8 +76,9 @@ class FeedController extends BaseController {
 		return Redirect::to('feeds');
 	}
 
-	public function getViewFeed ($feed_id) {
-		$data = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->take(5)->get();
+	public function getViewFeed ($feed_id, $skip = 0) {
+		$take = 20; // numbe of results to select
+		$data = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->skip($skip)->take($take)->get();
 	    $count = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->count();
 
 		$statuses = array();
@@ -90,11 +91,35 @@ class FeedController extends BaseController {
 			}
 		}
 
+		$feed = DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->first();
+		
 		return View::make('feed')
+		->with('feed', $feed)
 		->with('num_records', $count)
 		->with('statuses', $statuses)
 		->with('feed_id', $feed_id)
-		->with('start', '123')
-		->with('end', '123');
+		->with('start', $skip)
+		->with('end', $skip + $take)
+		->with('prev', max(0, $skip-$take));
+	}
+
+	public function startFetching ($feed_id) {
+		//turn feed status on
+		DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array('feed_status' => 'on'));
+
+		//push twitter search task to the queue
+		Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
+
+		//make sure queue listener is running
+		$a = new AdminController;
+		$a->check_start_queue_listener();
+
+		return Redirect::to('/view_feed/' .$feed_id);
+	}
+
+	public function stopFetching ($feed_id) {
+		//turn feed status off
+		DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array('feed_status' => 'off'));
+		return Redirect::to('/view_feed/' .$feed_id);
 	}
 }

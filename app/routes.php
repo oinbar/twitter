@@ -25,7 +25,11 @@ Route::put('/edit_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'Feed
 
 Route::get('/delete_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@getDeleteFeed'));
 
-Route::get('/view_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@getViewFeed'));
+Route::get('/view_feed/{feed_id}/{skip?}', array('before' => 'has_feed', 'uses' => 'FeedController@getViewFeed'));
+
+Route::get('/fetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@startFetching'));
+
+Route::get('/stopfetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@stopFetching'));
 
 Route::get('/feed/{feed_id?}/{start?}/{end?}', function($feed_id = null,
 														$start= 0,
@@ -45,8 +49,6 @@ Route::get('/login', array('before' => 'guest', 'uses' => 'UserController@getLog
 Route::post('/login', array('before' => 'csrf', 'uses' => 'UserController@postLogin'));
 
 Route::get('/logout', array('before' => 'auth', 'uses' => 'UserController@getLogout'));
-
-Route::get('/fetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'AdminController@pushFeedToQueue'));
 
 Route::get('/debug', 'AdminController@debug');
 

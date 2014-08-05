@@ -10,13 +10,13 @@
 
 {{ Form::open(array('url' => '/signup')) }}
 
-    Username:<br>
+    {{ Form::label('username', 'Username:')}}
     {{ Form::text('username') }}<br><br>
 
-    Password:<br>
+    {{ Form::label('password', 'Password:')}}
     {{ Form::password('password') }}<br><br>
 
-    Email<br>
+    {{ Form::label('email', 'Email:')}}
     {{ Form::text('email') }}<br><br>
 
     {{ Form::submit('Submit') }}

@@ -52,7 +52,7 @@ class UserController extends BaseController {
             $credentials = Input::only('username', 'password');
 
             if (Auth::attempt($credentials)) {
-                return Redirect::intended('/')->with('flash_message', 'login successful!');
+                return Redirect::intended('/feeds')->with('flash_message', 'login successful!');
             }
             else {
                 return Redirect::to('/login')->with('flash_message', 'Log in failed');
