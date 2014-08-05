@@ -106,11 +106,16 @@ class AdminController extends BaseController {
 
 	public function test() {
 		
-		// exec('cd /../../');
+		exec('/app-root/runtime/repo/')
 		
-		$pwd = exec('ls -la');
+		echo exec('pwd')
+		echo exec('ls -la')
 
-		return Pre::render($pwd);
+		$php = exec('which php');
+		echo($php)
+		echo exec($php . ' artisan queue:listen')
+
+		die();
 
 		// error_log(exec('pwd'). '   ' , 3, 'debug.log');
 
