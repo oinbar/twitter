@@ -72,7 +72,7 @@ class AdminController extends BaseController {
 		} else {
 			exec('cd ~/app-root/repo');
 			$php = exec('which php');
-			$number = exec($php . 'artisan queue:listen > dev/null $ echo $!');
+			$number = exec($php . 'artisan queue:listen > /dev/null $ echo $!');
 		}
 		file_put_contents(__DIR__ . '/queue.pid', $number);
 	}
