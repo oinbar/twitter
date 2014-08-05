@@ -106,9 +106,9 @@ class AdminController extends BaseController {
 
 	public function test() {
 		
-		exec('cd ~/app-root/repo');
-		$php = exec('which php');
-		$pwd = exec($php . ' artisan');
+		exec('cd /../../');
+		
+		$pwd = exec('ls -la');
 
 		return Pre::render($pwd);
 
