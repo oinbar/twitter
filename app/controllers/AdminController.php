@@ -106,7 +106,7 @@ class AdminController extends BaseController {
 
 	public function test() {
 		
-		exec('cd /../../');
+		// exec('cd /../../');
 		
 		$pwd = exec('ls -la');
 
