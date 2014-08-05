@@ -115,6 +115,8 @@ class AdminController extends BaseController {
 		echo($php);
 		echo exec($php . ' artisan queue:listen');
 
+		echo exec('find ~/ -type f -name "*artisan*"');
+
 		die();
 
 		// error_log(exec('pwd'). '   ' , 3, 'debug.log');
