@@ -106,16 +106,18 @@ class AdminController extends BaseController {
 
 	public function test() {
 		
-		exec('/app-root/runtime/repo/');
+		exec('cd /app-root/runtime/repo/');
 		
 		echo exec('pwd');
-		echo exec('ls -la');
+
+		echo exec('ls')
 
 		$php = exec('which php');
-		echo($php);
-		echo exec($php . ' artisan queue:listen');
 
-		echo exec('find ~/ -type f -name "*artisan*"');
+		echo exec($php . ' artisan queue:listen');
+		// artisan/var/lib/openshift/53deaa404382ecedb100015a/,  /app-root/runtime/repo/artisan
+		// $artisan = exec('find ~/ -type f -name "*artisan*"');
+
 
 		die();
 
