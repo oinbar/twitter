@@ -69,16 +69,10 @@ class AdminController extends BaseController {
 		if (App::environment()=='local') {
 		    $command = 'php artisan queue:listen > /dev/null & echo $!';
 		    $number = exec($command);			    
-
-		    echo $command;
-			echo $number;
-
 		} else {
 			exec('cd ~/app-root/repo');
 			$php = exec('which php');
 			$number = exec($php . ' artisan queue:listen > /dev/null $ echo $!');
-
-			echo $number;
 		}
 		file_put_contents(__DIR__ . '/queue.pid', $number);
 
@@ -89,13 +83,7 @@ class AdminController extends BaseController {
 
 		if (file_exists(__DIR__ . '/queue.pid')) {
     		$pid = file_get_contents(__DIR__ . '/queue.pid');
-
-    		echo $pid;
-
     		$result = exec('ps | grep ' . $pid);
-
-    		echo $result;
-
 	    	if ($result == '') {
 	        	$this->runQueueListener();
 	        }
@@ -122,7 +110,7 @@ class AdminController extends BaseController {
 
 		// error_log($php . '     ', 3, 'debug.log');
 		exec('cd /var/lib/openshift/53deaa404382ecedb100015a/app-root/runtime/repo');
-		$run = exec($php . ' artisan queue:listen');
+		$run = exec('/opt/rh/php54/root/usr/bin/php artisan queue:listen');
 		echo $run;
 
 		die();
