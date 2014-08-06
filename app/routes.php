@@ -61,6 +61,7 @@ Route::get('/debug', 'AdminController@debug');
 Route::get('/queue/send', function(){
 
 	$feed_id = 2;
+	$data['feed_id'] = $feed_id;
 
 	Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
 
