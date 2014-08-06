@@ -48,7 +48,7 @@ class FeedController extends BaseController {
 		$id = DB::connection('mysql')->table('users_feeds')->insertGetId(array(
 			'user_id' => Auth::user()->id,
 			'feed_name' => Input::get('name'),
-			'feed_status' => 'on'));
+			'feed_status' => 'off'));
 		DB::connection('mysql')->table('feeds')->insert(array(
 			'id' => $id,
 			'update_rate' => Input::get('update_rate'),
