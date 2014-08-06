@@ -109,15 +109,15 @@ class FeedController extends BaseController {
 		DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array('feed_status' => 'on'));
 
 		//push twitter search task to the queue
-		// Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
-		Queue::push(function($job) use ($feed_id){
-			$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
-			if ($feed_status == 'on') {
-				$t = new TwitterController();
-				$t->send_search_query($data['feed_id']);
-				$job->delete();
-			}
-		});
+		Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
+		// Queue::push(function($job) use ($feed_id){
+		// 	$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
+		// 	if ($feed_status == 'on') {
+		// 		$t = new TwitterController();
+		// 		$t->send_search_query($data['feed_id']);
+		// 		$job->delete();
+		// 	}
+		// });
 		return Redirect::to('/view_feed/' .$feed_id);
 	}
 
