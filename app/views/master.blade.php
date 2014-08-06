@@ -12,7 +12,7 @@
      	@if (Auth::check())
 	        <ul class="nav">
 				<li><a href="/feeds" class="header-nav-a">My Feeds</a></li>
-				<li><a href="#" class="header-nav-a">...</a></li>
+				<li><a href="/about" class="header-nav-a">About</a></li>
 				<li><a href="#" class="header-nav-a">...</a></li>
 			</ul>
 		@endif
