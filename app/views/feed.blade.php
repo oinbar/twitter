@@ -7,10 +7,10 @@
 	<center> {{ $num_records }} records </center><br>
 
 	@if ($feed->feed_status == 'on')
-		Status: ON
+		<center>Status: ON</center>
 		<center> <a href="{{ url('/stopfetch/' . $feed_id) }}" >Stop Fetching</a> </center><br><br>
 	@else
-		Status: OFF
+		<center>Status: OFF</center>
 		<center> <a href="{{ url('/startfetch/' . $feed_id) }}" >Start Fetching</a> </center><br><br>
 	@endif
 
