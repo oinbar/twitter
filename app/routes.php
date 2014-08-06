@@ -73,7 +73,7 @@ Route::get('/queue/send', function(){
 	}
 });
 
-Route::post('/queue/push', function(){ 
+Route::post('/queue/push', function(){
 	return Queue::marshal(); 
 });
 

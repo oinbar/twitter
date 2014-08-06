@@ -111,10 +111,6 @@ class FeedController extends BaseController {
 		//push twitter search task to the queue
 		Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
 
-		//make sure queue listener is running
-		// $a = new AdminController;
-		// $a->check_start_queue_listener();
-
 		return Redirect::to('/view_feed/' .$feed_id);
 	}
 
