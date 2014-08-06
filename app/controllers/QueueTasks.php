@@ -12,6 +12,10 @@ class QueueTasks {
 			$t = new TwitterController();
 			$t->send_search_query($data['feed_id']);
 			$job->delete();
+
+			sleep(10);
+			Queue::push('QueueTasks@send_search_query', array('feed_id' => $data['feed_id']));
+			
 		} else {
 			$job->delete();
 		}
