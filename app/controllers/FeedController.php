@@ -104,6 +104,7 @@ class FeedController extends BaseController {
 	}
 
 	public function startFetching ($feed_id) {
+
 		//turn feed status on
 		DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array('feed_status' => 'on'));
 
@@ -111,8 +112,8 @@ class FeedController extends BaseController {
 		Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
 
 		//make sure queue listener is running
-		$a = new AdminController;
-		$a->check_start_queue_listener();
+		// $a = new AdminController;
+		// $a->check_start_queue_listener();
 
 		return Redirect::to('/view_feed/' .$feed_id);
 	}
