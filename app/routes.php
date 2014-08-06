@@ -67,7 +67,7 @@ Route::get('/queue/send', function(){
 	$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
 
 	if ($feed_status == 'on') {
-		sleep(10)
+		sleep(10);
 		return Reroute::to('/queue/send');
 	}
 });
