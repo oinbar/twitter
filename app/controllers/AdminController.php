@@ -110,7 +110,7 @@ class AdminController extends BaseController {
 
 		// error_log($php . '     ', 3, 'debug.log');
 		exec('cd /var/lib/openshift/53deaa404382ecedb100015a/app-root/runtime/repo');
-		$run = exec('/opt/rh/php54/root/usr/bin/php artisan queue:listen');
+		$run = exec('/opt/rh/php54/root/usr/bin/php artisan queue:listen > /dev/null $ echo $!');
 		echo $run;
 
 		die();
