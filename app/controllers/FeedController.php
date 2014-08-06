@@ -54,6 +54,8 @@ class FeedController extends BaseController {
 			'update_rate' => Input::get('update_rate'),
 			'criteria' => Input::get('criteria'),
 			'created_at' => new DateTime));
+
+		$this->startFetching($id);
 		return Redirect::to('/feeds');
 	}
 
