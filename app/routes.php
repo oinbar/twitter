@@ -68,7 +68,7 @@ Route::get('/queue/send', function(){
 
 	if ($feed_status == 'on') {
 		sleep(10);
-		return Reroute::to('/queue/send');
+		return Redirect::to('/queue/send');
 	}
 });
 
