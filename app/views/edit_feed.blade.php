@@ -3,7 +3,7 @@
 @section('main-content')
 
 <h2>
-	@if ($method=='post')
+	@if ($new_feed)
 		Create new feed
 	@else
 		Edit feed: {{$name}}
@@ -11,7 +11,7 @@
 </h2>
 	
 {{ Form::open(array('url'=> '/edit_feed/' . $feed_id, 
-					'method'=>$method, 
+					'method' => 'POST',
 					'accept-charset' => 'ISO-8859-1')) }}
 {{ Form::label('name', 'Feed Name: ') }} <br>					
 {{ Form::text('name', $name) }} <br><br>

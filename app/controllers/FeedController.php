@@ -20,6 +20,7 @@ class FeedController extends BaseController {
 	public function getEditFeed ($feed_id = null) {
 
 		if ($feed_id){	
+			//figure out how to do joins with eloquent and replace this garbage
 			$feed1 = DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->first();		
 			$feed2 = DB::connection('mysql')->table('feeds')
 				->where('id', $feed_id)
@@ -31,7 +32,7 @@ class FeedController extends BaseController {
 				->with('status', $feed1->feed_status)
 				->with('criteria', $feed2->criteria)
 				->with('update_rate', $feed2->update_rate)				
-				->with('method', 'put');				
+				->with('new_feed', false);				
 		}
 		else {
 			return View::make('edit_feed')
@@ -40,36 +41,39 @@ class FeedController extends BaseController {
 				->with('status', '')
 				->with('criteria', '')
 				->with('update_rate', '')
-				->with('method', 'post');		
+				->with('method', 'post')
+				->with('new_feed', true);				
 		}				
 	}
 
-	public function postEditFeed () {
-		$id = DB::connection('mysql')->table('users_feeds')->insertGetId(array(
-			'user_id' => Auth::user()->id,
-			'feed_name' => Input::get('name'),
-			'feed_status' => 'off'));
-		DB::connection('mysql')->table('feeds')->insert(array(
-			'id' => $id,
-			'update_rate' => Input::get('update_rate'),
-			'criteria' => Input::get('criteria'),
-			'created_at' => new DateTime));
+	public function postEditFeed ($feed_id = null) {
+		
+		if ($feed_id) {
+			DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array(
+				'feed_name' => Input::get('name'),
+				'feed_status' => Input::get('status')
+			));
+			DB::connection('mysql')->table('feeds')->where('id', $feed_id)->insert(array(
+				'id' => $feed_id,
+				'update_rate' => Input::get('update_rate'),
+				'criteria' => Input::get('criteria'),
+				'created_at' => new DateTime
+			));
+			return Redirect::to('/view_feed/'.$feed_id);
 
-		return Redirect::to('/view_feed/'.$id);
-	}
+		} else {
+			$id = DB::connection('mysql')->table('users_feeds')->insertGetId(array(
+				'user_id' => Auth::user()->id,
+				'feed_name' => Input::get('name'),
+				'feed_status' => 'off'));
+			DB::connection('mysql')->table('feeds')->insert(array(
+				'id' => $id,
+				'update_rate' => Input::get('update_rate'),
+				'criteria' => Input::get('criteria'),
+				'created_at' => new DateTime));
 
-	public function putEditFeed ($feed_id) {
-		DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array(
-			'feed_name' => Input::get('name'),
-			'feed_status' => Input::get('status')
-		));
-		DB::connection('mysql')->table('feeds')->where('id', $feed_id)->insert(array(
-			'id' => $feed_id,
-			'update_rate' => Input::get('update_rate'),
-			'criteria' => Input::get('criteria'),
-			'created_at' => new DateTime
-		));
-		return Redirect::to('/feeds/'.$feed_id);
+			return Redirect::to('/view_feed/'.$id);			
+		}
 	}
 
 	public function getDeleteFeed ($feed_id) {

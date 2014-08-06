@@ -21,7 +21,7 @@ Route::get('/about', function(){ return View::make('about'); });
 
 Route::get('/edit_feed/{feed_id?}', array('before' => 'has_feed', 'uses' => 'FeedController@getEditFeed'));
 
-Route::post('/edit_feed', array('before' => 'csrf', 'before' => 'has_feed', 'uses' => 'FeedController@postEditFeed'));
+Route::post('/edit_feed/{feed_id?}', array('before' => 'csrf', 'before' => 'has_feed', 'uses' => 'FeedController@postEditFeed'));
 
 Route::put('/edit_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@putEditFeed'));
 
