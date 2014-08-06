@@ -38,7 +38,7 @@ return array(
 			'driver'  => 'iron',
 			'host'    => 'mq-aws-us-east-1.iron.io',
 			'token'   => 'rB3zn9DqBeBHgl9jTbfjWBub8pE',
-			'project' => '53e18168db11a432565644fd',
+			'project' => '53d7c7357682130005000075',
 			'queue'   => 'twitter_intel_push_queue',
 			'encrypt' => true,
 		),
