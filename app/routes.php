@@ -56,7 +56,7 @@ Route::get('/queue/send', function(){
 });
 
 Route::post('/queue/push', function(){ 
-	return Queue::marshall(); 
+	return Queue::marshal(); 
 });
 
 Route::get('/test', 'AdminController@test');
