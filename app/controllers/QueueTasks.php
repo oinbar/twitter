@@ -11,10 +11,9 @@ class QueueTasks {
 		if ($feed_status == 'on') {
 			$t = new TwitterController();
 			$t->send_search_query($data['feed_id']);
-
-			sleep(10);
-
-			return Redirect::to('/startfetch/'.$data['feed_id'])
+			$job->delete();
+		} else {
+			$job->delete();
 		}
 	}
 }
