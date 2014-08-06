@@ -55,7 +55,7 @@ class FeedController extends BaseController {
 			'criteria' => Input::get('criteria'),
 			'created_at' => new DateTime));
 
-		$this->startFetching($id);
+		Redirect::to('/startfetch/'.$id);
 		return Redirect::to('/feeds');
 	}
 
