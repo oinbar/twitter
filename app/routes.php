@@ -46,16 +46,23 @@ Route::get('/logout', array('before' => 'auth', 'uses' => 'UserController@getLog
 Route::get('/debug', 'AdminController@debug');
 
 
+// Route::get('/queue/send', function(){
+
+// 	$data['string'] = 'hello world';
+
+// 	Queue::push(function($job) use ($data) {
+
+// 		File::append(app_path().'/queue.txt', $data['string'].PHP_EOL);
+// 		$job->delete();
+// 	});
+// 	return 'OK';
+// });
+
 Route::get('/queue/send', function(){
 
-	$data['string'] = 'hello world';
+	$feed_id = 2;
 
-	Queue::push(function($job) use ($data) {
-
-		File::append(app_path().'/queue.txt', $data['string'].PHP_EOL);
-		$job->delete();
-	});
-	return 'OK';
+	Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
 });
 
 Route::post('/queue/push', function(){ 

@@ -6,14 +6,14 @@ class QueueTasks {
 	
 	public function send_search_query($job, $data){
 
-		// $feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
+		$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
 		
-		// if ($feed_status == 'on') {
+		if ($feed_status == 'on') {
 			$t = new TwitterController();
 			$t->send_search_query($data['feed_id']);
 			$job->delete();
-		// } else {
-			// $job->delete();
-		// }
+		} else {
+			$job->delete();
+		}
 	}
 }
