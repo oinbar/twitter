@@ -25,8 +25,8 @@
 									 'weekly'=>'weekly'), $update_rate); }}<br><br>
 
 {{ Form::label('status', 'Status: ')}}<br>									 
-{{ Form::select('status', array('on'=>'on', 
-								'off'=>'off'), $status); }}<br><br>
+{{ Form::select('status', array('off'=>'off', 
+								'on'=>'on'), $status); }}<br><br>
 
 {{form::submit('Submit')}}
 

@@ -55,8 +55,7 @@ class FeedController extends BaseController {
 			'criteria' => Input::get('criteria'),
 			'created_at' => new DateTime));
 
-		Redirect::to('/startfetch/'.$id);
-		return Redirect::to('/feeds');
+		return Redirect::to('/view_feed/'.$id);
 	}
 
 	public function putEditFeed ($feed_id) {
@@ -70,7 +69,7 @@ class FeedController extends BaseController {
 			'criteria' => Input::get('criteria'),
 			'created_at' => new DateTime
 		));
-		return Redirect::to('feeds');
+		return Redirect::to('/feeds/'.$feed_id);
 	}
 
 	public function getDeleteFeed ($feed_id) {
