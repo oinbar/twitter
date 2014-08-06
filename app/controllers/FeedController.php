@@ -115,6 +115,7 @@ class FeedController extends BaseController {
 			if ($feed_status == 'on') {
 				$t = new TwitterController();
 				$t->send_search_query($data['feed_id']);
+				$job->delete();
 			}
 		});
 		return Redirect::to('/view_feed/' .$feed_id);
