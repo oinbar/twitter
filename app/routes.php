@@ -46,9 +46,10 @@ Route::get('/logout', array('before' => 'auth', 'uses' => 'UserController@getLog
 Route::get('/debug', 'AdminController@debug');
 
 
+
 Route::get('/queue/send', function(){
 	$data['string'] = 'hello world';
-	Queue::push(function($job, $data) {
+	Queue::push(function($job, array('data' => $data)) {
 		File::append(app_path().'/queue.txt', $data['string'].PHP_EOL);
 		$job->delete();
 	});
