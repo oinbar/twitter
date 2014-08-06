@@ -63,6 +63,12 @@ Route::get('/queue/send', function(){
 	$feed_id = 2;
 
 	Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
+
+	$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
+
+	if ($feed_status == 'on') {
+		return Reroute::to('/queue/send');
+	}
 });
 
 Route::post('/queue/push', function(){ 
