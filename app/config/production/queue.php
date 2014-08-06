@@ -1,0 +1,65 @@
+<?php
+
+return array(
+
+	/*
+	|--------------------------------------------------------------------------
+	| Default Queue Driver
+	|--------------------------------------------------------------------------
+	|
+	| The Laravel queue API supports a variety of back-ends via an unified
+	| API, giving you convenient access to each back-end using the same
+	| syntax for each one. Here you may set the default queue driver.
+	|
+	| Supported: "sync", "beanstalkd", "sqs", "iron", "redis"
+	|
+	*/
+
+	'default' => 'iron',
+
+	/*
+	|--------------------------------------------------------------------------
+	| Queue Connections
+	|--------------------------------------------------------------------------
+	|
+	| Here you may configure the connection information for each server that
+	| is used by your application. A default configuration has been added
+	| for each back-end shipped with Laravel. You are free to add more.
+	|
+	*/
+
+	'connections' => array(
+
+		'sync' => array(
+			'driver' => 'sync',
+		),
+
+		'iron' => array(
+			'driver'  => 'iron',
+			'host'    => 'mq-aws-us-east-1.iron.io',
+			'token'   => 'rB3zn9DqBeBHgl9jTbfjWBub8pE',
+			'project' => '53e18168db11a432565644fd',
+			'queue'   => 'twitter_intel_push_queue',
+			'encrypt' => true,
+		),
+
+	),
+
+	/*
+	|--------------------------------------------------------------------------
+	| Failed Queue Jobs
+	|--------------------------------------------------------------------------
+	|
+	| These options configure the behavior of failed queue job logging so you
+	| can control which database and table are used to store the jobs that
+	| have failed. You may change them to any database / table you wish.
+	|
+	*/
+
+	'failed' => array(
+
+		'database' => 'mysql', 'table' => 'failed_jobs',
+
+	),
+
+);

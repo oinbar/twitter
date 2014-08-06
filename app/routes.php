@@ -45,6 +45,8 @@ Route::get('/logout', array('before' => 'auth', 'uses' => 'UserController@getLog
 
 Route::get('/debug', 'AdminController@debug');
 
+Route::post('/queue/push', function(){ return Queue::marshall(); });
+
 Route::get('/test', 'AdminController@test');
 
 Route::get('/test2', 'AdminController@test2');
