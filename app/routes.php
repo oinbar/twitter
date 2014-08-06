@@ -48,7 +48,7 @@ Route::get('/debug', 'AdminController@debug');
 
 Route::get('/queue/send', function(){
 	$data['string'] = 'hello world';
-	Queue::push(function($job use ($data)) {
+	Queue::push(function($job, $data) {
 		File::append(app_path().'/queue.txt', $data['string'].PHP_EOL);
 		$job->delete();
 	});
