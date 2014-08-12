@@ -20,13 +20,23 @@ return array(
 	'default' => 'mysql',
 
 	'connections' => array(
+		// openshift
+		// 'mongodb' => array(
+		//     'driver'   => 'mongodb',
+		//     'host'     => '127.3.231.3',
+		//     'port'     => '27017',
+		//     'username' => 'admin',
+		//     'password' => 'irDcWgiibvx7',
+		//     'database' => 'twitterintel',
+		// ),
 
 		'mongodb' => array(
+			// AWS
 		    'driver'   => 'mongodb',
-		    'host'     => '127.3.231.3',
+		    'host'     => 'localhost',
 		    'port'     => '27017',
 		    'username' => 'admin',
-		    'password' => 'irDcWgiibvx7',
+		    'password' => 'admin',
 		    'database' => 'twitterintel',
 		),
 
