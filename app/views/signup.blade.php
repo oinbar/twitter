@@ -2,24 +2,24 @@
 
 @section('main-content')
 
-<h1>Sign up</h1>
-
 @foreach($errors->all() as $message) 
 	<div class='error'>{{ $message }}</div>
 @endforeach <br>
 
-{{ Form::open(array('url' => '/signup')) }}
+{{ Form::open(array('url' => '/signup', 'class' => 'well')) }}
 
-    {{ Form::label('username', 'Username:')}}
+	<h1>Sign up</h1>
+
+    {{ Form::label('username', 'Username:')}}<br>
     {{ Form::text('username') }}<br><br>
 
-    {{ Form::label('password', 'Password:')}}
+    {{ Form::label('password', 'Password:')}}<br>
     {{ Form::password('password') }}<br><br>
 
-    {{ Form::label('email', 'Email:')}}
+    {{ Form::label('email', 'Email:')}}<br>
     {{ Form::text('email') }}<br><br>
 
-    {{ Form::submit('Submit') }}
+    {{ Form::submit('Submit', array('class'=>'btn btn-primary')) }}
 
 {{ Form::close() }}
 
