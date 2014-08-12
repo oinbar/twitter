@@ -2,8 +2,6 @@
 
 @section('main-content')
 
-<h1>Login</h1>
-
 
 @if (Session::get('flash_message'))
 	{{ Session::get('flash_message') }}
@@ -15,15 +13,16 @@
 
 <br><br>
 
-{{ Form::open(array('url' => '/login')) }}
+{{ Form::open(array('url' => '/login', 'class' => 'well')) }}
+	<h1>Login</h1>
 
-    {{ Form::label('username', 'Username:')}}
+    {{ Form::label('username', 'Username:') }} <br>
     {{ Form::text('username') }}<br><br>
 
-    {{ Form::label('password', 'Password:')}}
+    {{ Form::label('password', 'Password:')}} <br>
     {{ Form::password('password') }}<br><br>
 
-    {{ Form::submit('Submit') }}
+    {{ Form::submit('Login', array('class'=>'btn btn-primary')) }}
 
 {{ Form::close() }}
 
