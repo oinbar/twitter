@@ -33,7 +33,7 @@ return array(
 		'mongodb' => array(
 			// AWS
 		    'driver'   => 'mongodb',
-		    'host'     => '10.5.173.204',
+		    'host'     => 'ip-10-5-173-204',
 		    'port'     => '27017',
 		    'username' => 'admin',
 		    'password' => 'admin',
