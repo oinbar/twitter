@@ -20,7 +20,8 @@ return array(
 	'default' => 'mysql',
 
 	'connections' => array(
-		// openshift
+		
+		// OPENSHIFT		
 		// 'mongodb' => array(
 		//     'driver'   => 'mongodb',
 		//     'host'     => '127.3.231.3',
@@ -30,6 +31,7 @@ return array(
 		//     'database' => 'twitterintel',
 		// ),
 
+		// AWS
 		'mongodb' => array(
 			// AWS
 		    'driver'   => 'mongodb',
@@ -40,13 +42,24 @@ return array(
 		    'database' => 'twitterintel',
 		),
 
+		// OPENSHIFT
+		// 'mysql' => array(
+		// 	'driver'    => 'mysql',
+		// 	'host'      => '127.3.231.2',
+		// 	'port'		=> '3306',
+		// 	'database'  => 'twitterintel',
+		// 	'username'  => 'admin4nSCiYX',
+		// 	'password'  => '4NeDJtqkssj3',
+		// ),
+
+		// AWS
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => '127.3.231.2',
+			'host'      => '1twitterintel.c0sdmckg4fw5.us-east-1.rds.amazonaws.com',
 			'port'		=> '3306',
 			'database'  => 'twitterintel',
-			'username'  => 'admin4nSCiYX',
-			'password'  => '4NeDJtqkssj3',
+			'username'  => 'username',
+			'password'  => 'masterpassword',
 		),
 	),
 
