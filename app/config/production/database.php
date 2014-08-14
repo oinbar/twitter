@@ -35,10 +35,10 @@ return array(
 		'mongodb' => array(
 			// AWS
 		    'driver'   => 'mongodb',
-		    'host'     => 'ip-10-5-173-204',
+		    'host'     => 'ec2-54-87-178-57.compute-1.amazonaws.com',
 		    'port'     => '27017',
 		    'username' => 'admin',
-		    'password' => 'admin',
+		    'password' => 'password',
 		    'database' => 'twitterintel',
 		),
 
@@ -55,11 +55,11 @@ return array(
 		// AWS
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'twitterintel.c0sdmckg4fw5.us-east-1.rds.amazonaws.com',
+			'host'      => 'aak2fxzy3avwxx.c0sdmckg4fw5.us-east-1.rds.amazonaws.com',
 			'port'		=> '3306',
-			'database'  => 'twitterintel',
-			'username'  => 'username',
-			'password'  => 'masterpassword',
+			'database'  => 'ebdb',
+			'username'  => 'admin',
+			'password'  => 'password',
 		),
 	),
 

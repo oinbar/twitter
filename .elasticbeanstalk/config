@@ -8,9 +8,23 @@ EnvironmentType=LoadBalanced
 InstanceProfileName=aws-elasticbeanstalk-ec2-role
 OptionSettingFile=/Users/Orr/Sites/twitterintel/.elasticbeanstalk/optionsettings.twitterintel-env
 RdsDeletionPolicy=Snapshot
-RdsEnabled=Yes
+RdsEnabled=No
 RdsSourceSnapshotName=
 Region=us-east-1
 ServiceEndpoint=https://elasticbeanstalk.us-east-1.amazonaws.com
 SolutionStack=64bit Amazon Linux 2014.03 v1.0.4 running PHP 5.5
+
+[branches]
+master=twitterintel-env
+
+[branch:master]
+ApplicationVersionName=Sample Application
+EnvironmentName=twitterintel2-env
+EnvironmentTier=WebServer::Standard::1.0
+EnvironmentType=SingleInstance
+InstanceProfileName=aws-elasticbeanstalk-ec2-role
+OptionSettingFile=/Users/Orr/Sites/twitterintel/.elasticbeanstalk/optionsettings.twitterintel2-env
+RdsDeletionPolicy=Snapshot
+RdsEnabled=No
+RdsSourceSnapshotName=
 
