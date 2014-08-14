@@ -30,11 +30,9 @@ class AdminController extends BaseController {
 	    echo App::environment().'</h1>';
 
 	    echo '<h1>Debugging?</h1>';
-	    if(Config::get('app.debug')) echo "Yes"; else echo "No";
+	    if(Config::get('app.debug')) echo "Yes"; else echo "No";	    
 
-	    die();
 
-	    
 	    echo '<h1>Database Config</h1>';
 	    print_r(Config::get('database.connections.mongodb'));
 
@@ -49,6 +47,8 @@ class AdminController extends BaseController {
 	    catch (Exception $e) {
 	        echo '<strong style="background-color:crimson; padding:5px;">Caught exception: ', $e->getMessage(), "</strong>\n";
 	    }
+
+	    die();
 
 	    echo '<h1>Database Config</h1>';
 	    print_r(Config::get('database.connections.mysql'));
