@@ -32,7 +32,9 @@ class AdminController extends BaseController {
 	    echo '<h1>Debugging?</h1>';
 	    if(Config::get('app.debug')) echo "Yes"; else echo "No";
 
+	    die();
 
+	    
 	    echo '<h1>Database Config</h1>';
 	    print_r(Config::get('database.connections.mongodb'));
 
