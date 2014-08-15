@@ -15,7 +15,7 @@ return array(
 	|
 	*/
 
-	'default' => 'iron',
+	'default' => 'redis',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -63,6 +63,15 @@ return array(
 			'queue'  => 'default',
 		),
 
+		'twitter_fetch' => array(
+			'driver' => 'redis',
+			'queue'  => 'default',
+		),
+
+		'cache_to_db' => array(
+			'driver' => 'redis',
+			'queue'  => 'default',
+		),
 	),
 
 	/*

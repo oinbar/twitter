@@ -93,6 +93,14 @@ return array(
 			'prefix'   => '',
 		),
 
+		'redis' => array(
+			'cluster' => true,
+			'default' => array(
+				'host' => 'localhost',
+				'port' => '6379',
+			),
+		),
+
 	),
 
 	/*

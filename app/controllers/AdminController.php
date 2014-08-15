@@ -33,11 +33,8 @@ class AdminController extends BaseController {
 	    if(Config::get('app.debug')) echo "Yes"; else echo "No";	    
 
 
-	    echo '<h1>Database Config</h1>';
-	    print_r(Config::get('database.connections.mongodb'));
-
-	    echo '<h1>Test Database Connection</h1>';
-
+	    echo '<h1>Database Config (MongoDB)</h1>';
+	    print_r(Config::get('database.connections.mongodb'));	
 	    try {
 	        $results = DB::connection('mongodb')->collection('data1');
 	        echo '<strong style="background-color:green; padding:5px;">Connection confirmed</strong>';
@@ -47,74 +44,67 @@ class AdminController extends BaseController {
 	    }
 
 
-	    echo '<h1>Database Config</h1>';
+	    echo '<h1>Database Config (MySQL)</h1>';
 	    print_r(Config::get('database.connections.mysql'));
-
-	    echo '<h1>Test Database Connection</h1>';
-
 	    try {
 	        $results = DB::connection('mysql')->select('SHOW DATABASES;');
 	        echo '<strong style="background-color:green; padding:5px;">Connection confirmed</strong>';
-	        echo "<br><br>Your Databases:<br><br>";
-	        print_r($results);
 	    } 
 	    catch (Exception $e) {
 	        echo '<strong style="background-color:crimson; padding:5px;">Caught exception: ', $e->getMessage(), "</strong>\n";
 	    }
 
-	    echo '</pre>';
+	    echo '<h1>Cache Config (Redis)</h1>';
+	    print_r(Config::get('database.connections.redis'));
+	    try {
+	    	$redis = Redis::connection();
+	    	echo '<strong style="background-color:green; padding:5px;">Connection confirmed</strong>';
+		}
+		catch (Exception $e) {
+	        echo '<strong style="background-color:crimson; padding:5px;">Caught exception: ', $e->getMessage(), "</strong>\n";
+	    }
+
+	    echo '</pre>';	    
 	}
 
-	private function runQueueListener () {
+	private function runQueueListener ($queue) {
 		if (App::environment()=='local') {
-		    $command = 'php artisan queue:listen > /dev/null & echo $!';
+		    $command = 'php artisan queue:listen ' . $queue . ' > /dev/null & echo $!';
 		    $number = exec($command);			    
 		} else {
 			exec('cd ~/app-root/repo');
 			$php = exec('which php');
-			$number = exec($php . ' artisan queue:listen > /dev/null $ echo $!');
+			$number = exec($php . ' artisan queue:listen ' . $queue . ' > /dev/null $ echo $!');
 		}
-		file_put_contents(__DIR__ . '/queue.pid', $number);
-
-
+		file_put_contents(__DIR__ . '/' . $queue . '_queue.pid', $number);
 	}
 
-	public function check_start_queue_listener () {
+	public function check_start_queue_listener ($queue) {
+		// checks if the queue listener is running, if not it starts it and
+		// stores the process id
+			if (file_exists(__DIR__ . '/' . $queue . '_queue.pid')) {
+	    		$pid = file_get_contents(__DIR__ . '/' . $queue . '_queue.pid');	    		
 
-		if (file_exists(__DIR__ . '/queue.pid')) {
-    		$pid = file_get_contents(__DIR__ . '/queue.pid');
-    		$result = exec('ps | grep ' . $pid);
-	    	if ($result == '') {
-	        	$this->runQueueListener();
-	        }
-		} else {
-	    	$this->runQueueListener();
+	    		Log::error('pid   ' . $pid);
+
+			    $result = exec('kill -p ' . $pid);
+
+			    Log::error('result   ' . $result);
+
+			    if ($result == '') {
+		        	$this->runQueueListener($queue);
+		        }
+			} else {
+		    	$this->runQueueListener($queue);
 		}
 	}
 
-	public function test() {
-		
-		// exec('cd /app-root/runtime/repo/');
-		
-		// echo exec('pwd');
+	public function start_queue_listeners () {
+		$this->check_start_queue_listener('twitter_fetch');
+		$this->check_start_queue_listener('cache_to_db');
 
-		// $php = exec('which php');
-
-		// echo exec($php . ' artisan queue:listen');
-
-		// $artisan = exec('find ~/ -type f -name "*artisan*"');
-
-		// error_log(exec('pwd'). '   ' , 3, 'debug.log');
-
-		$php = exec('which php');
-
-		// error_log($php . '     ', 3, 'debug.log');
-		exec('cd /var/lib/openshift/53deaa404382ecedb100015a/app-root/runtime/repo');
-		$run = exec('/opt/rh/php54/root/usr/bin/php artisan queue:listen > /dev/null $ echo $!');
-		echo $run;
-
-		die();
+		//start cache to db
+		Queue::connection('cache_to_db')
 	}
-
 }
 

@@ -15,7 +15,7 @@ return array(
 	|
 	*/
 
-	'default' => 'iron',
+	'default' => 'redis',
 
 	/*
 	|--------------------------------------------------------------------------
@@ -41,6 +41,11 @@ return array(
 			'project' => '53d7c7357682130005000075',
 			'queue'   => 'twitter_intel_push_queue',
 			'encrypt' => true,
+		),
+
+		'redis' => array(
+			'driver' => 'redis',
+			'queue'  => 'default',
 		),
 
 	),

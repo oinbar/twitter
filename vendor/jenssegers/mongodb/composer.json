@@ -17,8 +17,9 @@
         "illuminate/events": "4.2.*"
     },
     "require-dev": {
-        "orchestra/testbench": "2.2.x-dev",
-        "mockery/mockery": "*"
+        "orchestra/testbench": "2.2.*",
+        "mockery/mockery": "*",
+        "satooshi/php-coveralls": "*"
     },
     "autoload": {
         "psr-0": {

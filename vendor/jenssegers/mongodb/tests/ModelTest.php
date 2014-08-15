@@ -79,7 +79,7 @@ class ModelTest extends TestCase {
 		$this->assertEquals(20, $check->age);
 	}
 
-	public function testManualId()
+	public function testManualStringId()
 	{
 		$user = new User;
 		$user->_id = '4af9f23d8ead0e1d32000000';
@@ -93,6 +93,35 @@ class ModelTest extends TestCase {
 
 		$raw = $user->getAttributes();
 		$this->assertInstanceOf('MongoId', $raw['_id']);
+
+		$user = new User;
+		$user->_id = 'customId';
+		$user->name = 'John Doe';
+		$user->title = 'admin';
+		$user->age = 35;
+		$user->save();
+
+		$this->assertEquals(true, $user->exists);
+		$this->assertEquals('customId', $user->_id);
+
+		$raw = $user->getAttributes();
+		$this->assertInternalType('string', $raw['_id']);
+	}
+
+	public function testManualIntId()
+	{
+		$user = new User;
+		$user->_id = 1;
+		$user->name = 'John Doe';
+		$user->title = 'admin';
+		$user->age = 35;
+		$user->save();
+
+		$this->assertEquals(true, $user->exists);
+		$this->assertEquals(1, $user->_id);
+
+		$raw = $user->getAttributes();
+		$this->assertInternalType('integer', $raw['_id']);
 	}
 
 	public function testDelete()
@@ -170,7 +199,7 @@ class ModelTest extends TestCase {
 			array('name' => 'Jane Doe')
 		));
 
-		$user = User::get()->first();
+		$user = User::first();
 		$this->assertInstanceOf('Jenssegers\Mongodb\Model', $user);
 		$this->assertEquals('John Doe', $user->name);
 	}
@@ -238,29 +267,33 @@ class ModelTest extends TestCase {
 
 	public function testSoftDelete()
 	{
-		$user = new Soft;
-		$user->name = 'Softy';
-		$user->save();
+		Soft::create(array('name' => 'John Doe'));
+		Soft::create(array('name' => 'Jane Doe'));
+
+		$this->assertEquals(2, Soft::count());
+
+		$user = Soft::where('name', 'John Doe')->first();
 		$this->assertEquals(true, $user->exists);
+		$this->assertEquals(false, $user->trashed());
+		$this->assertNull($user->deleted_at);
 
 		$user->delete();
+		$this->assertEquals(true, $user->trashed());
+		$this->assertNotNull($user->deleted_at);
 
-		$check = Soft::find($user->_id);
-		$this->assertEquals(null, $check);
+		$user = Soft::where('name', 'John Doe')->first();
+		$this->assertNull($user);
 
-		$all = Soft::get();
-		$this->assertEquals(0, $all->count());
+		$this->assertEquals(1, Soft::count());
+		$this->assertEquals(2, Soft::withTrashed()->count());
 
-		$all = Soft::withTrashed()->get();
-		$this->assertEquals(1, $all->count());
+		$user = Soft::withTrashed()->where('name', 'John Doe')->first();
+		$this->assertNotNull($user);
+		$this->assertInstanceOf('Carbon\Carbon', $user->deleted_at);
+		$this->assertEquals(true, $user->trashed());
 
-		$check = $all[0];
-		$this->assertInstanceOf('Carbon\Carbon', $check->deleted_at);
-		$this->assertEquals(true, $check->trashed());
-
-		$check->restore();
-		$all = Soft::get();
-		$this->assertEquals(1, $all->count());
+		$user->restore();
+		$this->assertEquals(2, Soft::count());
 	}
 
 	public function testPrimaryKey()
@@ -364,6 +397,12 @@ class ModelTest extends TestCase {
 
 		$user = User::create(array('name' => 'Jane Doe', 'birthday' => '2005-08-08'));
 		$this->assertInstanceOf('Carbon\Carbon', $user->birthday);
+
+		$user = User::create(array('name' => 'Jane Doe', 'entry' => array('date' => '2005-08-08')));
+		$this->assertInstanceOf('Carbon\Carbon', $user->getAttribute('entry.date'));
+
+		$user->setAttribute('entry.date', new DateTime);
+		$this->assertInstanceOf('Carbon\Carbon', $user->getAttribute('entry.date'));
 	}
 
 	public function testIdAttribute()
@@ -377,14 +416,28 @@ class ModelTest extends TestCase {
 
 	public function testPushPull()
 	{
-		$user = User::create(array('name' => 'John Doe', 'tags' => array()));
+		$user = User::create(array('name' => 'John Doe'));
 
-		$result = User::where('_id', $user->_id)->push('tags', 'tag1');
+		$user->push('tags', 'tag1');
+		$user->push('tags', array('tag1', 'tag2'));
+		$user->push('tags', 'tag2', true);
+
+		$this->assertEquals(array('tag1', 'tag1', 'tag2'), $user->tags);
 		$user = User::where('_id', $user->_id)->first();
+		$this->assertEquals(array('tag1', 'tag1', 'tag2'), $user->tags);
 
-		$this->assertTrue(is_int($result));
-		$this->assertTrue(is_array($user->tags));
-		$this->assertEquals(1, count($user->tags));
+		$user->pull('tags', 'tag1');
+
+		$this->assertEquals(array('tag2'), $user->tags);
+		$user = User::where('_id', $user->_id)->first();
+		$this->assertEquals(array('tag2'), $user->tags);
+
+		$user->push('tags', 'tag3');
+		$user->pull('tags', array('tag2', 'tag3'));
+
+		$this->assertEquals(array(), $user->tags);
+		$user = User::where('_id', $user->_id)->first();
+		$this->assertEquals(array(), $user->tags);
 	}
 
 	public function testRaw()
@@ -417,6 +470,21 @@ class ModelTest extends TestCase {
 			return $collection->insert(array('name' => 'Yvonne Yoe', 'age' => 35));
 		});
 		$this->assertTrue(is_array($result));
+	}
+
+	public function testDotNotation()
+	{
+		$user = User::create(array(
+			'name' => 'John Doe',
+			'address' => [
+				'city' => 'Paris',
+				'country' => 'France',
+			]
+		));
+
+		$this->assertEquals('Paris', $user->getAttribute('address.city'));
+		$this->assertEquals('Paris', $user['address.city']);
+		$this->assertEquals('Paris', $user->{'address.city'});
 	}
 
 }

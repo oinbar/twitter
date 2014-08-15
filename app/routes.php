@@ -44,22 +44,6 @@ Route::post('/login', array('before' => 'csrf', 'uses' => 'UserController@postLo
 
 Route::get('/logout', array('before' => 'auth', 'uses' => 'UserController@getLogout'));
 
-
-Route::get('/debug', 'AdminController@debug');
-
-
-// Route::get('/queue/send', function(){
-
-// 	$data['string'] = 'hello world';
-
-// 	Queue::push(function($job) use ($data) {
-
-// 		File::append(app_path().'/queue.txt', $data['string'].PHP_EOL);
-// 		$job->delete();
-// 	});
-// 	return 'OK';
-// });
-
 Route::get('/queue/send', function(){
 
 	$feed_id = 2;
@@ -79,9 +63,11 @@ Route::post('/queue/push', function(){
 	return Queue::marshal(); 
 });
 
+Route::get('/debug', 'AdminController@debug');
+
 Route::get('/test', 'AdminController@test');
 
 Route::get('/test2', 'AdminController@test2');
 
-Route::get('/startqueue', 'AdminController@check_start_queue_listener');
+Route::get('/startqueues', 'AdminController@start_queue_listeners');
 

@@ -188,10 +188,10 @@ class QueryBuilderTest extends TestCase {
 		$this->assertEquals(1, $cursor->count());
 
 		$collection = DB::collection('users')->raw();
-		$this->assertInstanceOf('MongoCollection', $collection);
+		$this->assertInstanceOf('Jenssegers\Mongodb\Collection', $collection);
 
 		$collection = User::raw();
-		$this->assertInstanceOf('MongoCollection', $collection);
+		$this->assertInstanceOf('Jenssegers\Mongodb\Collection', $collection);
 
 		$results = DB::collection('users')->whereRaw(array('age' => 20))->get();
 		$this->assertEquals(1, count($results));
@@ -520,6 +520,9 @@ class QueryBuilderTest extends TestCase {
 		$results = DB::collection('items')->where('tags', 'size', 2)->get();
 		$this->assertEquals(2, count($results));
 
+		$results = DB::collection('items')->where('tags', '$size', 2)->get();
+		$this->assertEquals(2, count($results));
+
 		$results = DB::collection('items')->where('tags', 'size', 3)->get();
 		$this->assertEquals(0, count($results));
 
@@ -536,6 +539,12 @@ class QueryBuilderTest extends TestCase {
 
 		$results = DB::collection('users')->where('name', 'REGEX', $regex)->get();
 		$this->assertEquals(2, count($results));
+
+		$results = DB::collection('users')->where('name', 'regexp', '/.*doe/i')->get();
+		$this->assertEquals(2, count($results));
+
+		$results = DB::collection('users')->where('name', 'not regexp', '/.*doe/i')->get();
+		$this->assertEquals(1, count($results));
 
 		DB::collection('users')->insert(array(
 			array(
@@ -606,6 +615,22 @@ class QueryBuilderTest extends TestCase {
 		$this->assertEquals(null, $user['age']);
 		$user = DB::collection('users')->where('name', 'Mark Moe')->first();
 		$this->assertEquals(1, $user['age']);
+	}
+
+	public function testProjections()
+	{
+		DB::collection('items')->insert(array(
+			array('name' => 'fork',  'tags' => array('sharp', 'pointy')),
+			array('name' => 'spork', 'tags' => array('sharp', 'pointy', 'round', 'bowl')),
+			array('name' => 'spoon', 'tags' => array('round', 'bowl')),
+		));
+
+		$results = DB::collection('items')->project(array('tags' => array('$slice' => 1)))->get();
+
+		foreach ($results as $result)
+		{
+			$this->assertEquals(1, count($result['tags']));
+		}
 	}
 
 }

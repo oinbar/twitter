@@ -2,13 +2,6 @@
 
 class FeedController extends BaseController {
 
-	// public function getFeeds (){
-
-	// 	$feeds = DB::connection('mongodb')->collection('data1')->where('type', 'feed')->get();
-	// 	return View::make('feeds')
-	// 		->with('feeds', $feeds);
-	// }
-
 	public function getFeeds () {
 		$feeds = DB::connection('mysql')->table('users_feeds')->where('user_id', Auth::user()->id)
 			->select('feed_id','feed_name')->get();
@@ -114,21 +107,14 @@ class FeedController extends BaseController {
 		DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array('feed_status' => 'on'));
 
 		//push twitter search task to the queue
-		Queue::push('QueueTasks@send_search_query', array('feed_id' => $feed_id));
-		// Queue::push(function($job) use ($feed_id){
-		// 	$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
-		// 	if ($feed_status == 'on') {
-		// 		$t = new TwitterController();
-		// 		$t->send_search_query($data['feed_id']);
-		// 		$job->delete();
-		// 	}
-		// });
-		return Redirect::to('/view_feed/' .$feed_id);
+		Queue::connection('twitter_fetch')->push('QueueTasks@send_search_query', array('feed_id' => $feed_id)); 
+
+		return Redirect::to('/view_feed/' . $feed_id);
 	}
 
 	public function stopFetching ($feed_id) {
 		//turn feed status off
 		DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array('feed_status' => 'off'));
 		return Redirect::to('/view_feed/' .$feed_id);
-	}
+	}	
 }
