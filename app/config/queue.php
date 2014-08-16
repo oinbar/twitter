@@ -65,17 +65,17 @@ return array(
 
 		'twitter_fetch' => array(
 			'driver' => 'redis',
-			'queue'  => 'default',
+			'queue'  => 'twitter_fetch',
 		),
 
 		'calais_fetch' => array(
 			'driver' => 'redis',
-			'queue'  => 'default',
+			'queue'  => 'calais_fetch',
 		),
 
 		'cache_to_db' => array(
 			'driver' => 'redis',
-			'queue'  => 'default',
+			'queue'  => 'cache_to_db',
 		),
 	),
 

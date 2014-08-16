@@ -115,13 +115,29 @@ class ProcessingTasks extends BaseController {
 				$record['opencalais'] = $results;				
 				$redis->rpush($cache_list_destination, json_encode($record));
 
-				echo Pre::render($record);
-
 				usleep(250000);
 			}
 			catch (Exception $e) {
 				Log::error($e);
 			}
 		}		
+	}
+
+	public function find_future_time ($cache_list_origin = 'pending_calais', 
+										  $cache_list_destination = 'pending_persistence', 
+										  $batch_size = 10) {
+		$redis = Redis::connection();
+		$batch_size = min($redis->llen($cache_list_origin), $batch_size);
+		$contents = $redis->lrange($cache_list_origin, 0, $batch_size-1);
+		$redis->ltrim($cache_list_origin, $batch_size, -1);
+
+		foreach ($contents as $content) {						
+
+			$record = json_decode($content, true);
+			$content = $record['text'];
+
+			$days_of_the_week = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+
+		}
 	}
 }

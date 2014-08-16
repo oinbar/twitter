@@ -25,7 +25,6 @@ class AdminController extends BaseController {
 	    echo '<br>';
 
 
-
 	    echo '<h1>Environment</h1>';
 	    echo App::environment().'</h1>';
 
@@ -99,7 +98,7 @@ class AdminController extends BaseController {
 		}
 	}
 
-	
+
 	public function load_queues () {
 		// this triggers the necessary jobs in QueueTasks by calling initiating them (they are cyclic).
 		Queue::connection('calais_fetch')->push('QueueTasks@send_tweet_to_calais');
@@ -110,6 +109,11 @@ class AdminController extends BaseController {
 		$this->check_start_queue_listener('twitter_fetch');
 		$this->check_start_queue_listener('calais_fetch');
 		$this->check_start_queue_listener('cache_to_db');
+	}
+
+	public function test () {
+		print $redis->lindex(0);
+
 	}
 }
 
