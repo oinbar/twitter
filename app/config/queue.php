@@ -68,6 +68,11 @@ return array(
 			'queue'  => 'default',
 		),
 
+		'calais_fetch' => array(
+			'driver' => 'redis',
+			'queue'  => 'default',
+		),
+
 		'cache_to_db' => array(
 			'driver' => 'redis',
 			'queue'  => 'default',

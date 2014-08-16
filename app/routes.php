@@ -65,9 +65,11 @@ Route::post('/queue/push', function(){
 
 Route::get('/debug', 'AdminController@debug');
 
-Route::get('/test', 'AdminController@test');
+Route::get('/test', 'ProcessingTasks@send_tweet_to_calais');
 
 Route::get('/test2', 'AdminController@test2');
+
+Route::get('/loadqueues', 'AdminController@load_queues');
 
 Route::get('/startqueues', 'AdminController@start_queue_listeners');
 

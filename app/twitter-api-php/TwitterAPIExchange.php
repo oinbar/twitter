@@ -214,6 +214,11 @@ class TwitterAPIExchange
         $json = curl_exec($feed);
         curl_close($feed);
 
+        if (isset($json['error'])) {
+            throw new Exception('TWITTER ERROR: ' . $json['error']);
+        }
+
+
         if ($return) { return $json; }
     }
     

@@ -102,7 +102,6 @@ class FeedController extends BaseController {
 	}
 
 	public function startFetching ($feed_id) {
-
 		//turn feed status on
 		DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array('feed_status' => 'on'));
 

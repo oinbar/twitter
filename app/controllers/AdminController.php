@@ -99,12 +99,17 @@ class AdminController extends BaseController {
 		}
 	}
 
+	
+	public function load_queues () {
+		// this triggers the necessary jobs in QueueTasks by calling initiating them (they are cyclic).
+		Queue::connection('calais_fetch')->push('QueueTasks@send_tweet_to_calais');
+		Queue::connection('cache_to_db')->push('QueueTasks@cache_to_db');   
+	}
+
 	public function start_queue_listeners () {
 		$this->check_start_queue_listener('twitter_fetch');
+		$this->check_start_queue_listener('calais_fetch');
 		$this->check_start_queue_listener('cache_to_db');
-
-		//start cache to db
-		Queue::connection('cache_to_db')
 	}
 }
 
