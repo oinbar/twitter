@@ -2,13 +2,14 @@
 
 class ProcessingTasks extends BaseController {
 
-	public function send_search_query($feed_id, $cache_list_destination = 'pending_calais') {	
+	public function searchTwitterFeedCriteria($feed_id, $cache_list_destination = 'PendingCalaisList') {	
 		/*
-		This is the first stage in the data processing pipeline.  It is responsible for fetching tweets from twitter,
-		and then depositing them in a cache list to await further processing. Note that each call retrieves up to 100 results,
+		This is the first stage in the data processing pipeline.  Finds the criteria based on the feed_id, and searches twitter api.
+		
+		Note that each call retrieves up to 100 results,
 		so there is no need for any time delay here, since all results are returned at once.
 
-		NOTE: must still implement since_id, to make sure tweets are fetched redundantly.  
+		NOTE: must still implement since_id, to make sure tweets are not fetched redundantly.  
 		*/	
 		try {
 			include __DIR__.'/../twitter-api-php/TwitterAPIExchange.php';
@@ -20,7 +21,7 @@ class ProcessingTasks extends BaseController {
 			);
 			// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
 
-			$getfield = '?count=100&q=' . urlencode(DB::connection('mysql')
+			$getfield = '?count=30&q=' . urlencode(DB::connection('mysql')
 											->table('feeds')->where('id', $feed_id)->orderBy('created_at', 'desc')
 											->first()->criteria);
 
@@ -35,7 +36,7 @@ class ProcessingTasks extends BaseController {
 			$data = json_decode($json, true);
 			$redis = Redis::connection();
 
-			foreach ($data['statuses'] as $status){				
+			foreach ($data['statuses'] as $status){	
 				$status['_id'] = $status['id']; //add mongoID
 				$status['feeds'] = array($feed_id); //add reference to feed						
 				$redis->rpush($cache_list_destination, json_encode($status));		
@@ -46,9 +47,9 @@ class ProcessingTasks extends BaseController {
 		} 	
 	}
 
-	public function cache_to_db ($cache_list_origin = 'pending_persistence', $batch_size = 1000) {
+	public function insertJsonToDB ($cache_list_origin = 'PendingPersistenceList', $batch_size = 1000) {
 		/*
-		This is the final stage in the data processing pipeline.  It fetches data from a cache list in batches, 
+		This is the final stage in the data processing pipeline.  It pops data from a cache list in batches, 
 		and inserts the records into the database, while making sure to deal appropriately with
 		any duplicates.
 		*/
@@ -79,65 +80,122 @@ class ProcessingTasks extends BaseController {
 		}
 	}
 
-	public function send_tweet_to_calais ($cache_list_origin = 'pending_calais', 
-										  $cache_list_destination = 'pending_persistence', 
-										  $batch_size = 10) {
+	public function runJsonThroughCalais ($cache_list_origin = 'PendingCalaisList', 
+										  $cache_list_destination = 'PendingSUTimeList', 
+										  $batch_size = 100) {
 		/*
-		passes tweets down the data processing pipeline by fetching it from one cache list, passing it
-		through the open calais service, and depositing it in the next cache list.
-		does so in batches, and uses the appropraite time interval in between api calls (0.25s)
+		pulls a batch of documents off the cache_list_origin list, runs each doc through the opencalais
+		service with a delay in between, and then deposits the reformed document in the cache_list_destination list. 
 		*/
 		include __DIR__.'/../open_calais_dg/opencalais.php';
 		$redis = Redis::connection();
 		$batch_size = min($redis->llen($cache_list_origin), $batch_size);
 		$contents = $redis->lrange($cache_list_origin, 0, $batch_size-1);
 		$redis->ltrim($cache_list_origin, $batch_size, -1);
-		$calais_key = 'qupquc5c4qzj7sg9knu5ad4w';
+		$calais_key1 = 'qupquc5c4qzj7sg9knu5ad4w';
+		$calais_key2 = 'cxxf222kq5thbjcmtmxw8hgv';
 
 		foreach ($contents as $content) {						
 			try{
 				$record = json_decode($content, true);
-				$content = 'This text is in English. ' . $record['text']; //using a prefix to cirvumvent a languge detection bug
+				$content = str_replace('#', '',$record['text']); //strip characters that screw up calais
+				$content = str_replace('@', '',$record['text']); //strip characters that screw up calais
 
-				$oc = new OpenCalais($calais_key);
+				$oc = new OpenCalais($calais_key2);
 				$results = json_decode($oc->getResult($content), true);
-				
-				// fix some issue with the keys
-				$i = 0;
-				foreach ($results as $key => $val) { 
-					$results[$i] = $val;
-					unset($results[$key]);
-					$i++;
-				}
 
 				unset($results['doc']);
-				unset($results[0]);				
+				unset($results[0]);
+
+				// fix some issue with the keys	
+				foreach ($results as $key => $val) { 
+					unset($results[$key]);					
+					array_push($results, $val);
+				}				
+
 				$record['opencalais'] = $results;				
 				$redis->rpush($cache_list_destination, json_encode($record));
 
-				usleep(250000);
+				usleep(100000);
 			}
 			catch (Exception $e) {
 				Log::error($e);
 			}
-		}		
+		}
 	}
 
-	public function find_future_time ($cache_list_origin = 'pending_calais', 
-										  $cache_list_destination = 'pending_persistence', 
-										  $batch_size = 10) {
-		$redis = Redis::connection();
-		$batch_size = min($redis->llen($cache_list_origin), $batch_size);
-		$contents = $redis->lrange($cache_list_origin, 0, $batch_size-1);
-		$redis->ltrim($cache_list_origin, $batch_size, -1);
+	public function runJsonThroughSUTime ($cache_list_origin = 'PendingSUTimeList', 
+										  $cache_list_destination = 'PendingPersistenceList', 
+										  $batch_size = 50) {
+		/*
+		pulls a batch of documents off the cache_list_origin list, and runs them through StanfordNLP's
+		SUTime module (packaged into a jar file), attempting to find any mentions of dates and times in the text.
+		currently this is done by using an intermediary json file and calling the jar directly, this should be changed.
+		*/
+		try{
+			$redis = Redis::connection();
+			$batch_size = min($redis->llen($cache_list_origin), $batch_size);
+			$contents = $redis->lrange($cache_list_origin, 0, $batch_size-1);
+			$redis->ltrim($cache_list_origin, $batch_size, -1);
+			
+			// add the normalized datetime field so that SUTime has a reference point 
+			$array = array();
+			foreach ($contents as $record){
+				$record = json_decode($record, true);
+				$record['datetime'] = date("Y-m-d H:i:s" , strtotime($record['created_at']));
+				array_push($array, $record);
+			}
+			$array = json_encode($array);
 
-		foreach ($contents as $content) {						
+			// save the data to an intermediate file, run SUTime, and save the new data back to the file
+			$filename = 'jsonForSUTime' . iterator_count(new DirectoryIterator(__DIR__ . '/temp/')) . '.json';
+			file_put_contents(__DIR__ . '/temp/' . $filename, $array);
+			exec('java -jar /Users/Orr/Desktop/SUTime.jar ' . __DIR__ . '/temp/' . $filename);
 
-			$record = json_decode($content, true);
-			$content = $record['text'];
+			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put
+			// the record in the cache
+			$file = file_get_contents(__DIR__ . '/temp/' . $filename);
+			$file = json_decode($file, true);
+			// foreach ($file as $record) {
+			// 	if (array_key_exists('SUTime', $record)){
+			// 		foreach ($record['SUTime'] as $time ){
+			// 			// numerize daytimes (morning, afternoon, evening, night)
+			// 			$a = new AdminController();
 
-			$days_of_the_week = array('monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday');
+			// 			Log::error($time['normalized']);
+			// 			Log::error('FIXED: '. $a->fixSUTime($time['normalized']));
 
+
+			// 			$time['normalized'] = $a->fixSUTime($time['normalized']);
+			// 			$time['new'] = $a->fixSUTime($time['normalized']);
+			// 			Log::error('IN JSON: '. $record['SUTime'][0]['new']);
+
+
+			for ($i = 0; $i < sizeof($file); $i++) {
+				if (array_key_exists('SUTime', $file[$i])){
+					for ($j = 0; $j < sizeof($file[$i]['SUTime']); $j++) {
+						// numerize daytimes (morning, afternoon, evening, night)
+						$a = new AdminController();
+
+						Log::error($file[$i]['SUTime'][$j]['normalized']);
+						Log::error('FIXED: '. $a->fixSUTime($file[$i]['SUTime'][$j]['normalized']));
+
+
+						$file[$i]['SUTime'][$j]['normalized'] = $a->fixSUTime($file[$i]['SUTime'][$j]['normalized']);
+						Log::error('IN JSON: '. $file[$i]['SUTime'][$j]['normalized']);
+
+						$interval = $a->dateTimeDiffDays($file[$i]['created_at'], $file[$i]['SUTime'][$j]['normalized']);
+						if ($interval > 0) {
+							$file[$i]['SUTime'][$j]['future'] = true;
+						}
+					}
+				}
+				$redis->rpush($cache_list_destination, json_encode($file[$i]));
+			}			
+			unlink(__DIR__ . '/temp/' . $filename);			
+		} 
+		catch (Exception $e) {
+			Log::error($e);
 		}
 	}
 }

@@ -26,8 +26,8 @@
     <ul class="feeds-items">
 		
 		
-		@foreach($statuses as $tweet)
-			<li><a href="#"> {{ $tweet }} </a></li>
+		@foreach($data as $tweet)
+			<li><a href="{{ url('/tweet/' . $tweet['_id']) }}"> {{ $tweet['text'] }} </a></li>
 		@endforeach
 		
 	</ul>

@@ -63,19 +63,24 @@ return array(
 			'queue'  => 'default',
 		),
 
-		'twitter_fetch' => array(
+		'PendingTwitterQueue' => array(
 			'driver' => 'redis',
-			'queue'  => 'twitter_fetch',
+			'queue'  => 'PendingTwitterQueue',
 		),
 
-		'calais_fetch' => array(
+		'PendingCalaisQueue' => array(
 			'driver' => 'redis',
-			'queue'  => 'calais_fetch',
+			'queue'  => 'PendingCalaisQueue',
+		),
+		
+		'PendingSUTimeQueue' => array(
+			'driver' => 'redis',
+			'queue'  => 'PendingSUTimeQueue',
 		),
 
-		'cache_to_db' => array(
+		'PendingPersistenceQueue' => array(
 			'driver' => 'redis',
-			'queue'  => 'cache_to_db',
+			'queue'  => 'PendingPersistenceQueue',
 		),
 	),
 

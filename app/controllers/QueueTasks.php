@@ -4,7 +4,7 @@ include "ProcessingTasks.php";
 
 class QueueTasks {
 	
-	public function send_search_query($job, $data){
+	public function searchTwitterFeedCriteriaJob($job, $data){
 		/*
 		The twitter fetch job.  The job proceeds if its status is labeled "ON" in the db.  The job is released back onto the queue
 		after a time delay, to regulate the rate of API calls.  Each job is tied to a feed, and currently they all share the same API
@@ -18,7 +18,7 @@ class QueueTasks {
 		
 		if ($feed_status == 'on') {
 			$p = new ProcessingTasks();
-			$p->send_search_query($data['feed_id']);
+			$p->searchTwitterFeedCriteria($data['feed_id']);
 			$job->delete();
 
 			$job->release(10);
@@ -28,27 +28,37 @@ class QueueTasks {
 		}
 	} 
 
-	public function send_tweet_to_calais ($job, $data) {
+	public function runJsonThroughCalaisJob ($job, $data) {
 		/*
 		The open calais fetch job.  The job is released immediately back onto the queue since time delays are taken care of
 		inside the function.  Currently this job uses one API key, and this job takes care of all data going to open calais 
 		(regardless of feed).  To provide scalability, more jobs should be triggered, each with a different API key.
 		*/
 		$p = new ProcessingTasks();
-		$p->send_tweet_to_calais();
+		$p->runJsonThroughCalais();
 
 		$job->release();
 	}
 
-	public function cache_to_db ($job, $data) {
+	public function runJsonThroughSUTimeJob ($job, $data) {
+		/*
+		The SUTime job.  The job is released immediately back onto the queue.  There is significant overhead in loading the 
+		JVM and related libraries, as currently this is performed each time the jar is called.
+		*/
+		$p = new ProcessingTasks();
+		$p->runJsonThroughSUTime();
+
+		$job->release();
+	}
+
+	public function insertJsonToDBJob ($job, $data) {
 		/*
 		The persistence job (moving data from cache to the db).  The job is released immediately back onto the queue since the only
 		delay imposed is the IO of the database.
 		*/
 		$p = new ProcessingTasks();
-		$p->cache_to_db();
+		$p->insertJsonToDB();
 
 		$job->release();
-
 	}
 }

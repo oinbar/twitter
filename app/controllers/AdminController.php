@@ -68,27 +68,24 @@ class AdminController extends BaseController {
 
 	private function runQueueListener ($queue) {
 		if (App::environment()=='local') {
-		    $command = 'php artisan queue:listen ' . $queue . ' > /dev/null & echo $!';
+		    $command = 'php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!';
 		    $number = exec($command);			    
 		} else {
 			exec('cd ~/app-root/repo');
 			$php = exec('which php');
-			$number = exec($php . ' artisan queue:listen ' . $queue . ' > /dev/null $ echo $!');
+			$number = exec($php . ' artisan queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
 		}
-		file_put_contents(__DIR__ . '/' . $queue . '_queue.pid', $number);
+		file_put_contents(__DIR__ . '/temp/' . $queue . '_queue.pid', $number);
+		
 	}
 
 	public function check_start_queue_listener ($queue) {
 		// checks if the queue listener is running, if not it starts it and
 		// stores the process id
-			if (file_exists(__DIR__ . '/' . $queue . '_queue.pid')) {
-	    		$pid = file_get_contents(__DIR__ . '/' . $queue . '_queue.pid');	    		
-
-	    		Log::error('pid   ' . $pid);
+			if (file_exists(__DIR__ . '/temp/' . $queue . '_queue.pid')) {
+	    		$pid = file_get_contents(__DIR__ . '/temp/' . $queue . '_queue.pid');	    		
 
 			    $result = exec('kill -p ' . $pid);
-
-			    Log::error('result   ' . $result);
 
 			    if ($result == '') {
 		        	$this->runQueueListener($queue);
@@ -100,19 +97,101 @@ class AdminController extends BaseController {
 
 
 	public function load_queues () {
-		// this triggers the necessary jobs in QueueTasks by calling initiating them (they are cyclic).
-		Queue::connection('calais_fetch')->push('QueueTasks@send_tweet_to_calais');
-		Queue::connection('cache_to_db')->push('QueueTasks@cache_to_db');   
+		try {
+			// this triggers the necessary jobs in QueueTasks by calling initiating them (they are cyclic).
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob');
+			Queue::connection('PendingSUTimeQueue')->push('QueueTasks@runJsonThroughSUTimeJob');
+			Queue::connection('PendingPersistenceQueue')->push('QueueTasks@insertJsonToDBJob');   
+		} catch (Ecxeption $e) {
+			Log::error('LOAD QUEUE ERROR: ' . $e);
+		}
 	}
 
 	public function start_queue_listeners () {
-		$this->check_start_queue_listener('twitter_fetch');
-		$this->check_start_queue_listener('calais_fetch');
-		$this->check_start_queue_listener('cache_to_db');
+		try {
+			$this->check_start_queue_listener('PendingTwitterQueue');
+			$this->check_start_queue_listener('PendingCalaisQueue');
+			$this->check_start_queue_listener('PendingSUTimeQueue');
+			$this->check_start_queue_listener('PendingPersistenceQueue');
+		} catch (Exception $e) {
+			Log::error('START LISTENER ERROR: ' . $e);
+		} 
+	}
+
+	private function convertMongoJavascriptToPhp ($string) {
+		$string = str_replace('.', '->', $string);
+		$string = str_replace(':', '=>', $string);
+		$string = str_replace('{', 'array(', $string);
+		$string = str_replace('}', ')', $string);
+		return $string;
+	} 
+
+	public function mongoQuery() {
+		try{
+			$query = Input::get('query');
+			if ($query) {				
+				$db = DB::connection('mongodb')->getMongoDB();								
+				$results = $db->execute('return ' . $query . ';');
+				return View::make('adminViews/mongo_query')
+							->with('query', $query)
+							->with('results', $results);							
+			}
+			else {
+				return View::make('adminViews/mongo_query')
+							->with('query', '')
+							->with('results', '');
+			}			
+		}
+		catch (Exception $e){
+			Log::error('MONGO QUERY:  '. $e);
+		}	
+	}
+
+	public function cacheView () {
+		$redis = Redis::connection();
+
+		return View::make('adminViews/cache_view')
+			->with('sizePendingCalaisList',$redis->llen('PendingCalaisList'))
+			->with('sizePendingSUTimeList',$redis->llen('PendingSUTimeList'))
+			->with('sizePendingPersistenceList',$redis->llen('PendingPersistenceList'));
 	}
 
 	public function test () {
-		print $redis->lindex(0);
+		include __DIR__.'/../open_calais_dg/opencalais.php';
+
+		$content = 'Next week I am flying to washington dc for an APIAC conference';
+		$oc = new OpenCalais('cxxf222kq5thbjcmtmxw8hgv');
+		$results = json_decode($oc->getResult($content), true);
+
+		echo Pre::render($results);		
+	}
+
+	public function fixSUTime ($date_str) {
+		$date_str = str_replace('TMO', ' 08:00' ,$date_str);
+		$date_str = str_replace('TAF', ' 15:00' ,$date_str);
+		$date_str = str_replace('TEV', ' 19:00' ,$date_str);
+		$date_str = str_replace('TNI', ' 21:00' ,$date_str);
+		$date_str = str_replace('T', ' ' ,$date_str);		
+		$date_str = preg_replace('/-W\d\d/', '', $date_str); //-W35
+		$date_str = preg_replace('/-W..-\d/', '', $date_str); //-WXX-5		
+		return $date_str;
+	}
+
+	public function dateTimeDiffDays ($date_str1, $date_str2){
+		// echo $this->fixSUTime($date_str1).'<br>';
+		// $date_str1 = new DateTime(date('Y-m-d H:i:s', strtotime($this->fixSUTime($date_str1))));
+
+		// echo $this->fixSUTime($date_str2).'<br>';		
+		// $date_str2 = new DateTime(date('Y-m-d H:i:s', strtotime($this->fixSUTime($date_str2))));		
+		
+		// $interval = $date_str2->diff($date_str1);
+		// return $interval->format('%h');
+		return (strtotime($this->fixSUTime($date_str2))-strtotime($this->fixSUTime($date_str1)))/60/60/24;
+	}
+
+	public function test2 () {
+
+		echo $this->dateTimeDiffDays('Wed Aug 20 18:52:33 +0000 2014', '2014-08-23-WXX-6T15:00');
 
 	}
 }

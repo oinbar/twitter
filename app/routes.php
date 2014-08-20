@@ -33,6 +33,8 @@ Route::get('/startfetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'Fee
 
 Route::get('/stopfetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@stopFetching'));
 
+Route::get('/tweet/{id}', array('uses' => 'FeedController@showTweet')); 
+
 
 Route::get('/signup', array('before' => 'guest', 'uses' => 'UserController@getSignup'));
 
@@ -63,9 +65,13 @@ Route::post('/queue/push', function(){
 	return Queue::marshal(); 
 });
 
+Route::get('/mongoquery', 'AdminController@mongoQuery');
+
+Route::get('/cacheview', 'AdminController@cacheView');
+
 Route::get('/debug', 'AdminController@debug');
 
-Route::get('/test', 'ProcessingTasks@send_tweet_to_calais');
+Route::get('/test', 'AdminController@test');
 
 Route::get('/test2', 'AdminController@test2');
 

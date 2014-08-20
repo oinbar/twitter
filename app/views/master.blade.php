@@ -32,7 +32,6 @@
 			</ul>	
      	</nav>
 
-
 	    <div id="main-content" class="main-content">
 	     	@yield('main-content') 
 	     	

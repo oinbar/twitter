@@ -43,8 +43,6 @@ class OpenCalais {
 
         $result = $this->callAPI();
 
-        // return $this->entities;
-
         return $result;
 
     }
@@ -98,9 +96,10 @@ class OpenCalais {
 
         if (strpos($response, "<Exception>") !== false) {
             $text = preg_match("/<Exception\>(.*)<\/Exception>/mu", $response, $matches);
-            throw new OpenCalaisException('CALAIS ERROR: ' . $matches[1]);
+            throw new OpenCalaisException('CALAIS ERROR: ' . $matches[1] . ' TEXT: ' . $this->document);
         }
-
+        
+        // Log::error($response);
         return $response;
     }
 }

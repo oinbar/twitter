@@ -76,37 +76,32 @@ class FeedController extends BaseController {
 
 	public function getViewFeed ($feed_id, $skip = 0) {
 		$take = 20; // numbe of results to select
-		$data = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->skip($skip)->take($take)->get();
+		$data = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->orderBy('created_at', 'desc', 'natural')->skip($skip)->take($take)->get();
 	    $count = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->count();
-
-		$statuses = array();
-		if (!empty($data)){
-			foreach ($data as $status) {
-				array_push($statuses, $status['created_at'] . ' - ' . 
-									  $status['user']['name'] . ' - ' . 
-						   			  $status['user']['location'] . ' - ' .
-	 					   			  $status['text']);		
-			}
-		}
 
 		$feed = DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->first();
 		
 		return View::make('feed')
 		->with('feed', $feed)
 		->with('num_records', $count)
-		->with('statuses', $statuses)
+		->with('data', $data)
 		->with('feed_id', $feed_id)
 		->with('start', $skip)
 		->with('end', $skip + $take)
 		->with('prev', max(0, $skip-$take));
 	}
 
+	public function showTweet ($id) {
+		$db = DB::connection('mongodb')->getMongoDB();								
+		$db_record = $db->execute('return db.data1.find({ _id : NumberLong('. $id .')}).toArray();');
+		echo Pre::render($db_record);
+	}
+
 	public function startFetching ($feed_id) {
 		//turn feed status on
 		DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array('feed_status' => 'on'));
 
-		//push twitter search task to the queue
-		Queue::connection('twitter_fetch')->push('QueueTasks@send_search_query', array('feed_id' => $feed_id)); 
+		Queue::connection('PendingTwitterQueue')->push('QueueTasks@searchTwitterFeedCriteriaJob', array('feed_id' => $feed_id)); 
 
 		return Redirect::to('/view_feed/' . $feed_id);
 	}
