@@ -81,19 +81,26 @@ class AdminController extends BaseController {
 	}
 
 	public function check_start_queue_listener ($queue) {
-		// checks if the queue listener is running, if not it starts it and
-		// stores the process id
-			if (file_exists(__DIR__ . '/temp/' . $queue . '_queue.pid')) {
-	    		$pid = file_get_contents(__DIR__ . '/temp/' . $queue . '_queue.pid');	    		
+		// // checks if the queue listener is running, if not it starts it and
+		// // stores the process id
+		// 	if (file_exists(__DIR__ . '/temp/' . $queue . '_queue.pid')) {
+	 //    		$pid = file_get_contents(__DIR__ . '/temp/' . $queue . '_queue.pid');	    		
 
-			    $result = exec('kill -p ' . $pid);
+		// 	    $result = exec('kill -p ' . $pid);
 
-			    if ($result == '') {
-		        	$this->runQueueListener($queue);
-		        }
-			} else {
-		    	$this->runQueueListener($queue);
+		// 	    if ($result == '') {
+		//         	$this->runQueueListener($queue);
+		//         }
+		// 	} else {
+		//     	$this->runQueueListener($queue);
+		// }
+		if (App::environment()=='local') {
+		    exec('php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!');		    
+		} else {
+			exec($php . ' artisan queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
 		}
+		file_put_contents(__DIR__ . '/temp/' . $queue . '_queue.pid', $number);
+
 	}
 
 
