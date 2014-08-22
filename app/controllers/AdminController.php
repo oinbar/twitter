@@ -94,13 +94,14 @@ class AdminController extends BaseController {
 		// 	} else {
 		//     	$this->runQueueListener($queue);
 		// }
-		if (App::environment()=='local') {
-		    exec('php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!');		    
-		} else {
+		// if (App::environment()=='local') {
+		//     exec('php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!');		    
+		// } else {
 
-			exec('$(which php) artisan queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
-		}
-		file_put_contents(__DIR__ . '/temp/' . $queue . '_queue.pid', $number);
+		// 	exec('$(which php) artisan queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
+		// }
+		// file_put_contents(__DIR__ . '/temp/' . $queue . '_queue.pid', $number);
+		exec('$(which php) artisan queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
 	}
 
 
