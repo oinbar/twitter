@@ -21,7 +21,15 @@ class ProcessingTasks extends BaseController {
 			);
 			// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
 
-			$getfield = '?count=30&q=' . urlencode(DB::connection('mysql')
+			$redis = Redis::Connection();
+			$since_id = '';
+			if ($redis->exists('since_id-feedID-' . $since_id)) {
+				$since_id = $redis->get('since_id-feedID-' . $since_id);
+				$since_id = '&since_id=' . $since_id;
+			}
+
+
+			$getfield = '?count=100' . $since_id . '&q=' . urlencode(DB::connection('mysql')
 											->table('feeds')->where('id', $feed_id)->orderBy('created_at', 'desc')
 											->first()->criteria);
 
@@ -36,10 +44,17 @@ class ProcessingTasks extends BaseController {
 			$data = json_decode($json, true);
 			$redis = Redis::connection();
 
-			foreach ($data['statuses'] as $status){	
+			$max_id = 0;
+			foreach ($data['statuses'] as $status){					
 				$status['_id'] = $status['id']; //add mongoID
 				$status['feeds'] = array($feed_id); //add reference to feed						
 				$redis->rpush($cache_list_destination, json_encode($status));		
+				if ($status['_id'] > $max_id) {
+					$max_id = ($status['_id']);
+				}
+
+			$redis->del('since_id-feedID-' . $since_id);
+			$redis->append('since_id-feedID-' . $since_id, $max_id);	
 			}
 		}
 		catch (Exception $e) {
@@ -80,7 +95,8 @@ class ProcessingTasks extends BaseController {
 		}
 	}
 
-	public function runJsonThroughCalais ($cache_list_origin = 'PendingCalaisList', 
+	public function runJsonThroughCalais ($calais_key = '',
+										  $cache_list_origin = 'PendingCalaisList', 
 										  $cache_list_destination = 'PendingSUTimeList', 
 										  $batch_size = 100) {
 		/*
@@ -92,8 +108,7 @@ class ProcessingTasks extends BaseController {
 		$batch_size = min($redis->llen($cache_list_origin), $batch_size);
 		$contents = $redis->lrange($cache_list_origin, 0, $batch_size-1);
 		$redis->ltrim($cache_list_origin, $batch_size, -1);
-		$calais_key1 = 'qupquc5c4qzj7sg9knu5ad4w';
-		$calais_key2 = 'cxxf222kq5thbjcmtmxw8hgv';
+
 
 		foreach ($contents as $content) {						
 			try{
@@ -101,7 +116,7 @@ class ProcessingTasks extends BaseController {
 				$content = str_replace('#', '',$record['text']); //strip characters that screw up calais
 				$content = str_replace('@', '',$record['text']); //strip characters that screw up calais
 
-				$oc = new OpenCalais($calais_key2);
+				$oc = new OpenCalais($calais_key);
 				$results = json_decode($oc->getResult($content), true);
 
 				unset($results['doc']);
@@ -116,7 +131,7 @@ class ProcessingTasks extends BaseController {
 				$record['opencalais'] = $results;				
 				$redis->rpush($cache_list_destination, json_encode($record));
 
-				usleep(100000);
+				// usleep(100000);
 			}
 			catch (Exception $e) {
 				Log::error($e);
@@ -177,12 +192,7 @@ class ProcessingTasks extends BaseController {
 						// numerize daytimes (morning, afternoon, evening, night)
 						$a = new AdminController();
 
-						Log::error($file[$i]['SUTime'][$j]['normalized']);
-						Log::error('FIXED: '. $a->fixSUTime($file[$i]['SUTime'][$j]['normalized']));
-
-
 						$file[$i]['SUTime'][$j]['normalized'] = $a->fixSUTime($file[$i]['SUTime'][$j]['normalized']);
-						Log::error('IN JSON: '. $file[$i]['SUTime'][$j]['normalized']);
 
 						$interval = $a->dateTimeDiffDays($file[$i]['created_at'], $file[$i]['SUTime'][$j]['normalized']);
 						if ($interval > 0) {

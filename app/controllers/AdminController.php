@@ -97,9 +97,13 @@ class AdminController extends BaseController {
 
 
 	public function load_queues () {
+		$calais_key1 = 'qupquc5c4qzj7sg9knu5ad4w';
+		$calais_key2 = 'cxxf222kq5thbjcmtmxw8hgv';
 		try {
 			// this triggers the necessary jobs in QueueTasks by calling initiating them (they are cyclic).
-			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob');
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $calais_key1));
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $calais_key2));
+			Queue::connection('PendingSUTimeQueue')->push('QueueTasks@runJsonThroughSUTimeJob');
 			Queue::connection('PendingSUTimeQueue')->push('QueueTasks@runJsonThroughSUTimeJob');
 			Queue::connection('PendingPersistenceQueue')->push('QueueTasks@insertJsonToDBJob');   
 		} catch (Ecxeption $e) {
@@ -111,6 +115,8 @@ class AdminController extends BaseController {
 		try {
 			$this->check_start_queue_listener('PendingTwitterQueue');
 			$this->check_start_queue_listener('PendingCalaisQueue');
+			$this->check_start_queue_listener('PendingCalaisQueue');
+			$this->check_start_queue_listener('PendingSUTimeQueue');
 			$this->check_start_queue_listener('PendingSUTimeQueue');
 			$this->check_start_queue_listener('PendingPersistenceQueue');
 		} catch (Exception $e) {
@@ -147,9 +153,8 @@ class AdminController extends BaseController {
 		}	
 	}
 
-	public function cacheView () {
+	public function cacheView () {		
 		$redis = Redis::connection();
-
 		return View::make('adminViews/cache_view')
 			->with('sizePendingCalaisList',$redis->llen('PendingCalaisList'))
 			->with('sizePendingSUTimeList',$redis->llen('PendingSUTimeList'))
@@ -171,7 +176,7 @@ class AdminController extends BaseController {
 		$date_str = str_replace('TAF', ' 15:00' ,$date_str);
 		$date_str = str_replace('TEV', ' 19:00' ,$date_str);
 		$date_str = str_replace('TNI', ' 21:00' ,$date_str);
-		$date_str = str_replace('T', ' ' ,$date_str);		
+		$date_str = preg_replace('/(?<=\d)T/', ' ' ,$date_str);		
 		$date_str = preg_replace('/-W\d\d/', '', $date_str); //-W35
 		$date_str = preg_replace('/-W..-\d/', '', $date_str); //-WXX-5		
 		return $date_str;
@@ -191,7 +196,8 @@ class AdminController extends BaseController {
 
 	public function test2 () {
 
-		echo $this->dateTimeDiffDays('Wed Aug 20 18:52:33 +0000 2014', '2014-08-23-WXX-6T15:00');
+		echo $this->fixSUTime('2014-08-23T15:00');
+		//echo $this->dateTimeDiffDays('Wed Aug 20 18:52:33 +0000 2014', '2014-08-23-WXX-6T15:00');
 
 	}
 }

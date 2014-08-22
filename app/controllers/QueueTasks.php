@@ -35,7 +35,7 @@ class QueueTasks {
 		(regardless of feed).  To provide scalability, more jobs should be triggered, each with a different API key.
 		*/
 		$p = new ProcessingTasks();
-		$p->runJsonThroughCalais();
+		$p->runJsonThroughCalais($data['calais_key']);
 
 		$job->release();
 	}
