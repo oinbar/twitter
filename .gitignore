@@ -1,7 +1,9 @@
 /bootstrap/compiled.php
 /app/controllers/temp
-/vendor
+
+
 composer.phar
+compsoer.lock
 .env.*.php
 .env.php
 .DS_Store
