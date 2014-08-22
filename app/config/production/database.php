@@ -59,8 +59,9 @@ return array(
 			'port'		=> '3306',
 			'database'  => 'ebdb',
 			'username'  => 'admin',
-			'password'  => 'password',
+			'password'  => 'password',		
 		),
+		
 	),
 
 );

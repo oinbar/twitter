@@ -97,10 +97,10 @@ class AdminController extends BaseController {
 		if (App::environment()=='local') {
 		    exec('php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!');		    
 		} else {
-			exec($php . ' artisan queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
+
+			exec('$(which php) artisan queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
 		}
 		file_put_contents(__DIR__ . '/temp/' . $queue . '_queue.pid', $number);
-
 	}
 
 
