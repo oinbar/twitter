@@ -165,7 +165,13 @@ class ProcessingTasks extends BaseController {
 			// save the data to an intermediate file, run SUTime, and save the new data back to the file
 			$filename = 'jsonForSUTime' . iterator_count(new DirectoryIterator(__DIR__ . '/temp/')) . '.json';
 			file_put_contents(__DIR__ . '/temp/' . $filename, $array);
-			exec('java -jar /Users/Orr/Desktop/SUTime.jar ' . __DIR__ . '/temp/' . $filename);
+			$path ='';
+			if (App::environment() == 'local') {
+				$filepath = '/Users/Orr/Desktop/SUTime.jar'
+			elseif (App::environment() == 'production') {
+				$filepath = '/var/app/twitterintelLibs/SUTime.jar';
+			}
+			exec('java -jar ' . $filepath . __DIR__ . '/temp/' . $filename);
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put
 			// the record in the cache
