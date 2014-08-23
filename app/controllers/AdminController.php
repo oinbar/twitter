@@ -72,12 +72,11 @@ class AdminController extends BaseController {
 		    $command = 'php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!';
 		    $number = exec($command);			    
 		} else {
-			// exec('cd /var/app/current');
-			// $php = exec('which php');			
+			exec('cd /var/app/current/');		
 			$command = 'php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!';
 			$number = exec($command);
 		}
-		// file_put_contents(__DIR__ . '/temp/' . $queue . '_queue.pid', $number);
+
 		
 	}
 
