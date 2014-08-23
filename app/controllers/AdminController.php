@@ -70,19 +70,10 @@ class AdminController extends BaseController {
 	private function runQueueListener ($queue) {
 		if (App::environment()=='local') {
 		    $command = 'php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!';
-		    $number = exec($command);			    
+		    $pid = exec($command);			    
 		} else {
-			// exec('cd /var/app/current');
-			// $command = 'php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!';
-			// $number = exec($command);
-			try {
-				// echo exec('which php');
-				$command = 'php /var/app/current/artisan queue:listen ' . $queue . ' --timeout=600';
-				$result = exec($command);
-			} catch (Exception $e) {
-				Log::error($result . ' ' . $e);
-			}
-		
+			$command = 'php /var/app/current/artisan queue:listen ' . $queue . ' --timeout=600';
+			$pid = exec($command);			
 		}
 	}
 
