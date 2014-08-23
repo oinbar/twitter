@@ -18,7 +18,7 @@ print_r($argv);  // just to see what was passed in
 
 if (argc == 0) {
 	echo 'no args';
-	die():
+	die();
 }
 
 $out = array();
