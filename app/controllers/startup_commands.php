@@ -21,7 +21,6 @@
 // 	die();
 // }
 
-exec('php /var/app/current/artisan queue:listen PendingTwitterQueue --timeout=600');
 
 $out = array();
 if  ($argv[1] == 'local') {
@@ -34,7 +33,7 @@ if  ($argv[1] == 'local') {
 	array_push($out, exec('php artisan queue:listen PendingPersistenceQueue --timeout=600'));
 }
 
-elseif ($argv[1] == 'local') {
+elseif ($argv[1] == 'production') {
 	// START QUEUE LISTENERS
 	array_push($out, exec('php /var/app/current/artisan queue:listen PendingTwitterQueue --timeout=600'));
 	array_push($out, exec('php /var/app/current/artisan queue:listen PendingCalaisQueue --timeout=600'));
