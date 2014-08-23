@@ -22,7 +22,7 @@
 // }
 
 
-// $out = array();
+$out = array();
 // if  ($argv[1] == 'local') {
 	// START QUEUE LISTENERS	
 	// array_push($out, exec('php artisan queue:listen PendingTwitterQueue --timeout=600 &'));
