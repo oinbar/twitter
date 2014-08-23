@@ -57,7 +57,7 @@ class AdminController extends BaseController {
 	    print_r(Config::get('database.connections.redis'));
 	    try {
 	    	$redis = Redis::connection();
-	    	$redis->ping();
+	    	$redis->ping;
 	    	echo '<strong style="background-color:green; padding:5px;">Connection confirmed</strong>';
 		}
 		catch (Exception $e) {
@@ -72,37 +72,30 @@ class AdminController extends BaseController {
 		    $command = 'php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!';
 		    $number = exec($command);			    
 		} else {
-			exec('cd ~/app-root/repo');
+			exec('cd /var/app/current');
 			$php = exec('which php');
 			$number = exec($php . ' artisan queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
 		}
-		file_put_contents(__DIR__ . '/temp/' . $queue . '_queue.pid', $number);
+		// file_put_contents(__DIR__ . '/temp/' . $queue . '_queue.pid', $number);
 		
 	}
 
 	public function check_start_queue_listener ($queue) {
-		// // checks if the queue listener is running, if not it starts it and
-		// // stores the process id
-		// 	if (file_exists(__DIR__ . '/temp/' . $queue . '_queue.pid')) {
-	 //    		$pid = file_get_contents(__DIR__ . '/temp/' . $queue . '_queue.pid');	    		
+		// checks if the queue listener is running, if not it starts it and
+		// stores the process id
+			// if (file_exists(__DIR__ . '/temp/' . $queue . '_queue.pid')) {
+	  //   		$pid = file_get_contents(__DIR__ . '/temp/' . $queue . '_queue.pid');	    		
 
-		// 	    $result = exec('kill -p ' . $pid);
+			//     $result = exec('kill -p ' . $pid);
 
-		// 	    if ($result == '') {
-		//         	$this->runQueueListener($queue);
-		//         }
-		// 	} else {
-		//     	$this->runQueueListener($queue);
-		// }
-		// if (App::environment()=='local') {
-		//     exec('php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!');		    
-		// } else {
-
-		// 	exec('$(which php) artisan queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
-		// }
-		// file_put_contents(__DIR__ . '/temp/' . $queue . '_queue.pid', $number);
-		exec('$(which php) artisan queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
+			//     if ($result == '') {
+		 //        	$this->runQueueListener($queue);
+		 //        }
+			// } else {
+		 //    	$this->runQueueListener($queue);
+		$this->runQueueListener($queue);
 	}
+
 
 
 	public function load_queues () {
