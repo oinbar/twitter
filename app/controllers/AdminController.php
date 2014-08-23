@@ -77,11 +77,8 @@ class AdminController extends BaseController {
 			// $number = exec($command);
 			try {
 				// echo exec('which php');
-				echo exec('which artisan');
 				$command = 'php /var/app/current/artisan queue:listen ' . $queue . ' --timeout=600';
 				$result = exec($command);
-				echo '<br>';
-				echo $result;
 			} catch (Exception $e) {
 				Log::error($result . ' ' . $e);
 			}
@@ -132,6 +129,7 @@ class AdminController extends BaseController {
 		} catch (Exception $e) {
 			Log::error('START LISTENER ERROR: ' . $e);
 		} 
+		echo 'done';
 	}
 
 	private function convertMongoJavascriptToPhp ($string) {
