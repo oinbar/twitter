@@ -16,30 +16,35 @@ print_r($argv);  // just to see what was passed in
 // echo "\$_REQUEST = ";
 // print_r($_REQUEST);
 
+if (argc == 0) {
+	echo 'no args';
+	die():
+}
 
 $out = array();
 if  ($argv[1] == 'local') {
 	// START QUEUE LISTENERS	
-	array_push($results, exec('php artisan queue:listen PendingTwitterQueue --timeout=600'));
-	array_push($results, exec('php artisan queue:listen PendingCalaisQueue --timeout=600'));
-	array_push($results, exec('php artisan queue:listen PendingCalaisQueue --timeout=600'));
-	array_push($results, exec('php artisan queue:listen PendingSUTimeQueue --timeout=600'));
-	array_push($results, exec('php artisan queue:listen PendingSUTimeQueue --timeout=600'));
-	array_push($results, exec('php artisan queue:listen PendingPersistenceQueue --timeout=600'));
+	array_push($out, exec('php artisan queue:listen PendingTwitterQueue --timeout=600'));
+	array_push($out, exec('php artisan queue:listen PendingCalaisQueue --timeout=600'));
+	array_push($out, exec('php artisan queue:listen PendingCalaisQueue --timeout=600'));
+	array_push($out, exec('php artisan queue:listen PendingSUTimeQueue --timeout=600'));
+	array_push($out, exec('php artisan queue:listen PendingSUTimeQueue --timeout=600'));
+	array_push($out, exec('php artisan queue:listen PendingPersistenceQueue --timeout=600'));
 }
 
-else {
+elseif ($argv[1] == 'local') {
 	// START QUEUE LISTENERS
-	array_push($results, exec('php php /var/app/current/artisan queue:listen PendingTwitterQueue --timeout=600'));
-	array_push($results, exec('php php /var/app/current/artisan queue:listen PendingCalaisQueue --timeout=600'));
-	array_push($results, exec('php php /var/app/current/artisan queue:listen PendingCalaisQueue --timeout=600'));
-	array_push($results, exec('php php /var/app/current/artisan queue:listen PendingSUTimeQueue --timeout=600'));
-	array_push($results, exec('php php /var/app/current/artisan queue:listen PendingSUTimeQueue --timeout=600'));
-	array_push($results, exec('php php /var/app/current/artisan queue:listen PendingPersistenceQueue --timeout=600'));
+	array_push($out, exec('php php /var/app/current/artisan queue:listen PendingTwitterQueue --timeout=600'));
+	array_push($out, exec('php php /var/app/current/artisan queue:listen PendingCalaisQueue --timeout=600'));
+	array_push($out, exec('php php /var/app/current/artisan queue:listen PendingCalaisQueue --timeout=600'));
+	array_push($out, exec('php php /var/app/current/artisan queue:listen PendingSUTimeQueue --timeout=600'));
+	array_push($out, exec('php php /var/app/current/artisan queue:listen PendingSUTimeQueue --timeout=600'));
+	array_push($out, exec('php php /var/app/current/artisan queue:listen PendingPersistenceQueue --timeout=600'));
+	// START REDIS
+	array_push($out, exec(' /var/app/twitterintelLibs/redis-stable/src/redis-server /var/app/twitterintelLibs/redis-stable/redis.conf'));
+
 }
 
 echo join('\n', $out);
-	// START REDIS
-	array_push($results, exec(' /var/app/twitterintelLibs/redis-stable/src/redis-server /var/app/twitterintelLibs/redis-stable/redis.conf'));
 
 
