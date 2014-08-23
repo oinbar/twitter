@@ -68,6 +68,9 @@ class ProcessingTasks extends BaseController {
 		and inserts the records into the database, while making sure to deal appropriately with
 		any duplicates.
 		*/
+
+		Log::error('INSERT TO DB');
+
 		$redis = Redis::connection();
 		$batch_size = min($redis->llen($cache_list_origin), $batch_size);		
 		$records = $redis->lrange($cache_list_origin, 0, $batch_size-1);
