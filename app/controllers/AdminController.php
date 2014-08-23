@@ -72,9 +72,10 @@ class AdminController extends BaseController {
 		    $command = 'php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!';
 		    $number = exec($command);			    
 		} else {
-			exec('cd /var/app/current');
-			$php = exec('which php');			
-			$number = exec('$(which php) $(which artisan) queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
+			// exec('cd /var/app/current');
+			// $php = exec('which php');			
+			$command = 'php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!';
+			$number = exec($command);
 		}
 		// file_put_contents(__DIR__ . '/temp/' . $queue . '_queue.pid', $number);
 		
@@ -92,13 +93,7 @@ class AdminController extends BaseController {
 		 //        	$this->runQueueListener($queue);
 		 //        }
 			// } else {
-		 //    	$this->runQueueListener($queue);
-		try{
-			exec('$(which php) $(which artisan) queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
-		}
-		catch (Exception $e) {
-			Log::error($e);
-		}
+    	$this->runQueueListener($queue);
 	}
 
 
