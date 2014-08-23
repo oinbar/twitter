@@ -5,6 +5,7 @@ class AdminController extends BaseController {
 	private $calais_key1 = 'qupquc5c4qzj7sg9knu5ad4w';
 	private $calais_key2 = 'cxxf222kq5thbjcmtmxw8hgv';	
 	private $calais_key3 = 'cytb2vdruh7r3wwx6vemvgft';
+	private $calais_key4 = 'fvtjme9xyx2r54kuqxy9d9zf';
 
 
 	public function debug() {
