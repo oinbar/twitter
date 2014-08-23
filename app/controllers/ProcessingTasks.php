@@ -168,6 +168,7 @@ class ProcessingTasks extends BaseController {
 			$path ='';
 			if (App::environment() == 'local') {
 				$filepath = '/Users/Orr/Desktop/SUTime.jar';
+			}
 			elseif (App::environment() == 'production') {
 				$filepath = '/var/app/twitterintelLibs/SUTime.jar';
 			}
