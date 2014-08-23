@@ -2,6 +2,11 @@
 
 class AdminController extends BaseController {
 
+	private $calais_key1 = 'qupquc5c4qzj7sg9knu5ad4w';
+	private $calais_key2 = 'cxxf222kq5thbjcmtmxw8hgv';	
+	private $calais_key3 = 'cytb2vdruh7r3wwx6vemvgft';
+
+
 	public function debug() {
 
 	    echo '<pre>';
@@ -95,12 +100,10 @@ class AdminController extends BaseController {
 
 
 	public function load_queues () {
-		$calais_key1 = 'qupquc5c4qzj7sg9knu5ad4w';
-		$calais_key2 = 'cxxf222kq5thbjcmtmxw8hgv';
 		try {
 			// this triggers the necessary jobs in QueueTasks by calling initiating them (they are cyclic).
-			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $calais_key1));
-			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $calais_key2));
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_key1));
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_key2));
 			Queue::connection('PendingSUTimeQueue')->push('QueueTasks@runJsonThroughSUTimeJob');
 			Queue::connection('PendingSUTimeQueue')->push('QueueTasks@runJsonThroughSUTimeJob');
 			Queue::connection('PendingPersistenceQueue')->push('QueueTasks@insertJsonToDBJob');   
@@ -163,14 +166,14 @@ class AdminController extends BaseController {
 	public function test () {
 		include __DIR__.'/../open_calais_dg/opencalais.php';
 
-		$content = 'Next week I am flying to washington dc for an APIAC conference';
-		$oc = new OpenCalais('cxxf222kq5thbjcmtmxw8hgv');
+		$content = 'Next week I am flying to washington dc for an AIPAC conference';
+		$oc = new OpenCalais($this->calais_key1);
 		$results = json_decode($oc->getResult($content), true);
 
 		echo Pre::render($results);		
 	}
 
-	public function fixSUTime ($date_str) {
+	private function fixSUTime ($date_str) {
 		$date_str = str_replace('TMO', ' 08:00' ,$date_str);
 		$date_str = str_replace('TAF', ' 15:00' ,$date_str);
 		$date_str = str_replace('TEV', ' 19:00' ,$date_str);
