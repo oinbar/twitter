@@ -16,7 +16,7 @@ print_r($argv);  // just to see what was passed in
 // echo "\$_REQUEST = ";
 // print_r($_REQUEST);
 
-if (argc == 0) {
+if ($argc == 0) {
 	echo 'no args';
 	die();
 }
