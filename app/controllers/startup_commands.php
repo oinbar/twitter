@@ -53,7 +53,7 @@ array_push($out, exec('php /var/app/current/artisan queue:listen PendingSUTimeQu
 exec('disown');
 array_push($out, exec('php /var/app/current/artisan queue:listen PendingPersistenceQueue --timeout=600 &'));
 // START REDIS
-array_push($out, exec(' /var/app/twitterintelLibs/redis-stable/src/redis-server /var/app/twitterintelLibs/redis-stable/redis.conf &'));
+array_push($out, exec('/var/app/twitterintelLibs/redis-stable/src/redis-server /var/app/twitterintelLibs/redis-stable/redis.conf &'));
 exec('disown');
 // }
 
