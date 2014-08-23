@@ -21,6 +21,8 @@
 // 	die();
 // }
 
+exec('php /var/app/current/artisan queue:listen PendingTwitterQueue --timeout=600');
+
 $out = array();
 if  ($argv[1] == 'local') {
 	// START QUEUE LISTENERS	
