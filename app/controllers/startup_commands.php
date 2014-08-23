@@ -18,7 +18,7 @@ print_r($argv);  // just to see what was passed in
 
 
 $out = array();
-if  ($argv[1] == 'local'{
+if  ($argv[1] == 'local') {
 	// START QUEUE LISTENERS	
 	array_push($results, exec('php artisan queue:listen PendingTwitterQueue --timeout=600'));
 	array_push($results, exec('php artisan queue:listen PendingCalaisQueue --timeout=600');
