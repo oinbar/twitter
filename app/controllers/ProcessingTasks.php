@@ -23,8 +23,8 @@ class ProcessingTasks extends BaseController {
 
 			$redis = Redis::Connection();
 			$since_id = '';
-			if ($redis->exists('since_id-feedID-' . $since_id)) {
-				$since_id = $redis->get('since_id-feedID-' . $since_id);
+			if ($redis->exists('since_id-feedID-' . $feed_id)) {
+				$since_id = $redis->get('since_id-feedID-' . $feed_id);
 				$since_id = '&since_id=' . $since_id;
 			}
 
@@ -53,8 +53,8 @@ class ProcessingTasks extends BaseController {
 					$max_id = ($status['_id']);
 				}
 
-			$redis->del('since_id-feedID-' . $since_id);
-			$redis->append('since_id-feedID-' . $since_id, $max_id);	
+			$redis->del('since_id-feedID-' . $feed_id);
+			$redis->append('since_id-feedID-' . $feed_id, $max_id);	
 			}
 		}
 		catch (Exception $e) {
