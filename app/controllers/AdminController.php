@@ -80,7 +80,7 @@ class AdminController extends BaseController {
 		
 	}
 
-	public function check_start_queue_listener ($queue) {
+	public function check_start_queue_listener ($queue) {		
 		// checks if the queue listener is running, if not it starts it and
 		// stores the process id
 			// if (file_exists(__DIR__ . '/temp/' . $queue . '_queue.pid')) {
@@ -93,7 +93,12 @@ class AdminController extends BaseController {
 		 //        }
 			// } else {
 		 //    	$this->runQueueListener($queue);
-		$this->runQueueListener($queue);
+		try{
+			exec('$(which php) $(which artisan) queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
+		}
+		catch (Exception $e) {
+			Log::error($e);
+		}
 	}
 
 
