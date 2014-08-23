@@ -37,7 +37,7 @@ $out = array();
 	// // exec('disown');
 	// array_push($out, exec('php artisan queue:listen PendingPersistenceQueue --timeout=600 &'));
 	// exec('disown');
-}
+// }
 
 // elseif ($argv[1] == 'production') {
 	// START QUEUE LISTENERS
