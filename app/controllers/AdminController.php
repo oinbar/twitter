@@ -57,7 +57,7 @@ class AdminController extends BaseController {
 	    print_r(Config::get('database.connections.redis'));
 	    try {
 	    	$redis = Redis::connection();
-	    	$redis->ping;
+	    	$redis->ping();
 	    	echo '<strong style="background-color:green; padding:5px;">Connection confirmed</strong>';
 		}
 		catch (Exception $e) {
@@ -73,8 +73,8 @@ class AdminController extends BaseController {
 		    $number = exec($command);			    
 		} else {
 			exec('cd /var/app/current');
-			$php = exec('which php');
-			$number = exec($php . ' artisan queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
+			$php = exec('which php');			
+			$number = exec('$(which php) $(which artisan) queue:listen ' . $queue . '--timeout=600 > /dev/null $ echo $!');
 		}
 		// file_put_contents(__DIR__ . '/temp/' . $queue . '_queue.pid', $number);
 		
