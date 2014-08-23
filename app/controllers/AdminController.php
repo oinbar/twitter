@@ -76,11 +76,7 @@ class AdminController extends BaseController {
 			// $command = 'php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!';
 			// $number = exec($command);
 			try {
-				echo exec('whoami') . ' ';
-				echo exec('cd /var/app/current') . ' ';
-				echo exec('which php') . ' ';
-				echo exec('which artisan') . ' ';
-				echo exec();
+				echo exec('which php');
 				$command = 'php artisan queue:listen ' . $queue . ' --timeout=600';
 				$result = exec($command);
 				echo '<br>';
