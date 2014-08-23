@@ -1,7 +1,7 @@
 <?php
 
-echo "argv[] = ";
-print_r($argv);  // just to see what was passed in
+// echo "argv[] = ";
+// print_r($argv);  // just to see what was passed in
 
 
 // if ($argc > 0)
@@ -16,10 +16,10 @@ print_r($argv);  // just to see what was passed in
 // echo "\$_REQUEST = ";
 // print_r($_REQUEST);
 
-if ($argc == 0) {
-	echo 'no args';
-	die();
-}
+// if ($argc == 0) {
+// 	echo 'no args';
+// 	die();
+// }
 
 $out = array();
 if  ($argv[1] == 'local') {
@@ -45,6 +45,6 @@ elseif ($argv[1] == 'local') {
 
 }
 
-echo join('\n', $out);
+// echo join('\n', $out);
 
-
+echo 'DONE';
