@@ -55,7 +55,7 @@ return array(
 		// AWS
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'aak2fxzy3avwxx.c0sdmckg4fw5.us-east-1.rds.amazonaws.com',
+			'host'      => 'aaebwtm71yrhk.c0sdmckg4fw5.us-east-1.rds.amazonaws.com',
 			'port'		=> '3306',
 			'database'  => 'ebdb',
 			'username'  => 'admin',
