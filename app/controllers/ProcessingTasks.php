@@ -152,8 +152,7 @@ class ProcessingTasks extends BaseController {
 		pulls a batch of documents off the cache_list_origin list, and runs them through StanfordNLP's
 		SUTime module (packaged into a jar file), attempting to find any mentions of dates and times in the text.
 		currently this is done by using an intermediary json file and calling the jar directly, this should be changed.
-		*/
-		Log::error('RUNNING SUTIME');
+		*/		
 
 		try{
 			$redis = Redis::connection();
@@ -180,26 +179,15 @@ class ProcessingTasks extends BaseController {
 			elseif (App::environment() == 'production') {
 				$filepath = '/var/app/twitterintelLibs/SUTime.jar';
 			}
+
+			Log::error('RUNNING SUTIME   ' . $filename);
+
 			exec('java -jar ' . $filepath . __DIR__ . '/temp/' . $filename);
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put
 			// the record in the cache
 			$file = file_get_contents(__DIR__ . '/temp/' . $filename);
 			$file = json_decode($file, true);
-			// foreach ($file as $record) {
-			// 	if (array_key_exists('SUTime', $record)){
-			// 		foreach ($record['SUTime'] as $time ){
-			// 			// numerize daytimes (morning, afternoon, evening, night)
-			// 			$a = new AdminController();
-
-			// 			Log::error($time['normalized']);
-			// 			Log::error('FIXED: '. $a->fixSUTime($time['normalized']));
-
-
-			// 			$time['normalized'] = $a->fixSUTime($time['normalized']);
-			// 			$time['new'] = $a->fixSUTime($time['normalized']);
-			// 			Log::error('IN JSON: '. $record['SUTime'][0]['new']);
-
 
 			for ($i = 0; $i < sizeof($file); $i++) {
 				if (array_key_exists('SUTime', $file[$i])){
