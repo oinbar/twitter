@@ -1,5 +1,4 @@
 /bootstrap/compiled.php
-/app/controllers/temp
 /vendor
 /redis-2.8.13
 composer.phar
