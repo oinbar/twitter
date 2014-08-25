@@ -76,7 +76,7 @@ class FeedController extends BaseController {
 
 	public function getViewFeed ($feed_id, $skip = 0) {
 		$take = 20; // numbe of results to select
-		$data = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->orderBy('created_at', 'desc', 'natural')->skip($skip)->take($take)->get();
+		$data = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->orderBy('datetime', 'desc', 'natural')->skip($skip)->take($take)->get();
 	    $count = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->count();
 
 		$feed = DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->first();
@@ -93,7 +93,7 @@ class FeedController extends BaseController {
 
 	public function showTweet ($id) {
 		$db = DB::connection('mongodb')->getMongoDB();								
-		$db_record = $db->execute('return db.data1.find({ _id : NumberLong('. $id .')}).toArray();');
+		$db_record = $db->execute('return db.data1.find({ _id : '. $id .'}).toArray();');
 		echo Pre::render($db_record);
 	}
 
@@ -110,5 +110,18 @@ class FeedController extends BaseController {
 		//turn feed status off
 		DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array('feed_status' => 'off'));
 		return Redirect::to('/view_feed/' .$feed_id);
-	}	
+	}
+
+	public function getAlerts () {
+		try{
+			$query = Input::get('query');
+			if ($query) {				
+				$db = DB::connection('mongodb')->getMongoDB();								
+				$results = $db->execute('return ' . $query . ';');
+			}
+		}
+		catch (Exception $e){
+			Log::error('MONGO QUERY:  '. $e);
+		}
+	}
 }

@@ -79,7 +79,7 @@ class ProcessingTasks extends BaseController {
 		foreach($records as $record) {
 			try{
 				//check if record already exists in db
-				$record = json_decode($record, true);
+				$record = json_decode($record, true);				
 				$db_record = DB::connection('mongodb')->collection('data1')->where('_id', $record['_id'])->first();
 				if ($db_record) {
 					// IF ALREADY EXISTS IN DB COMBINE REFERENCES TO FEED AND UPDATE RECORD
@@ -89,6 +89,7 @@ class ProcessingTasks extends BaseController {
 					DB::connection('mongodb')->collection('data1')->where('_id', $db_record['_id'])->update($record);
 				} 
 				else {
+					$record['datetime'] = date('Y-m-d H:i:s'); 
 					DB::connection('mongodb')->collection('data1')->insert($record);
 				}
 			}
@@ -182,7 +183,9 @@ class ProcessingTasks extends BaseController {
 
 			Log::error('RUNNING SUTIME   ' . $filename);
 
-			exec('java -jar ' . $filepath . __DIR__ . '/temp/' . $filename);
+			$result=exec('java -jar ' . $filepath . __DIR__ . '/temp/' . $filename);
+
+			Log::error('RESULTS: ' . $result);
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put
 			// the record in the cache

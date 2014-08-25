@@ -57,6 +57,16 @@ array_push($out, exec('/var/app/twitterintelLibs/redis-stable/src/redis-server /
 exec('disown');
 // }
 
+// CREATE MONGO INDICES
+$db = DB::connection('mongodb')->getMongoDB();								
+$command = $db->execute('return db.data1.ensureIndex({ _id : -1 }, { background : true }).toArray() ;');
+$command = $db->execute('return db.data1.ensureIndex({ feed_id : 1 }, { background : true }).toArray() ;');
+$command = $db->execute('return db.data1.ensureIndex({ created_at : -1 }, { background : true }).toArray() ;');
+$command = $db->execute('return db.data1.ensureIndex({ datetime : -1 }, { background : true }).toArray() ;');
+$command = $db->execute('return db.data1.ensureIndex({ "opencalais._type" : 1 }, { background : true }).toArray() ;');
+$command = $db->execute('return db.data1.ensureIndex({ retweet_count : -1 }, { background : true }).toArray() ;');
+$command = $db->execute('return db.data1.ensureIndex({ text : "text" }, { background : true }).toArray() ;');
+
 // // echo join('\n', $out);
 
 // echo 'DONE';

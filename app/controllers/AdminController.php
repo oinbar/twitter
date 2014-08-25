@@ -199,9 +199,11 @@ class AdminController extends BaseController {
 
 	public function test2 () {
 
-		echo $this->fixSUTime('2014-08-23T15:00');
+		// echo $this->fixSUTime('2014-08-23T15:00');
 		//echo $this->dateTimeDiffDays('Wed Aug 20 18:52:33 +0000 2014', '2014-08-23-WXX-6T15:00');
 
+		// echo date("Y-m-d H:i:s" , strtotime(time())); 
+		echo date('Y-m-d H:i:s');
 	}
 }
 
