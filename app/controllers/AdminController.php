@@ -172,6 +172,8 @@ class AdminController extends BaseController {
 		$results = json_decode($oc->getResult($content), true);
 
 		echo Pre::render($results);		
+
+		file_put_contents('/Users/Orr/Desktop/.json', json_encode($results));
 	}
 
 	private function fixSUTime ($date_str) {
