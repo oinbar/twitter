@@ -69,8 +69,6 @@ class ProcessingTasks extends BaseController {
 		any duplicates.
 		*/
 
-		Log::error('INSERT TO DB');
-
 		$redis = Redis::connection();
 		$batch_size = min($redis->llen($cache_list_origin), $batch_size);		
 		$records = $redis->lrange($cache_list_origin, 0, $batch_size-1);
@@ -107,8 +105,6 @@ class ProcessingTasks extends BaseController {
 		pulls a batch of documents off the cache_list_origin list, runs each doc through the opencalais
 		service with a delay in between, and then deposits the reformed document in the cache_list_destination list. 
 		*/
-
-		Log::error('RUNNING CALAIS '. $calais_key);
 
 		include __DIR__.'/../open_calais_dg/opencalais.php';
 		$redis = Redis::connection();
