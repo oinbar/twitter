@@ -179,7 +179,7 @@ class ProcessingTasks extends BaseController {
 
 			Log::error('RUNNING SUTIME   ' . substr($array, 0 , 50));
 
-			Log::error('WHOAMI ' exec('whoami'))
+			Log::error('WHOAMI ' exec('whoami'));
 
 			$result=exec('java -jar ' . $filepath . __DIR__ . '/temp/' . $filename);			
 
