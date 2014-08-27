@@ -171,17 +171,17 @@ class ProcessingTasks extends BaseController {
 			file_put_contents(__DIR__ . '/temp/' . $filename, $array);
 			$path ='';
 			if (App::environment() == 'local') {
-				$filepath = '/Users/Orr/Desktop/SUTime.jar';
+				$jarpath = '/Users/Orr/Desktop/SUTime.jar';
 			}
 			elseif (App::environment() == 'production') {
-				$filepath = '/home/ubuntu/prod/lib/SUTime.jar';
+				$jarpath = '/home/ubuntu/prod/lib/SUTime.jar';
 			}
 
 			Log::error('RUNNING SUTIME   ' . substr($array, 0 , 50));
 
 			Log::error('WHOAMI ' . exec('whoami'));
 
-			$result=exec('java -jar ' . $filepath . __DIR__ . '/temp/' . $filename);			
+			$result=exec('java -jar ' . $filepath . ' ' . __DIR__ . '/temp/' . $filename);			
 
 			Log::error(print_r($result));
 
