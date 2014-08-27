@@ -38,37 +38,37 @@ class AdminController extends BaseController {
 	    if(Config::get('app.debug')) echo "Yes"; else echo "No";	    
 
 
-	    echo '<h1>Database Config (MongoDB)</h1>';
-	    print_r(Config::get('database.connections.mongodb'));	
+	    // echo '<h1>Database Config (MongoDB)</h1>';
+	    // print_r(Config::get('database.connections.mongodb'));	
+	    // try {
+	    //     $results = DB::connection('mongodb')->collection('data1');
+	    //     echo '<strong style="background-color:green; padding:5px;">Connection confirmed</strong>';
+	    // } 
+	    // catch (Exception $e) {
+	    //     echo '<strong style="background-color:crimson; padding:5px;">Caught exception: ', $e->getMessage(), "</strong>\n";
+	    // }
+
+
+	    // echo '<h1>Database Config (MySQL)</h1>';
+	    // print_r(Config::get('database.connections.mysql'));
+	    // try {
+	    //     $results = DB::connection('mysql')->select('SHOW DATABASES;');
+	    //     echo '<strong style="background-color:green; padding:5px;">Connection confirmed</strong>';
+	    // } 
+	    // catch (Exception $e) {
+	    //     echo '<strong style="background-color:crimson; padding:5px;">Caught exception: ', $e->getMessage(), "</strong>\n";
+	    // }
+
+	    echo '<h1>Cache Config (Redis)</h1>';
+	    print_r(Config::get('database.connections.redis'));
 	    try {
-	        $results = DB::connection('mongodb')->collection('data1');
-	        echo '<strong style="background-color:green; padding:5px;">Connection confirmed</strong>';
-	    } 
-	    catch (Exception $e) {
+	    	$redis = Redis::connection();
+	    	$redis->ping();
+	    	echo '<strong style="background-color:green; padding:5px;">Connection confirmed</strong>';
+		}
+		catch (Exception $e) {
 	        echo '<strong style="background-color:crimson; padding:5px;">Caught exception: ', $e->getMessage(), "</strong>\n";
 	    }
-
-
-	 //    echo '<h1>Database Config (MySQL)</h1>';
-	 //    print_r(Config::get('database.connections.mysql'));
-	 //    try {
-	 //        $results = DB::connection('mysql')->select('SHOW DATABASES;');
-	 //        echo '<strong style="background-color:green; padding:5px;">Connection confirmed</strong>';
-	 //    } 
-	 //    catch (Exception $e) {
-	 //        echo '<strong style="background-color:crimson; padding:5px;">Caught exception: ', $e->getMessage(), "</strong>\n";
-	 //    }
-
-	 //    echo '<h1>Cache Config (Redis)</h1>';
-	 //    print_r(Config::get('database.connections.redis'));
-	 //    try {
-	 //    	$redis = Redis::connection();
-	 //    	$redis->ping();
-	 //    	echo '<strong style="background-color:green; padding:5px;">Connection confirmed</strong>';
-		// }
-		// catch (Exception $e) {
-	 //        echo '<strong style="background-color:crimson; padding:5px;">Caught exception: ', $e->getMessage(), "</strong>\n";
-	 //    }
 
 	    echo '</pre>';	    
 	}
