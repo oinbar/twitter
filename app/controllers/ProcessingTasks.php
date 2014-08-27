@@ -181,12 +181,14 @@ class ProcessingTasks extends BaseController {
 
 			$result=exec('java -jar ' . $filepath . __DIR__ . '/temp/' . $filename);
 
-			Log::error('RESULTS: ' . $result);
+			Log::error('SUTIME RESULT ' . $result);		
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put
 			// the record in the cache
 			$file = file_get_contents(__DIR__ . '/temp/' . $filename);
 			$file = json_decode($file, true);
+
+			Log::error(sizeof($file));
 
 			for ($i = 0; $i < sizeof($file); $i++) {
 				if (array_key_exists('SUTime', $file[$i])){
