@@ -37,8 +37,8 @@ return array(
 		    'driver'   => 'mongodb',
 		    'host'     => 'ec2-54-87-178-57.compute-1.amazonaws.com',
 		    'port'     => '27017',
-		    'username' => 'admin',
-		    'password' => 'password',
+		    // 'username' => 'admin',
+		    // 'password' => 'password',
 		    'database' => 'twitterintel',
 		),
 
