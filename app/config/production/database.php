@@ -55,9 +55,9 @@ return array(
 		// AWS
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'aaebwtm71yrhk.c0sdmckg4fw5.us-east-1.rds.amazonaws.com',
+			'host'      => 'twitterintel-mysql.c0sdmckg4fw5.us-east-1.rds.amazonaws.com',
 			'port'		=> '3306',
-			'database'  => 'ebdb',
+			'database'  => 'twitterintel',
 			'username'  => 'admin',
 			'password'  => 'password',		
 		),
