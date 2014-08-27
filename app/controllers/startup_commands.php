@@ -49,7 +49,7 @@ array_push($out, exec('php /var/app/current/artisan queue:listen PendingCalaisQu
 exec('disown');
 array_push($out, exec('php /var/app/current/artisan queue:listen PendingSUTimeQueue --timeout=600 &'));
 exec('disown');
-array_push($out, exec('php /var/app/current/artisan queue:listen PendingSUTimeQueue --timeout=600 &'));
+array_push($out, exec('php /var/app/cur`rent/artisan queue:listen PendingSUTimeQueue --timeout=600 &'));
 exec('disown');
 array_push($out, exec('php /var/app/current/artisan queue:listen PendingPersistenceQueue --timeout=600 &'));
 // START REDIS
