@@ -177,7 +177,7 @@ class ProcessingTasks extends BaseController {
 				$filepath = '/home/ubuntu/prod/lib/SUTime.jar';
 			}
 
-			Log::error('RUNNING SUTIME   ' . substr($array, 0 , 50);
+			Log::error('RUNNING SUTIME   ' . substr($array, 0 , 50));
 
 			$result=exec('java -jar ' . $filepath . __DIR__ . '/temp/' . $filename);
 
