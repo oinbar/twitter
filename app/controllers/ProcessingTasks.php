@@ -181,7 +181,7 @@ class ProcessingTasks extends BaseController {
 
 			Log::error('WHOAMI ' . exec('whoami'));
 
-			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename);			
+			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' &> /tmp/debug_java.log');			
 
 			Log::error(print_r($result));
 
