@@ -196,7 +196,7 @@ class ProcessingTasks extends BaseController {
 						// numerize daytimes (morning, afternoon, evening, night)
 						$a = new AdminController();
 
-						Log::error('NORMALIZED ' . $file[$i]['SUTime'][$j]['normalized']));
+						Log::error('NORMALIZED ' . $file[$i]['SUTime'][$j]['normalized']);
 
 						$file[$i]['SUTime'][$j]['normalized'] = $a->fixSUTime($file[$i]['SUTime'][$j]['normalized']);
 
