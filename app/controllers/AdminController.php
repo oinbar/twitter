@@ -176,7 +176,7 @@ class AdminController extends BaseController {
 		// file_put_contents('/Users/Orr/Desktop/.json', json_encode($results));
 	}
 
-	private function fixSUTime ($date_str) {
+	public function fixSUTime ($date_str) {
 		$date_str = str_replace('TMO', ' 08:00' ,$date_str);
 		$date_str = str_replace('TAF', ' 15:00' ,$date_str);
 		$date_str = str_replace('TEV', ' 19:00' ,$date_str);
