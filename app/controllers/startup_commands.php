@@ -41,17 +41,17 @@ $out = array();
 
 // elseif ($argv[1] == 'production') {
 	// START QUEUE LISTENERS
-array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingTwitterQueue --timeout=600 &'));
+array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingTwitterQueue --timeout=600 &> /dev/null &'));
 exec('disown');
-array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingCalaisQueue --timeout=600 &'));
+array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingCalaisQueue --timeout=600 &> /dev/null &'));
 exec('disown');
-array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingCalaisQueue --timeout=600 &'));
+array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingCalaisQueue --timeout=600 &> /dev/null &'));
 exec('disown');
 array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingSUTimeQueue --timeout=600 &> /dev/null &'));
 exec('disown');
-array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingSUTimeQueue --timeout=600 &'));
+array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingSUTimeQueue --timeout=600 &> /dev/null &'));
 exec('disown');
-array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingPersistenceQueue --timeout=600 &'));
+array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingPersistenceQueue --timeout=600 &> /dev/null &'));
 // START REDIS
 array_push($out, exec('sudo /usr/bin/redis-server /etc/redis/redis.conf &'));
 exec('disown');
