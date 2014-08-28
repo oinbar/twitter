@@ -207,9 +207,11 @@ class AdminController extends BaseController {
 		// echo date("Y-m-d H:i:s" , strtotime(time())); 
 		// echo date('Y-m-d H:i:s');
 
-		$result=exec('/usr/bin/java -jar /home/ubuntu/prod/lib/SUTime.jar /home/ubuntu/prod/lib/sutimedata.json');
-		echo Pre::render($result);
+		// $result=exec('/usr/bin/java -jar /home/ubuntu/prod/lib/SUTime.jar /home/ubuntu/prod/lib/sutimedata.json');
+		// echo Pre::render($result);
 
+		$result=exec('env');
+		echo Pre::render($result);
 	}
 }
 
