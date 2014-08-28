@@ -205,7 +205,10 @@ class AdminController extends BaseController {
 		//echo $this->dateTimeDiffDays('Wed Aug 20 18:52:33 +0000 2014', '2014-08-23-WXX-6T15:00');
 
 		// echo date("Y-m-d H:i:s" , strtotime(time())); 
-		echo date('Y-m-d H:i:s');
+		// echo date('Y-m-d H:i:s');
+
+		$result=exec('/usr/bin/java -jar /home/ubuntu/prod/lib/SUTime.jar /home/ubuntu/prod/lib/sutimedata.txt');
+
 	}
 }
 

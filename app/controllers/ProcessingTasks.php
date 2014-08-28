@@ -22,12 +22,11 @@ class ProcessingTasks extends BaseController {
 			// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
 
 			$redis = Redis::Connection();
-			$since_id = '';
+			$since_id = '0';
 			if ($redis->exists('since_id-feedID-' . $feed_id)) {
 				$since_id = $redis->get('since_id-feedID-' . $feed_id);
 				$since_id = '&since_id=' . $since_id;
 			}
-
 
 			$getfield = '?count=100' . $since_id . '&q=' . urlencode(DB::connection('mysql')
 											->table('feeds')->where('id', $feed_id)->orderBy('created_at', 'desc')
@@ -43,6 +42,7 @@ class ProcessingTasks extends BaseController {
 			// LOOP OVER THE RESULTS COLLECTION, AND STORE IN CACHE FOR DATA PIPELINE
 			$data = json_decode($json, true);
 			$redis = Redis::connection();
+
 
 			$max_id = 0;
 			foreach ($data['statuses'] as $status){					
@@ -181,7 +181,7 @@ class ProcessingTasks extends BaseController {
 
 			Log::error('WHOAMI ' . exec('whoami'));
 
-			$result=exec('java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename);			
+			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename);			
 
 			Log::error(print_r($result));
 

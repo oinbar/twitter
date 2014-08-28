@@ -47,7 +47,7 @@ array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan qu
 exec('disown');
 array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingCalaisQueue --timeout=600 &'));
 exec('disown');
-array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingSUTimeQueue --timeout=600 &'));
+array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingSUTimeQueue --timeout=600 &> /dev/null &'));
 exec('disown');
 array_push($out, exec('sudo -u www-data php /home/ubuntu/prod/twitter/artisan queue:listen PendingSUTimeQueue --timeout=600 &'));
 exec('disown');
