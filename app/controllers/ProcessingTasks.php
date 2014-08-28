@@ -33,7 +33,7 @@ class ProcessingTasks extends BaseController {
 											->first()->criteria);
 
 			// $getfield = '?count=50&q=protest';
-
+			Log::error('GETFIELD ' . $getfield);
 
 
 			$url = 'https://api.twitter.com/1.1/search/tweets.json';
