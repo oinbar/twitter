@@ -29,8 +29,8 @@ class ProcessingTasks extends BaseController {
 			}			
 
 			// $getfield = '?count=50&q=' . urlencode(DB::connection('mysql')
-											->table('feeds')->where('id', $feed_id)->orderBy('created_at', 'desc')
-											->first()->criteria);
+			// 								->table('feeds')->where('id', $feed_id)->orderBy('created_at', 'desc')
+			// 								->first()->criteria);
 
 			$getfield = '?count=50&q=protest';
 
