@@ -26,7 +26,7 @@ class ProcessingTasks extends BaseController {
 			if ($redis->exists('since_id-feedID-' . $feed_id)) {
 				$since_id = $redis->get('since_id-feedID-' . $feed_id);
 				$since_id = '&since_id=' . $since_id;
-			}
+			}			
 
 			$getfield = '?count=50&q=' . urlencode(DB::connection('mysql')
 											->table('feeds')->where('id', $feed_id)->orderBy('created_at', 'desc')
