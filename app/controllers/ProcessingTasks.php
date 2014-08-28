@@ -162,6 +162,9 @@ class ProcessingTasks extends BaseController {
 			foreach ($contents as $record){
 				$record = json_decode($record, true);
 				$record['datetime'] = date("Y-m-d H:i:s" , strtotime($record['created_at']));
+
+				Log::error('DATETIME ' . $record['datetime']);
+
 				array_push($array, $record);
 			}
 			$array = json_encode($array);
