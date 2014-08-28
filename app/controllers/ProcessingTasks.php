@@ -32,7 +32,7 @@ class ProcessingTasks extends BaseController {
 			// 								->table('feeds')->where('id', $feed_id)->orderBy('created_at', 'desc')
 			// 								->first()->criteria);
 
-			$getfield = '?count=50&q=protest';
+			$getfield = '?count=50' . $since_id . '&q=protest';
 
 
 
