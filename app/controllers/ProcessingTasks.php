@@ -2,7 +2,7 @@
 
 class ProcessingTasks extends BaseController {
 
-	public function searchTwitterFeedCriteria($feed_id, $cache_list_destination = 'PendingCalaisList') {	
+	public function searchTwitterFeedCriteria($feed_id, $use_since_id = false, $cache_list_destination = 'PendingCalaisList') {	
 		/*
 		This is the first stage in the data processing pipeline.  Finds the criteria based on the feed_id, and searches twitter api.
 		
@@ -22,8 +22,8 @@ class ProcessingTasks extends BaseController {
 			// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
 
 			$redis = Redis::Connection();
-			$since_id = '';
-			if ($redis->exists('since_id-feedID-' . $feed_id)) {
+			$since_id = '';			
+			if ($use_since_id && $redis->exists('since_id-feedID-' . $feed_id)) {
 				$since_id = $redis->get('since_id-feedID-' . $feed_id);
 				$since_id = '&since_id=' . $since_id;
 			}			
