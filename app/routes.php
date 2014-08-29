@@ -35,6 +35,8 @@ Route::get('/stopfetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'Feed
 
 Route::get('/tweet/{id}', array('uses' => 'FeedController@showTweet')); 
 
+Route::get('/alerts/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@getAlerts'));
+
 
 Route::get('/signup', array('before' => 'guest', 'uses' => 'UserController@getSignup'));
 

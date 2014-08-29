@@ -2,7 +2,7 @@
 
 class ProcessingTasks extends BaseController {
 
-	public function searchTwitterFeedCriteria($feed_id, $use_since_id = false, $cache_list_destination = 'PendingCalaisList') {	
+	public function searchTwitterFeedCriteria($feed_id, $cache_list_destination = 'PendingCalaisList') {	
 		/*
 		This is the first stage in the data processing pipeline.  Finds the criteria based on the feed_id, and searches twitter api.
 		
@@ -13,15 +13,16 @@ class ProcessingTasks extends BaseController {
 		*/	
 		try {
 			include __DIR__.'/../twitter-api-php/TwitterAPIExchange.php';
+			$redis = Redis::Connection();
 			$settings = array(
 			    'oauth_access_token' => "2492151342-mRMDlwJGaij2yZQB5CHyU2FbaymXnIcEhYnhcgC",
 			    'oauth_access_token_secret' => "sDCCPbYt39Uii76de2HcSMbcTFffby1BwxjAEheL6b4dk",
 			    'consumer_key' => "x393VwuVLnnixX6Ld7panxSp8",
 			    'consumer_secret' => "qglHdDR9gcwpyhdFSF37hPpMwXSrIchkmp9DV8TZ8iOzLNt95u"
-			);
-			// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
+			);				
 
-			$redis = Redis::Connection();
+			// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
+			$use_since_id = false
 			$since_id = '';			
 			if ($use_since_id && $redis->exists('since_id-feedID-' . $feed_id)) {
 				$since_id = $redis->get('since_id-feedID-' . $feed_id);
@@ -31,10 +32,6 @@ class ProcessingTasks extends BaseController {
 			$getfield = '?count=50' . $since_id . '&q=' . urlencode(DB::connection('mysql')
 											->table('feeds')->where('id', $feed_id)->orderBy('created_at', 'desc')
 											->first()->criteria);
-
-			// $getfield = '?count=50&q=protest';
-			Log::error('GETFIELD ' . $getfield);
-
 
 			$url = 'https://api.twitter.com/1.1/search/tweets.json';
 			$requestMethod = 'GET';
@@ -138,7 +135,7 @@ class ProcessingTasks extends BaseController {
 				$record['opencalais'] = $results;				
 				$redis->rpush($cache_list_destination, json_encode($record));
 
-				// usleep(100000);
+				usleep(250000);
 			}
 			catch (Exception $e) {
 				Log::error($e);

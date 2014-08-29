@@ -103,6 +103,8 @@ class AdminController extends BaseController {
 	public function load_queues () {
 		try {
 			// this triggers the necessary jobs in QueueTasks by calling initiating them (they are cyclic).
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_key1));
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_key2));
 			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_key3));
 			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_key4));
 			Queue::connection('PendingSUTimeQueue')->push('QueueTasks@runJsonThroughSUTimeJob');
@@ -167,8 +169,8 @@ class AdminController extends BaseController {
 	public function test () {
 		include __DIR__.'/../open_calais_dg/opencalais.php';
 
-		$content = 'Next week I am flying to washington dc for an AIPAC conference';
-		$oc = new OpenCalais($this->calais_key1);
+		$content = 'Sports #Giants win protest, rain-shortened game to resume: CHICAGO — The San Francisco Giants on Wednesday became... http://t.co/BBNJM2YrgQ';
+		$oc = new OpenCalais($this->calais_key4);
 		$results = json_decode($oc->getResult($content), true);
 
 		echo Pre::render($results);		
@@ -202,16 +204,11 @@ class AdminController extends BaseController {
 	public function test2 () {
 
 		// echo $this->fixSUTime('2014-08-23T15:00');
-		//echo $this->dateTimeDiffDays('Wed Aug 20 18:52:33 +0000 2014', '2014-08-23-WXX-6T15:00');
+		echo $this->dateTimeDiffDays('Fri Aug 29 00:56:55 +0000 2014', '2014-08-29');
 
-		// echo date("Y-m-d H:i:s" , strtotime(time())); 
-		// echo date('Y-m-d H:i:s');
 
-		// $result=exec('/usr/bin/java -jar /home/ubuntu/prod/lib/SUTime.jar /home/ubuntu/prod/lib/sutimedata.json');
+		// $result=exec('env');
 		// echo Pre::render($result);
-
-		$result=exec('env');
-		echo Pre::render($result);
 	}
 }
 
