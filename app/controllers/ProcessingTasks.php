@@ -22,7 +22,8 @@ class ProcessingTasks extends BaseController {
 			);				
 
 			// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
-			$use_since_id = false
+			$use_since_id = false;
+			
 			$since_id = '';			
 			if ($use_since_id && $redis->exists('since_id-feedID-' . $feed_id)) {
 				$since_id = $redis->get('since_id-feedID-' . $feed_id);
