@@ -115,17 +115,26 @@ class FeedController extends BaseController {
 	public function getAlerts ($feed_id) {
 		$query = 
 		'db.data1.aggregate([
-	    { $match : { feeds : { $in : [ "5" ] }, "opencalais._type" : { $in : [ "City", "Facility" ] } , "SUTime.future" : {$exists : true} } },
-	    { $unwind : "$opencalais" }, { $unwind : "$SUTime" }, 
-	    { $match : { "opencalais._type" : { $in : [ "City", "Facility" ] }, "SUTime.future" : {$exists : true} } },
-	    { $project : { text : 1, opencalais : 1, SUTime : 1, retweet_count : 1, id : 1 } },
+	    { $match : { feeds : { $in : [ "' . $feed_id . '" ] }, 
+                   "opencalais._type" : { $in : [ "City", "Facility" ] } , 
+                   "SUTime.future" : {$exists : true},
+                   text : { $regex : /^((?!(yesterday)|(ago)).)*$/ } } },
+	    { $unwind : "$opencalais" }, 
+        { $unwind : "$SUTime" }, 
+	    { $match : { "opencalais._type" : { $in : [ "City", "Facility" ] }, 
+                   "SUTime.future" : {$exists : true} } },
+	    { $project : { text : 1, 
+                     opencalais : 1, 
+                     SUTime : 1, 
+                     retweet_count : 1, 
+                     id : 1 } },
 	    { $group: { _id : "$text" ,
-	                    id : { $push : "$id" },
-                            future_time_norm : { $first : "$SUTime.normalized" },
-                            future_time_original : { $first : "$SUTime.original" },
-                            location : { $first : "$opencalais.name" },
-                            location_type : { $first : "$opencalais._type" },
-	                    retweet_count : { $max : "$retweet_count" } } },    
+                id : { $addToSet : "$id" },
+                future_time_norm : { $first : "$SUTime.normalized" },
+                future_time_original : { $first : "$SUTime.original" },
+                location : { $addToSet : "$opencalais.name" },
+                location_type : { $addToSet : "$opencalais._type" },
+    	        retweet_count : { $max : "$retweet_count" } } },    
 		]).toArray()';	
 	
 		// try {			

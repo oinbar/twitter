@@ -23,7 +23,7 @@ class ProcessingTasks extends BaseController {
 
 			// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
 			$use_since_id = false;
-			
+
 			$since_id = '';			
 			if ($use_since_id && $redis->exists('since_id-feedID-' . $feed_id)) {
 				$since_id = $redis->get('since_id-feedID-' . $feed_id);
@@ -49,10 +49,14 @@ class ProcessingTasks extends BaseController {
 			$max_id = 0;
 			foreach ($data['statuses'] as $status){					
 				$status['_id'] = $status['id']; //add mongoID
-				$status['feeds'] = array($feed_id); //add reference to feed						
-				$redis->rpush($cache_list_destination, json_encode($status));		
+				$status['feeds'] = array($feed_id); //add reference to feed	
 				if ($status['_id'] > $max_id) {
 					$max_id = ($status['_id']);
+				}
+				// TEST TO SEE IF IN DB - this is also tested for in the insertion phase, but using it here helps reduce the volume on the pipeline
+				$db_record = DB::connection('mongodb')->collection('data1')->where('_id', $status['_id'])->first();
+				if (!$db_record) {
+					$redis->rpush($cache_list_destination, json_encode($status));		
 				}
 
 			$redis->del('since_id-feedID-' . $feed_id);
