@@ -160,6 +160,7 @@ class FeedController extends BaseController {
 		}		
 		catch (Exception $e){
 			Log::error('ALERTS AGGREGATOR :  '. $e);
+			echo $e;
 		}
 	}
 }
