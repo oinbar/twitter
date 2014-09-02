@@ -170,7 +170,7 @@ class AdminController extends BaseController {
 		include __DIR__.'/../open_calais_dg/opencalais.php';
 
 		$content = 'Sports #Giants win protest, rain-shortened game to resume: CHICAGO — The San Francisco Giants on Wednesday became... http://t.co/BBNJM2YrgQ';
-		$oc = new OpenCalais($this->calais_key4);
+		$oc = new OpenCalais($this->calais_key3);
 		$results = json_decode($oc->getResult($content), true);
 
 		echo Pre::render($results);		

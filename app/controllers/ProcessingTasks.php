@@ -140,7 +140,7 @@ class ProcessingTasks extends BaseController {
 				$record['opencalais'] = $results;				
 				$redis->rpush($cache_list_destination, json_encode($record));
 
-				usleep(100000);
+				usleep(250000);
 			}
 			catch (Exception $e) {
 				Log::error($e);
