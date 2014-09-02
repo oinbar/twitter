@@ -122,7 +122,7 @@ class FeedController extends BaseController {
 	    { $match : { feeds : { $in : [ "' . $feed_id . '" ] }, 
                    "opencalais._type" : { $in : [ "City", "Facility" ] }, 
                    "SUTime.future" : { $exists : true },
-                  
+                   "SUTime.normalized" : { $gte : "2014-09-1" }
                    text : { $regex : /^((?!(yesterday)|(ago)).)*$/ } } },
 	    { $unwind : "$opencalais" }, 
         { $unwind : "$SUTime" }, 
