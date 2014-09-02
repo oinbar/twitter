@@ -121,8 +121,8 @@ class FeedController extends BaseController {
 		'db.data1.aggregate([
 	    { $match : { feeds : { $in : [ "' . $feed_id . '" ] }, 
                    "opencalais._type" : { $in : [ "City", "Facility" ] }, 
-                   "SUTime.future" : {$exists : true},
-
+                   "SUTime.future" : { $exists : true },
+                   "SUTime.normalized" : { $gte : ' . $current_date_time . '}
                    text : { $regex : /^((?!(yesterday)|(ago)).)*$/ } } },
 	    { $unwind : "$opencalais" }, 
         { $unwind : "$SUTime" }, 
@@ -160,7 +160,6 @@ class FeedController extends BaseController {
 		}		
 		catch (Exception $e){
 			Log::error('ALERTS AGGREGATOR :  '. $e);
-			echo $e;
 		}
 	}
 }
