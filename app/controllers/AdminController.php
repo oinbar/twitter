@@ -204,11 +204,18 @@ class AdminController extends BaseController {
 	public function test2 () {
 
 		// echo $this->fixSUTime('2014-08-23T15:00');
-		echo $this->dateTimeDiffDays('Fri Aug 29 00:56:55 +0000 2014', '2014-08-29');
+		// echo $this->dateTimeDiffDays('Fri Aug 29 00:56:55 +0000 2014', '2014-08-29');
 
 
 		// $result=exec('env');
 		// echo Pre::render($result);
+
+
+		// date_default_timezone_set("EST");
+		// $date = date('Y-m-d H:i:s', time());
+		// echo $date;
+
+		echo base_path();
 	}
 }
 
