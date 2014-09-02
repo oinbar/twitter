@@ -122,7 +122,7 @@ class FeedController extends BaseController {
 	    { $match : { feeds : { $in : [ "' . $feed_id . '" ] }, 
                    "opencalais._type" : { $in : [ "City", "Facility" ] }, 
                    "SUTime.future" : { $exists : true },
-                   "SUTime.normalized" : { $gt : "2014-09-1" },
+                   "SUTime.normalized" : { $gt : "' . $current_date_time . '" },
                    text : { $regex : /^((?!(yesterday)|(ago)).)*$/ } } },
 	    { $unwind : "$opencalais" }, 
         { $unwind : "$SUTime" }, 
@@ -153,7 +153,6 @@ class FeedController extends BaseController {
 			if ($err){
 				throw new Exception(Pre::render($err));
 			}			
-			echo $current_date_time;
 			echo file_get_contents($temp_file_out);
 
 			unset($temp_file_in);
