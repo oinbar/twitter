@@ -153,7 +153,8 @@ class FeedController extends BaseController {
 			if ($err){
 				throw new Exception(Pre::render($err));
 			}			
-			echo file_get_contents($temp_file_in);
+			echo $current_date_time;
+			echo file_get_contents($temp_file_out);
 
 			unset($temp_file_in);
 			unset($temp_file_out);			
