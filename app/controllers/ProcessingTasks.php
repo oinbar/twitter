@@ -168,9 +168,6 @@ class ProcessingTasks extends BaseController {
 			foreach ($contents as $record){
 				$record = json_decode($record, true);
 				$record['datetime'] = date("Y-m-d H:i:s" , strtotime($record['created_at']));
-
-				Log::error('DATETIME ' . $record['datetime']);
-
 				array_push($array, $record);
 			}
 			$array = json_encode($array);
@@ -186,12 +183,7 @@ class ProcessingTasks extends BaseController {
 				$jarpath = '/home/ubuntu/prod/lib/SUTime.jar';
 			}
 
-			Log::error('RUNNING SUTIME   ' . substr($array, 0 , 50));
-
-			Log::error('WHOAMI ' . exec('whoami'));
-
 			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' &> /tmp/debug_java.log');			
-			Log::error(print_r($result));
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put
 			// the record in the cache
@@ -204,11 +196,7 @@ class ProcessingTasks extends BaseController {
 						// numerize daytimes (morning, afternoon, evening, night)
 						$a = new AdminController();
 
-						Log::error('NORMALIZED BEFEORE' . $file[$i]['SUTime'][$j]['normalized']);
-
 						$file[$i]['SUTime'][$j]['normalized'] = $a->fixSUTime($file[$i]['SUTime'][$j]['normalized']);
-
-						Log::error('NORMALIZED AFTER' . $file[$i]['SUTime'][$j]['normalized']);
 
 						$interval = $a->dateTimeDiffDays($file[$i]['created_at'], $file[$i]['SUTime'][$j]['normalized']);
 						if ($interval > 0) {
