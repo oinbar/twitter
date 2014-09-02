@@ -115,7 +115,7 @@ class FeedController extends BaseController {
 	public function getAlerts ($feed_id) {
 		
 		date_default_timezone_set("EST");
-		$current_date_time = date('Y-m-d H:i:s', time());
+		$current_date_time = date('Y-m-d', time());
 
 		$query = 
 		'db.data1.aggregate([
