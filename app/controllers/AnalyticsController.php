@@ -47,7 +47,6 @@ class AnalyticsController extends BaseController {
                      datetime : { $first : "$datetime" },
                      text : { $push : "$entities.hashtags.text" } } },
 		]).toArray()';
-		echo $query;
 
 		try {			
 			$db = DB::connection('mongodb')->getMongoDB();								
@@ -61,12 +60,12 @@ class AnalyticsController extends BaseController {
 				throw new Exception(Pre::render($err));
 			}			
 						
-			// $im = imagecreatefrompng($temp_file_out);
-			// header('Content-Type: image/png');
-			// imagepng($im);
+			$im = imagecreatefrompng($temp_file_out);
+			header('Content-Type: image/png');
+			imagepng($im);
 
-			unset($temp_file_in);
-			unset($temp_file_out);			
+			// unset($temp_file_in);
+			// unset($temp_file_out);			
 		}		
 		catch (Exception $e){
 			Log::error('ALERTS AGGREGATOR :  '. $e);

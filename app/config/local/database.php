@@ -22,13 +22,22 @@ return array(
 	'connections' => array(
 
 		'mongodb' => array(
+			// AWS
 		    'driver'   => 'mongodb',
-		    'host'     => 'localhost',
-		    'port'     => 27017,
-		    'username' => 'username',
+		    'host'     => 'ec2-54-87-178-57.compute-1.amazonaws.com',
+		    'port'     => '27017',
+		    'username' => 'admin',
 		    'password' => 'password',
-		    'database' => 'twitterintelDB',
+		    'database' => 'twitterintel',
 		),
+		// 'mongodb' => array(
+		//     'driver'   => 'mongodb',
+		//     'host'     => 'localhost',
+		//     'port'     => 27017,
+		//     'username' => 'username',
+		//     'password' => 'password',
+		//     'database' => 'twitterintelDB',
+		// ),
 
 		'mysql' => array(
 			'driver'    => 'mysql',

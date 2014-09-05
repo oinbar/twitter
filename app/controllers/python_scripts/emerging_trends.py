@@ -26,7 +26,6 @@ timeframe = sys.argv[4]
 
 num_features_to_plot = 5
 timeframes = {'hour' : 'hour', 'day' : 'day'}
-timeframe = timeframes['day']
 
 file = open(input_file)
 json = json.load(file)
