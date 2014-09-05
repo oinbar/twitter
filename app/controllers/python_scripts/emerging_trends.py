@@ -89,7 +89,7 @@ y_vectors_dict = get_features_to_plot(tfidf_scores, num_features_to_plot)
 
 
 for feature in y_vectors_dict:
-    plt.plot(range(N), y_vectors_dict[feature], label=feature)
+    plt.plot(range(len(y_vectors_dict[feature])), y_vectors_dict[feature], label=feature)
 
 plt.ylim((0,1))
 plt.legend(loc='upper left')
