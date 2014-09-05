@@ -40,7 +40,7 @@ Route::get('/alerts/{feed_id}', array('uses' => 'FeedController@getAlerts'));
 
 
 
-Route::get('/emergingtrends/{feed_id}', array('uses' => 'AnalyticsController@emergingTrends'));
+Route::get('/trends/{feed_id}/{timepoints?}/{num_features?}/{timeframe?}', array('uses' => 'AnalyticsController@trends'));
 
 
 Route::get('/signup', array('before' => 'guest', 'uses' => 'UserController@getSignup'));

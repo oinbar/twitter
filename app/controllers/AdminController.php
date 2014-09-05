@@ -211,11 +211,11 @@ class AdminController extends BaseController {
 		// echo Pre::render($result);
 
 
-		// date_default_timezone_set("EST");
-		// $date = date('Y-m-d H:i:s', time());
-		// echo $date;
+		date_default_timezone_set("EST");
+		$date = date('Y-m-d H:i:s', time()-7*60*60*24);
+		echo $date;
 
-		echo base_path();
+		// echo base_path();
 	}
 }
 

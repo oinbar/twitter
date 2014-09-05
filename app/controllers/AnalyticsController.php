@@ -2,13 +2,20 @@
 
 class AnalyticsController extends BaseController {
 
-	public function emergingTrends ($feed_id) {
+	public function trends ($feed_id, $timepoints = 24, $num_features = 5, $timeframe = 'hour') {		
+		date_default_timezone_set("EST");
+		if ($timeframe == 'hour') {
+			$since_time =  date('Y-m-d H:i:s', time()-$timepoints*60*60);		
+		} 
+		elseif ($timeframe == 'day') {
+			$since_time =  date('Y-m-d H:i:s', time()-$timepoints*60*60*24);		
+		}
 
 		// TWEET TEXT
 		$query = 
 		'db.data1.aggregate([
 		    { $match : { feeds : { $in : [ "' . $feed_id . '" ] },
-	                     datetime : { $gte : "2014-08-01" } } },
+	                     datetime : { $gte : "' . $since_time . '" } } },
 		    { $project : { _id : 1,
 	                      datetime : 1,
 	                      text : 1 } },
@@ -18,13 +25,14 @@ class AnalyticsController extends BaseController {
 		$query = 
 		'db.data1.aggregate([
 		    { $match : { feeds : { $in : [ "' . $feed_id . '" ] },
-                     datetime : { $gte : "2014-08-01" } } },
+                     datetime : { $gte : "' . $since_time . '" } } },
             { $unwind : "$entities.hashtags" }, 
 		    { $group : { _id : "$_id",
                      datetime : { $first : "$datetime" },
                      text : { $push : "$entities.hashtags.text" } } },
 		]).toArray()';
-	
+
+		echo $since_time;
 		try {			
 			$db = DB::connection('mongodb')->getMongoDB();								
 			$results = $db->execute('return ' . $query . ';');
@@ -32,12 +40,11 @@ class AnalyticsController extends BaseController {
 			$temp_file_out = tempnam(__DIR__ . '/temp/', 'emergingTrendsOut') . '.png';
 			file_put_contents($temp_file_in, json_encode($results['retval']));
 			
-			exec(base_path() . '/../python_venv/bin/python ' . __DIR__ .  '/python_scripts/emerging_trends.py ' . $temp_file_in . ' ' . $temp_file_out . ' 2>&1', $err);
+			exec(base_path() . '/../python_venv/bin/python ' . __DIR__ .  '/python_scripts/emerging_trends.py ' . $temp_file_in . ' ' . $temp_file_out . ' ' . $num_features . ' ' . $timeframe . ' 2>&1', $err);
 			if ($err){
 				throw new Exception(Pre::render($err));
 			}			
-			
-			// echo $temp_file_out;
+						
 			$im = imagecreatefrompng($temp_file_out);
 			header('Content-Type: image/png');
 			imagepng($im);
