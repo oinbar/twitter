@@ -47,7 +47,7 @@ class AnalyticsController extends BaseController {
                      datetime : { $first : "$datetime" },
                      text : { $push : "$entities.hashtags.text" } } },
 		]).toArray()';
-		echo $since_time;
+		// echo $since_time;
 
 		try {			
 			$db = DB::connection('mongodb')->getMongoDB();								
