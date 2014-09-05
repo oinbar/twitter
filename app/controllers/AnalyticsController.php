@@ -2,13 +2,29 @@
 
 class AnalyticsController extends BaseController {
 
-	public function trends ($feed_id, $timepoints = 48, $num_features = 5, $timeframe = 'hour') {		
+	private function maxtime ($feed_id) {
+		$query = 
+		'db.data1.aggregate([
+		{ $match : { feeds : { $in : [ "' . $feed_id . '" ] } } },
+		{ $sort : { datetime : -1 } },
+		{ $limit : 1 },
+		{ $project : { _id : 0 , datetime : 1 } }
+		]).toArray()';
+
+		$db = DB::connection('mongodb')->getMongoDB();								
+		$results = $db->execute('return ' . $query . ';');
+		return $results['retval'][0]['datetime'];
+	}
+
+	public function trends ($feed_id, $timepoints = 24, $num_features = 5, $timeframe = 'hour') {		
+		$maxtime = $this->maxtime($feed_id);
+
 		date_default_timezone_set("EST");
 		if ($timeframe == 'hour') {
-			$since_time =  date('Y-m-d H:i:s', time()-$timepoints*60*60);		
+			$since_time =  date('Y-m-d H:i:s', strtotime($maxtime)-$timepoints*60*60);		
 		} 
 		elseif ($timeframe == 'day') {
-			$since_time =  date('Y-m-d H:i:s', time()-$timepoints*60*60*24);		
+			$since_time =  date('Y-m-d H:i:s', strtotime($maxtime)-$timepoints*60*60*24);		
 		}
 
 		// TWEET TEXT
@@ -31,7 +47,8 @@ class AnalyticsController extends BaseController {
                      datetime : { $first : "$datetime" },
                      text : { $push : "$entities.hashtags.text" } } },
 		]).toArray()';
-		
+		echo $since_time;
+
 		try {			
 			$db = DB::connection('mongodb')->getMongoDB();								
 			$results = $db->execute('return ' . $query . ';');
