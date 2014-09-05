@@ -46,7 +46,9 @@ def group_df_into_windows (df, timeframe):
             window.append(df.datetime[i][:10])        
     df['window'] = window
     df = df[['window', 'text']]
-    df = df.groupby('window', as_index=False).sum().sort('window', ascending=False)       
+    df = df.groupby('window').apply(lambda x: ' '.join(x.text)) #.sort('window', ascending=False)
+    df = pd.DataFrame(df)
+    df = pd.DataFrame({'window' : df.index, 'text' : df[0] }).reset_index(drop=True)            
     return df
 
 df = group_df_into_windows(df, timeframe)
@@ -85,11 +87,12 @@ def get_features_to_plot(final_scores_matrix, num_features_to_plot, selection_me
     return plot_data
 
 y_vectors_dict = get_features_to_plot(tfidf_scores, num_features_to_plot)
-
+x_vector = df.window.apply(lambda x: str(x))
 
 for feature in y_vectors_dict:
     plt.plot(range(len(y_vectors_dict[feature])), y_vectors_dict[feature], label=feature)
+    plt.xticks(range(len(x_vector)), x_vector, rotation=45)
 
 plt.ylim((0,1))
-plt.legend(loc='upper left')
+plt.legend(loc='best')
 plt.savefig(output_file)
