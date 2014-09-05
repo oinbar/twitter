@@ -2,7 +2,7 @@
 
 class AnalyticsController extends BaseController {
 
-	public function trends ($feed_id, $timepoints = 24, $num_features = 5, $timeframe = 'hour') {		
+	public function trends ($feed_id, $timepoints = 48, $num_features = 5, $timeframe = 'hour') {		
 		date_default_timezone_set("EST");
 		if ($timeframe == 'hour') {
 			$since_time =  date('Y-m-d H:i:s', time()-$timepoints*60*60);		
@@ -31,7 +31,7 @@ class AnalyticsController extends BaseController {
                      datetime : { $first : "$datetime" },
                      text : { $push : "$entities.hashtags.text" } } },
 		]).toArray()';
-
+		
 		try {			
 			$db = DB::connection('mongodb')->getMongoDB();								
 			$results = $db->execute('return ' . $query . ';');
