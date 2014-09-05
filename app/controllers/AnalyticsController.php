@@ -49,6 +49,10 @@ class AnalyticsController extends BaseController {
 		]).toArray()';
 
 		try {			
+
+			ini_set('memory_limit','256M');
+
+			
 			$db = DB::connection('mongodb')->getMongoDB();								
 			$results = $db->execute('return ' . $query . ';');
 			$temp_file_in = tempnam(__DIR__ . '/temp/', 'emergingTrendsIn');
