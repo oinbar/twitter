@@ -154,7 +154,7 @@ class ProcessingTasks extends BaseController {
 		/*
 		pulls a batch of documents off the cache_list_origin list, and runs them through StanfordNLP's
 		SUTime module (packaged into a jar file), attempting to find any mentions of dates and times in the text.
-		currently this is done by using an intermediary json file and calling the jar directly, this should be changed.
+		currently this is done by using an intermediary json file and calling the jar directly.
 		*/		
 
 		try{

@@ -134,8 +134,8 @@ class FeedController extends BaseController {
                      id : 1 } },
 	    { $group: { _id : "$text" ,
                 id : { $addToSet : "$id" },
-                future_time_norm : { $first : "$SUTime.normalized" },
-                future_time_original : { $first : "$SUTime.original" },
+                future_time_norm : { $addToSet : "$SUTime.normalized" },
+                future_time_original : { $addToSet : "$SUTime.original" },
                 location : { $addToSet : "$opencalais.name" },
                 location_type : { $addToSet : "$opencalais._type" },
     	        retweet_count : { $max : "$retweet_count" } } },    
@@ -152,7 +152,16 @@ class FeedController extends BaseController {
 			if ($err){
 				throw new Exception(Pre::render($err));
 			}			
-			echo file_get_contents($temp_file_out);
+
+			// change time format to full time format for timeline display
+			$timeline_data = json_decode(file_get_contents($temp_file_out), true);
+			for ($i = 0; $i < sizeof($timeline_data); $i++) {
+				$timeline_data[$i]['full_datetime'] = date(DATE_RFC2822, strtotime($timeline_data[$i]['future_time_norm']));
+			}
+			return View::make('timeline')
+				->with('data', json_encode($timeline_data));
+
+			// echo file_get_contents($temp_file_out);
 
 			unset($temp_file_in);
 			unset($temp_file_out);			

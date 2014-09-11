@@ -34,6 +34,21 @@ def make_partial_tweet(text):
             text_new.append(token)
     return ' '.join(text_new).lower()[:50]
 
+def consolidate_times(time_array):
+    # takes all set of aggregated times from the json input file and picks the highest time and highest hour
+    dates, times, datetimes = [""], [""], [""]
+    for item in time_array:
+        if (len(item) == 10) :
+            dates.append(item)
+        elif (len(item) == 5):
+            times.append(item)
+        elif (len(item) == 16):
+            datetimes.append(item)
+    if (len(datetimes) > 1):
+        return max(datetimes)
+    else:
+        return str(max(dates)) + ' ' + str(max(times))
+        
 def fix_time(time):
     # remove the time from the datetimes that arent round to the half hour.  Those times are estimated incorrectly.
     if (len(time) == 16):
@@ -47,7 +62,7 @@ text = [item['_id'] for item in json]
 partial_text = [make_partial_tweet(item) for item in text]
 location = [', '.join(item['location']) for item in json]
 location_type = [', '.join(item['location_type']) for item in json]
-future_time_norm = [fix_time(item['future_time_norm']) for item in json]
+future_time_norm = [fix_time(consolidate_times(item['future_time_norm'])).strip() for item in json]
 future_time_original = [item['future_time_original'] for item in json]
 retweet_count = [item['retweet_count']+1 for item in json]
 ids = [item['id'] for item in json]

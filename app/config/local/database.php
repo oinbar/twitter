@@ -39,16 +39,26 @@ return array(
 		//     'database' => 'twitterintelDB',
 		// ),
 
+		
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'database'  => 'twittermanagerDB',
-			'username'  => 'root',
-			'password'  => 'root',
-			'charset'   => 'utf8',
-			'collation' => 'utf8_unicode_ci',
-			'prefix'    => '',
+			'host'      => 'twitterintel-mysql.c0sdmckg4fw5.us-east-1.rds.amazonaws.com',
+			'port'		=> '3306',
+			'database'  => 'twitterintel',
+			'username'  => 'admin',
+			'password'  => 'password',		
 		),
+		// 'mysql' => array(
+		// 	'driver'    => 'mysql',
+		// 	'host'      => 'localhost',
+		// 	'database'  => 'twittermanagerDB',
+		// 	'username'  => 'root',
+		// 	'password'  => 'root',
+		// 	'charset'   => 'utf8',
+		// 	'collation' => 'utf8_unicode_ci',
+		// 	'prefix'    => '',
+		// ),
+
 
 	),
 
