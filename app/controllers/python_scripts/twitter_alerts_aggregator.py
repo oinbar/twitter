@@ -47,7 +47,7 @@ def consolidate_times(time_array):
     if (len(datetimes) > 1):
         return max(datetimes)
     else:
-        return str(max(dates)) + ' ' + str(max(times))
+        return str(max(dates)) + ' ' + str(min(times))
         
 def fix_time(time):
     # remove the time from the datetimes that arent round to the half hour.  Those times are estimated incorrectly.
