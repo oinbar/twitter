@@ -153,7 +153,7 @@ class FeedController extends BaseController {
 				throw new Exception(Pre::render($err));
 			}			
 
-			// change time format to full time format for timeline display
+			// add full datetime format for timeline display
 			$timeline_data = json_decode(file_get_contents($temp_file_out), true);
 			for ($i = 0; $i < sizeof($timeline_data); $i++) {
 				$timeline_data[$i]['full_datetime'] = date(DATE_RFC2822, strtotime($timeline_data[$i]['future_time_norm']));

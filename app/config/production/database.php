@@ -53,13 +53,23 @@ return array(
 		// ),
 
 		// AWS
+		// 'mysql' => array(
+		// 	'driver'    => 'mysql',
+		// 	'host'      => 'twitterintel-mysql.c0sdmckg4fw5.us-east-1.rds.amazonaws.com',
+		// 	'port'		=> '3306',
+		// 	'database'  => 'twitterintel',
+		// 	'username'  => 'admin',
+		// 	'password'  => 'password',		
+		// ),
+
+		// PRIVATE SERVER
 		'mysql' => array(
 			'driver'    => 'mysql',
-			'host'      => 'twitterintel-mysql.c0sdmckg4fw5.us-east-1.rds.amazonaws.com',
+			'host'      => 'localhost',
 			'port'		=> '3306',
 			'database'  => 'twitterintel',
 			'username'  => 'admin',
-			'password'  => 'password',		
+			'password'  => 'jewbacca',		
 		),
 		
 	),
