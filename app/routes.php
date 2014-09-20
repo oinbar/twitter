@@ -16,7 +16,7 @@ Route::get('/', function() {
 });
 
 Route::get('/phpinfo', function() {
-	return phpinfo();
+	echo phpinfo();
 })
 
 Route::get('/feeds/', 'FeedController@getFeeds'); 
