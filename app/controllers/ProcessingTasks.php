@@ -11,6 +11,7 @@ class ProcessingTasks extends BaseController {
 
 		NOTE: must still implement since_id, to make sure tweets are not fetched redundantly.  
 		*/	
+		Log::error("STARTING TWITTER FETCH");
 		try {
 			include __DIR__.'/../twitter-api-php/TwitterAPIExchange.php';
 			$redis = Redis::Connection();

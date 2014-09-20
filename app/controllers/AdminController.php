@@ -101,6 +101,7 @@ class AdminController extends BaseController {
 
 
 	public function load_queues () {
+		Log::error("QUEUES PUSHED");
 		try {
 			// this triggers the necessary jobs in QueueTasks by calling initiating them (they are cyclic).
 			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_key1));
@@ -116,6 +117,7 @@ class AdminController extends BaseController {
 	}
 
 	public function start_queue_listeners () {
+		Log::error("QUEUES STARTED");
 		try {
 			$this->check_start_queue_listener('PendingTwitterQueue');
 			$this->check_start_queue_listener('PendingCalaisQueue');
