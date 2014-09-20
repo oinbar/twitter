@@ -68,7 +68,7 @@ return array(
 			'host'      => 'localhost',
 			'port'		=> '3306',
 			'database'  => 'twitterintel',
-			'username'  => 'admin',
+			'username'  => 'root',
 			'password'  => 'jewbacca',		
 		),
 		
