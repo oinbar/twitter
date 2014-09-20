@@ -15,6 +15,10 @@ Route::get('/', function() {
 	return View::make('master');
 });
 
+Route::get('/phpinfo', function() {
+	return phpinfo();
+})
+
 Route::get('/feeds/', 'FeedController@getFeeds'); 
 
 Route::get('/about', function(){ return View::make('about'); });
