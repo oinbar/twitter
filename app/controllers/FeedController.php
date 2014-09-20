@@ -106,7 +106,7 @@ class FeedController extends BaseController {
 
 			Queue::connection('PendingTwitterQueue')->push('QueueTasks@searchTwitterFeedCriteriaJob', array('feed_id' => $feed_id)); 
 		}
-		catch (Exception e) {
+		catch (Exception $e) {
 			Log::error(e);
 		}
 		return Redirect::to('/view_feed/' . $feed_id);
