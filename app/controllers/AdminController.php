@@ -2,12 +2,11 @@
 
 class AdminController extends BaseController {
 
-	private $calais_key1 = 'qupquc5c4qzj7sg9knu5ad4w';
-	private $calais_key2 = 'cxxf222kq5thbjcmtmxw8hgv';	
-	private $calais_key3 = 'cytb2vdruh7r3wwx6vemvgft';
-	private $calais_key4 = 'fvtjme9xyx2r54kuqxy9d9zf';
-
-	private $calaiskeys = array($calais_key1, $calais_key2, $calais_key3, $calais_key4);
+	private $calais_keys = array('calais_key1' => 'qupquc5c4qzj7sg9knu5ad4w',
+								 'calais_key2' => 'cxxf222kq5thbjcmtmxw8hgv',
+								 'calais_key3' => 'cytb2vdruh7r3wwx6vemvgft',
+								 'calais_key4' => 'fvtjme9xyx2r54kuqxy9d9zf',
+								);
 
 
 	public function debug() {
@@ -72,7 +71,11 @@ class AdminController extends BaseController {
 	        echo '<strong style="background-color:crimson; padding:5px;">Caught exception: ', $e->getMessage(), "</strong>\n";
 	    }
 
-	    echo '</pre>';	    
+	    echo "<h1>Calais Keys:</h1>".'<br>';
+	    $this->testCalaisKeys();
+
+	    echo '</pre>';
+
 	}
 
 	private function runQueueListener ($queue) {
@@ -106,10 +109,10 @@ class AdminController extends BaseController {
 		Log::error("QUEUES PUSHED");
 		try {
 			// this triggers the necessary jobs in QueueTasks by calling initiating them (they are cyclic).
-			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_key1));
-			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_key2));
-			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_key3));
-			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_key4));
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->$calais_keys['calais_key1)']));
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->$calais_keys['calais_key2)']));
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->$calais_keys['calais_key3)']));
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->$calais_keys['calais_key4)']));
 			Queue::connection('PendingSUTimeQueue')->push('QueueTasks@runJsonThroughSUTimeJob');
 			Queue::connection('PendingSUTimeQueue')->push('QueueTasks@runJsonThroughSUTimeJob');
 			Queue::connection('PendingPersistenceQueue')->push('QueueTasks@insertJsonToDBJob');   
@@ -119,7 +122,6 @@ class AdminController extends BaseController {
 	}
 
 	public function start_queue_listeners () {
-		Log::error("QUEUES STARTED");
 		try {
 			$this->check_start_queue_listener('PendingTwitterQueue');
 			$this->check_start_queue_listener('PendingCalaisQueue');
@@ -173,16 +175,16 @@ class AdminController extends BaseController {
 	public function testCalaisKeys () {
 		include __DIR__.'/../open_calais_dg/opencalais.php';
 
-		foreach($calaiskeys as $calaiskey){
+		foreach($this->calais_keys as  $key_name => $key_val){
 			$content = 'Sports #Giants win protest, rain-shortened game to resume: CHICAGO — The San Francisco Giants on Wednesday became... http://t.co/BBNJM2YrgQ';
-			$oc = new OpenCalais($this->calais_key4);
+			$oc = new OpenCalais($key_val);
 			$results = json_decode($oc->getResult($content), true);
 
-			if (in_array('docs', $results)) {
-				echo $calaiskey + " : GOOD";
+			if ($results == null) {
+				echo (string)$key_name . " : BAD" . '<br>';
 			}
 			else {
-				echo $calaiskey + " : BAD";
+				echo (string)$key_name . " : GOOD" . '<br>';
 			}
 		}
 	}
