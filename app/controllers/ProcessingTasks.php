@@ -180,9 +180,10 @@ class ProcessingTasks extends BaseController {
 				$jarpath = '/Users/Orr/Desktop/SUTime.jar';
 			}
 			elseif (App::environment() == 'production') {
-				$jarpath = '/home/ubuntu/prod/lib/SUTime.jar';
+				$jarpath = '/home/upupup/prod/lib/SUTime.jar';
 			}
 
+			
 			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' &> /tmp/debug_java.log');			
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put

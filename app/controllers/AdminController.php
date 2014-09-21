@@ -78,15 +78,15 @@ class AdminController extends BaseController {
 
 	}
 
-	private function runQueueListener ($queue) {
-		if (App::environment()=='local') {
-		    $command = 'php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!';
-		    $pid = exec($command);			    
-		} else {
-			$command = 'php /var/app/current/artisan queue:listen ' . $queue . ' --timeout=600';
-			$pid = exec($command);			
-		}
-	}
+	// private function runQueueListener ($queue) {
+	// 	if (App::environment()=='local') {
+	// 	    $command = 'php artisan queue:listen ' . $queue . ' --timeout=600 > /dev/null & echo $!';
+	// 	    $pid = exec($command);			    
+	// 	} else {
+	// 		$command = 'php /var/app/current/artisan queue:listen ' . $queue . ' --timeout=600';
+	// 		$pid = exec($command);			
+	// 	}
+	// }
 
 	public function check_start_queue_listener ($queue) {		
 		// checks if the queue listener is running, if not it starts it and
@@ -119,6 +119,7 @@ class AdminController extends BaseController {
 		} catch (Ecxeption $e) {
 			Log::error('LOAD QUEUE ERROR: ' . $e);
 		}
+		echo "done";
 	}
 
 	public function start_queue_listeners () {
@@ -230,6 +231,9 @@ class AdminController extends BaseController {
 		// echo base_path();
 
 		echo date(DATE_RFC2822, strtotime("2014-09-10 17:00"));
+	}
+	public function test () {
+		echo app_path() . '../../';
 	}
 }
 
