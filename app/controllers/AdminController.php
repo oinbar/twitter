@@ -109,10 +109,10 @@ class AdminController extends BaseController {
 		Log::error("QUEUES PUSHED");
 		try {
 			// this triggers the necessary jobs in QueueTasks by calling initiating them (they are cyclic).
-			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->$calais_keys['calais_key1)']));
-			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->$calais_keys['calais_key2)']));
-			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->$calais_keys['calais_key3)']));
-			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->$calais_keys['calais_key4)']));
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_keys['calais_key1)']));
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_keys['calais_key2)']));
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_keys['calais_key3)']));
+			Queue::connection('PendingCalaisQueue')->push('QueueTasks@runJsonThroughCalaisJob', array('calais_key' =>  $this->calais_keys['calais_key4)']));
 			Queue::connection('PendingSUTimeQueue')->push('QueueTasks@runJsonThroughSUTimeJob');
 			Queue::connection('PendingSUTimeQueue')->push('QueueTasks@runJsonThroughSUTimeJob');
 			Queue::connection('PendingPersistenceQueue')->push('QueueTasks@insertJsonToDBJob');   
