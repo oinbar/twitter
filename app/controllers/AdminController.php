@@ -181,10 +181,11 @@ class AdminController extends BaseController {
 			$results = json_decode($oc->getResult($content), true);
 
 			if ($results == null) {
-				echo (string)$key_name . " : BAD" . '<br>';
+				// <strong style="background-color:green; padding:5px;">Connection confirmed</strong>';
+				echo '<strong style="background-color:crimson; padding:5px;">' . (string)$key_name . " : BAD" . '</strong><br><br>';
 			}
 			else {
-				echo (string)$key_name . " : GOOD" . '<br>';
+				echo '<strong style="background-color:green; padding:5px;">' . (string)$key_name . " : GOOD" . '</strong><br><br>';
 			}
 		}
 	}
