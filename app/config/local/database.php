@@ -21,45 +21,44 @@ return array(
 
 	'connections' => array(
 
-		'mongodb' => array(
-			// AWS
-		    'driver'   => 'mongodb',
-		    'host'     => 'ec2-54-87-178-57.compute-1.amazonaws.com',
-		    'port'     => '27017',
-		    'username' => 'admin',
-		    'password' => 'password',
-		    'database' => 'twitterintel',
-		),
 		// 'mongodb' => array(
+		// 	// AWS
 		//     'driver'   => 'mongodb',
-		//     'host'     => 'localhost',
-		//     'port'     => 27017,
-		//     'username' => 'username',
+		//     'host'     => 'ec2-54-87-178-57.compute-1.amazonaws.com',
+		//     'port'     => '27017',
+		//     'username' => 'admin',
 		//     'password' => 'password',
-		//     'database' => 'twitterintelDB',
+		//     'database' => 'twitterintel',
 		// ),
+		'mongodb' => array(
+		    'driver'   => 'mongodb',
+		    'host'     => 'localhost',
+		    'port'     => 27017,
+		    'username' => 'username',
+		    'password' => 'password',
+		    'database' => 'twitterintelDB',
+		),
 
 		
-		'mysql' => array(
-			'driver'    => 'mysql',
-			'host'      => 'twitterintel-mysql.c0sdmckg4fw5.us-east-1.rds.amazonaws.com',
-			'port'		=> '3306',
-			'database'  => 'twitterintel',
-			'username'  => 'admin',
-			'password'  => 'password',		
-		),
 		// 'mysql' => array(
 		// 	'driver'    => 'mysql',
-		// 	'host'      => 'localhost',
-		// 	'database'  => 'twittermanagerDB',
-		// 	'username'  => 'root',
-		// 	'password'  => 'root',
-		// 	'charset'   => 'utf8',
-		// 	'collation' => 'utf8_unicode_ci',
-		// 	'prefix'    => '',
+		// 	'host'      => 'twitterintel-mysql.c0sdmckg4fw5.us-east-1.rds.amazonaws.com',
+		// 	'port'		=> '3306',
+		// 	'database'  => 'twitterintel',
+		// 	'username'  => 'admin',
+		// 	'password'  => 'password',		
 		// ),
 
+		'mysql' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'database'  => 'twittermanagerDB',
+			'username'  => 'root',
+			'password'  => 'root',
+			'charset'   => 'utf8',
+			'collation' => 'utf8_unicode_ci',
+			'prefix'    => '',
+		),
 
 	),
-
 );

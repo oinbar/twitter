@@ -15,8 +15,6 @@ class QueueTasks {
 		quickly.
 		*/
 
-		Log::error("SEARCH TWITTERFEED QUEUE JOB");
-
 		$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
 		
 		if ($feed_status == 'on') {
