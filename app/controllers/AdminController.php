@@ -7,6 +7,8 @@ class AdminController extends BaseController {
 	private $calais_key3 = 'cytb2vdruh7r3wwx6vemvgft';
 	private $calais_key4 = 'fvtjme9xyx2r54kuqxy9d9zf';
 
+	private $calaiskeys = array($calais_key1, $calais_key2, $calais_key3, $calais_key4);
+
 
 	public function debug() {
 
@@ -168,16 +170,21 @@ class AdminController extends BaseController {
 			->with('sizePendingPersistenceList',$redis->llen('PendingPersistenceList'));
 	}
 
-	public function test () {
+	public function testCalaisKeys () {
 		include __DIR__.'/../open_calais_dg/opencalais.php';
 
-		$content = 'Sports #Giants win protest, rain-shortened game to resume: CHICAGO — The San Francisco Giants on Wednesday became... http://t.co/BBNJM2YrgQ';
-		$oc = new OpenCalais($this->calais_key4);
-		$results = json_decode($oc->getResult($content), true);
+		foreach($calaiskeys as $calaiskey){
+			$content = 'Sports #Giants win protest, rain-shortened game to resume: CHICAGO — The San Francisco Giants on Wednesday became... http://t.co/BBNJM2YrgQ';
+			$oc = new OpenCalais($this->calais_key4);
+			$results = json_decode($oc->getResult($content), true);
 
-		echo Pre::render($results);		
-
-		// file_put_contents('/Users/Orr/Desktop/.json', json_encode($results));
+			if (in_array('docs', $results)) {
+				echo $calaiskey + " : GOOD";
+			}
+			else {
+				echo $calaiskey + " : BAD";
+			}
+		}
 	}
 
 	public function fixSUTime ($date_str) {
