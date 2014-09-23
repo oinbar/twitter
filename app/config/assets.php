@@ -1,3 +1,3 @@
 <?php
 
-return array('images' => 'app/assets/images/')
+return array('images' => 'app/assets/images/');
