@@ -3,6 +3,6 @@
 @section('main-content')
 
 	
-	<img src="<?php echo $protest_hour_trend; ?>" />
+	<img src="{{ $protest_hour_trend }}" >
 
 @stop
