@@ -3,7 +3,7 @@
 <!-- @section('main-content') -->
 
 	
-	<img src="{{ $protest_hour_trend) }}" >
+	<img src="{{ $protest_hour_trend }}" >
 
 
 
