@@ -89,6 +89,7 @@ class AnalyticsController extends BaseController {
 	}
 
 	public function showAnalytics() {
+		// create image and get the name
 		$protest_hour_trend = $this->trends('1', '24', '5', 'hour');	
 		$protest_day_trend = $this->trends('1', '2', '5', 'day');
 
