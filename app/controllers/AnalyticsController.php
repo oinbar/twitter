@@ -59,7 +59,7 @@ class AnalyticsController extends BaseController {
 			$temp_file_out = tempnam(__DIR__ . '/temp/', 'emergingTrendsOut') . '.png';
 			file_put_contents($temp_file_in, json_encode($results['retval']));
 			
-			
+
 			exec(base_path() . '/../python_venv/bin/python ' . __DIR__ .  '/python_scripts/emerging_trends.py ' . $temp_file_in . ' ' . $temp_file_out . ' ' . $num_features . ' ' . $timeframe . ' 2>&1', $err);
 			if ($err){
 				throw new Exception(Pre::render($err));
@@ -67,7 +67,7 @@ class AnalyticsController extends BaseController {
 						
 			$im = imagecreatefrompng($temp_file_out);
 			header('Content-Type: image/png');
-			imagepng($temp_file_out);
+			imagepng($im);
 			
 
 			unset($temp_file_in);
