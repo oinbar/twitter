@@ -66,8 +66,9 @@ class AnalyticsController extends BaseController {
 						
 			$im = imagecreatefrompng($temp_file_out);
 			header('Content-Type: image/png');
+			$temp_file_out = imagepng($im);
 			return $temp_file_out;
-			// imagepng($im);
+			
 
 			// unset($temp_file_in);
 			// unset($temp_file_out);			
