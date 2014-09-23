@@ -67,8 +67,7 @@ class AnalyticsController extends BaseController {
 						
 			$im = imagecreatefrompng($temp_file_out);
 			header('Content-Type: image/png');
-			file_put_contents($temp_file_out, base64_decode($im));
-			
+			// imagepng($im);			
 			return $im;		
 
 			// unset($temp_file_in);
@@ -83,8 +82,6 @@ class AnalyticsController extends BaseController {
 	public function showAnalytics() {
 		$protest_hour_trend = $this->trends('1', '24', '5', 'hour');	
 		$protest_day_trend = $this->trends('1', '2', '5', 'day');
-
-
 
 		return View::make('analytics')
 			->with('protest_hour_trend', $protest_hour_trend)
