@@ -86,8 +86,5 @@ class AnalyticsController extends BaseController {
 		return View::make('analytics')
 			->with('protest_hour_trend', $protest_hour_trend)
 			->with('protest_day_trend', $protest_day_trend);
-
-		unset($protest_hour_trend);
-		unset($protest_day_trend);
 	}
 }

@@ -2,10 +2,20 @@
 
 @section('main-content')
 
-{{ $protest_hour_trend }}
+	hour trends
+	<?php
+		$im = imagecreatefrompng($protest_hour_trend);
+		header('Content-Type: image/png');
+		imagepng($im);
+		unset($protest_hour_trend);
+	?>
 
-<img src="{{ $protest_hour_trend }}" alt="protest_hour_trend" style="width:304px;height:228px">
-<img src="{{ $protest_day_trend }}" alt="protest_day_trend" style="width:304px;height:228px">
-
+	day trend
+	<?php
+		$im = imagecreatefrompng($protest_day_trend);
+		header('Content-Type: image/png');
+		imagepng($im);
+		unset($protest_day_trend);
+	?>
 
 @stop
