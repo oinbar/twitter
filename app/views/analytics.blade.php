@@ -11,11 +11,11 @@
        <h4>Label</h4>
        <span class="text-muted">Something else</span>
      </div>
-     <div class="col-xs-6 col-sm-3 placeholder">
+     <!-- <div class="col-xs-6 col-sm-3 placeholder">
        <img data-src="holder.js/100x100/auto/industrial/text:yesterday" class="img-responsive" alt="Generic placeholder thumbnail">
        <h4>Label</h4>
        <span class="text-muted">Something else</span>
-     </div>
+     </div> -->
    </div>
 
 
