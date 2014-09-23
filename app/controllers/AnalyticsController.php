@@ -71,8 +71,6 @@ class AnalyticsController extends BaseController {
 				
 			
 			$temp_file_out_name = basename($temp_file_out);
-			$a = new AdminController();
-			$response = $a->getImage($temp_file_out);
 
 			return Redirect::to('/images/' . $temp_file_out_name);
 			

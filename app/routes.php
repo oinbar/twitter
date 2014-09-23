@@ -48,6 +48,8 @@ Route::get('/trends/{feed_id}/{timepoints?}/{num_features?}/{timeframe?}', array
 
 Route::get('/analytics/', array('uses' => 'AnalyticsController@showAnalytics'));
 
+Route::get('/images/{file}', array('uses' => 'AdminController@getImage'));
+
 
 Route::get('/signup', array('before' => 'guest', 'uses' => 'UserController@getSignup'));
 
