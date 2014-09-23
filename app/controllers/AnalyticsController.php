@@ -78,7 +78,7 @@ class AnalyticsController extends BaseController {
 			
 			$temp_file_out_name = basename($temp_file_out);
 
-			return Redirect::to('/images/' . $temp_file_out_name);
+			return $temp_file_out_name
 			
 
 			// unset($temp_file_in);
