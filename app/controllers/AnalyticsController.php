@@ -65,12 +65,13 @@ class AnalyticsController extends BaseController {
 				throw new Exception(Pre::render($err));
 			}			
 						
-			$im = imagecreatefrompng($temp_file_out);
-			header('Content-Type: image/png');
-			imagepng($im);	
+			// $im = imagecreatefrompng($temp_file_out);
+			// header('Content-Type: image/png');
+			// imagepng($im);	
 			// $im = asset($im);		
 						
-			// return $im;
+			$im = Image::make($temp_file_out);
+			return $im;
 
 			unset($temp_file_in);
 			unset($temp_file_out);			
