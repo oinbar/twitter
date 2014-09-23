@@ -2,9 +2,6 @@
 
 @section('main-content')
 
-	my image<br>
-	<img src="/images/{{ $protest_hour_trend }}" style="width:600px;height:500px">
-
  <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
    <h1 class="page-header">Feed: Protest > Analytics </h1>
    <p class="lead"><i>Here's whats going on in your neck of the woods:</i></p>
