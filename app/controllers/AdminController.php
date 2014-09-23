@@ -211,16 +211,20 @@ class AdminController extends BaseController {
 		// This is a dependency of Laravel so it is readily available.
 		$file = new Symfony\Component\HttpFoundation\File\File($path);
 
-		// Make a new response out of the contents of the file
-		// Set the response status code to 200 OK
-		$response = Response::make(File::get($path), 200);
+		$im = imagecreatefrompng($file;
+		header('Content-Type: image/png');
+			
 
-		// Modify our output's header.
-		// Set the content type to the mime of the file.
-		// In the case of a .jpeg this would be image/jpeg
+		// // Make a new response out of the contents of the file
+		// // Set the response status code to 200 OK
+		// $response = Response::make(File::get($path), 200);
+
+		// // Modify our output's header.
+		// // Set the content type to the mime of the file.
+		// // In the case of a .jpeg this would be image/jpeg
 		// $response->header('Content-Type: image/png', $file->getMimeType());
 
-		return $response;
+		return imagepng($im);
 	}
 
 	public function dateTimeDiffDays ($date_str1, $date_str2){
