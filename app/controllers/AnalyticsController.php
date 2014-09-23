@@ -83,7 +83,7 @@ class AnalyticsController extends BaseController {
 		$protest_hour_trend = $this->trends('1', '24', '5', 'hour');	
 		$protest_day_trend = $this->trends('1', '2', '5', 'day');
 
-		View::make('analytics')
+		return View::make('analytics')
 			->with('protest_hour_trend', $protest_hour_trend)
 			->with('protest_day_trend', $protest_day_trend);
 
