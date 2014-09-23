@@ -58,8 +58,9 @@ class AnalyticsController extends BaseController {
 			$temp_file_in = tempnam(__DIR__ . '/temp/', 'emergingTrendsIn');
 			$temp_file_out = tempnam(base_path() . 'app/assets/images/', 'emergingTrendsOut') . '.png';		
 
-			echo base_path();
-			echo $temp_file_out;
+			echo Config::get('assets.images'). '<br>';
+			echo base_path(). '<br>';			
+			echo $temp_file_out. '<br>';
 			die();
 
 			file_put_contents($temp_file_in, json_encode($results['retval']));
