@@ -20,7 +20,7 @@
 	we shed light on your strategic needs, as we build context and parametrize the problem. <p>
 
 <h5>2. MODEL</h5>
- <p>We design an explanatory model, powered by a data collection engine. The result is a big data system geared towards answering your specific,
+ <p>We design an analytical model and an underlying data collection engine. The result is a big data system geared towards answering your specific,
  	goal driven questions.
 
 <h5>3. COLLECT</h5>
