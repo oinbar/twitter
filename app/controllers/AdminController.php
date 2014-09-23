@@ -218,7 +218,7 @@ class AdminController extends BaseController {
 		// Modify our output's header.
 		// Set the content type to the mime of the file.
 		// In the case of a .jpeg this would be image/jpeg
-		$response->header('Content-Type: image/png', $file->getMimeType());
+		$response->header('image/png', $file->getMimeType());
 
 		return $response;
 	}
