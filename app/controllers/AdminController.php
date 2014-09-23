@@ -211,7 +211,7 @@ class AdminController extends BaseController {
 		// This is a dependency of Laravel so it is readily available.
 		$file = new Symfony\Component\HttpFoundation\File\File($path);
 
-		$im = imagecreatefrompng($file;
+		$im = imagecreatefrompng($file);
 		header('Content-Type: image/png');
 			
 
