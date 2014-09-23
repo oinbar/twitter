@@ -1,3 +1,7 @@
+@extends('master')
+
+@section('main-content')
+
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
  <html>
 	<head>
@@ -15,8 +19,13 @@
     </head>
     
     <body onload="onLoad();" onresize="onResize();">
-     
-	    <div id="my-timeline" style="height: 150px; border: 1px solid #aaa"></div>
+    	
+    	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+		    <h1 class="page-header">Feed: Protest > Alerts</h1>
+	   		<p class="lead"><i>Here are upcomming events:</i></p>
+
+		    <div id="my-timeline" style="height: 150px; border: 1px solid #aaa"></div>
+		</div>
 		<noscript>
 			This page uses Javascript to show you a Timeline. Please enable Javascript in your browser to see the full page. Thank you.
 		</noscript>

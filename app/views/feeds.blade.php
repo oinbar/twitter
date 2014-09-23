@@ -2,7 +2,7 @@
 
 @section('main-content')
 
-           
+ <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">           
    <h1 class="page-header">My Feeds</h1>
       <ol class="breadcrumb">
      <li><a href="#">My Feeds</a></li>
@@ -35,13 +35,12 @@
 				<label>Tweets perhour: </label><br>
 				<label>Credentials: </label><br>
 				<a href="/analytics"><h4>Analytics</h4></a>
-				<a href="/alerts"><h4>Alerts</h4></a>
+				<a href="/alerts/{{ $feed->feed_id }}"><h4>Alerts</h4></a>
 			</div>			
 		@endforeach
 	</ul>
 
- 
- </div>
+	 
 </div>
 
 @stop

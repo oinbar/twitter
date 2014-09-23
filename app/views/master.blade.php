@@ -66,27 +66,24 @@
      <div class="container-fluid">
        <div class="row">
 
-       	@if (Auth::check())
+   	@if (Auth::check())
 
 	         <div class="col-sm-3 col-md-2 sidebar">
 	           <ul class="nav nav-sidebar">
 	              
 	             {{-- Secondary NavBar --}}            
 	             <li><a href="/feeds"> My Feeds </a></li>
-				 <li><a href="#"> Reports </a></li>
+				       <li><a href="#"> Reports </a></li>
 
 	           </ul>           
 	         </div>        		
-	         <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
 
 	         	@yield('main-content')
 
-	         </div>
-
 		@else
-			<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+
 				@yield('main-content')		
-			</div>
+
 			<div class="col-sm-3 col-md-2 sidebar">
 
 			</div>
