@@ -70,7 +70,7 @@ class AnalyticsController extends BaseController {
 			// imagepng($im);	
 			// $im = asset($im);		
 						
-			$im = Image::make($temp_file_out);
+			$im = asset($temp_file_out);
 			return $im;
 
 			unset($temp_file_in);
