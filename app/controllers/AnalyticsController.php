@@ -56,7 +56,7 @@ class AnalyticsController extends BaseController {
 			$db = DB::connection('mongodb')->getMongoDB();								
 			$results = $db->execute('return ' . $query . ';');
 			$temp_file_in = tempnam(__DIR__ . '/temp/', 'emergingTrendsIn');
-			$temp_file_out = tempnam(base_path() . 'app/assets/images/', 'emergingTrendsOut') . '.png';		
+			$temp_file_out = base_path() . '/app/assets/images/', 'trends_Feed_' . $feed_id . '_timepts_' . $timepoints . '_features_' . $num_features . '_timeframe_' . $timeframe) . '.png';		
 
 			echo Config::get('assets.images'). '<br>';
 			echo base_path(). '<br>';			
