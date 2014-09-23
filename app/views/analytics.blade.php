@@ -2,11 +2,7 @@
 
 @section('main-content')
 
-    trends
-	<?php
-		$a = new AnalyticsController();
-		$a->trends('1', '24', '5', 'hour');
-		$a->trends('1', '2', '5', 'day');
-	?>
+	
+	<img src="{{ $protest_hour_trend }}" alt="Mountain View" style="width:304px;height:228px">
 
 @stop

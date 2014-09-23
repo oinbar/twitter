@@ -66,10 +66,11 @@ class AnalyticsController extends BaseController {
 						
 			$im = imagecreatefrompng($temp_file_out);
 			header('Content-Type: image/png');
-			imagepng($im);
+			return $im;
+			// imagepng($im);
 
-			unset($temp_file_in);
-			unset($temp_file_out);			
+			// unset($temp_file_in);
+			// unset($temp_file_out);			
 		}		
 		catch (Exception $e){
 			Log::error('ALERTS AGGREGATOR :  '. $e);
