@@ -205,10 +205,10 @@ class AdminController extends BaseController {
 	public function getImage($filename) {
         // Initialize an instance of Symfony's File class.
         // This is a dependency of Laravel so it is readily available.
-		$path = base_path() . '/app/assets/images/' . $filename;
+		$path = Config::get('assets.images') . $filename;
 
-		echo $path;
-
+		// Initialize an instance of Symfony's File class.
+		// This is a dependency of Laravel so it is readily available.
 		$file = new Symfony\Component\HttpFoundation\File\File($path);
 
 		// Make a new response out of the contents of the file
