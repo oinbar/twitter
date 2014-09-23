@@ -31,7 +31,7 @@
 	<h5>4. ANALYZE</h5>
 	<p>We normalize, mash up, and combine the data into a uniform database. We then use techniques from social network analysis, natural language processing, 
 	machine learning, and some good old common sense to derive meaning from the data. We discover influencial individuals, predict future events, uncover 
-	trends and explain behaviors, all in a way that allows your organization to maximize its goals.<p>
+	trends and explain behaviors, all in a way that allows your organization to maximize its efforts.<p>
 
 	<h5>5. REPORT & ALERT</h5>
 	<p>Once the first batch of data is in and fully analyzed, we deliver an intuitive report that allows you to act on our insights.
