@@ -58,10 +58,10 @@ class AnalyticsController extends BaseController {
 			$temp_file_in = tempnam(__DIR__ . '/temp/', 'emergingTrendsIn');
 			$temp_file_out = base_path() . '/app/assets/images/trends_Feed_' . $feed_id . '_timepts_' . $timepoints . '_features_' . $num_features . '_timeframe_' . $timeframe . '.png';		
 
-			echo Config::get('assets.images'). '<br>';
-			echo base_path(). '<br>';			
-			echo $temp_file_out. '<br>';
-			die();
+			// echo Config::get('assets.images'). '<br>';
+			// echo base_path(). '<br>';			
+			// echo $temp_file_out. '<br>';
+			// die();
 
 			file_put_contents($temp_file_in, json_encode($results['retval']));
 			
