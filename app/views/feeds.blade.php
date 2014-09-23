@@ -2,17 +2,15 @@
 
 @section('main-content')
 
-<nav class="nav nav-pills inner-header" role="navigation">     
-	<ul class="nav nav-pills pull-left">
-		<li><a href="/edit_feed">Add</a></li>
-		<li><a href="#">...</a></li>
-		<li><a href="#">...</a></li>		
-	</ul>
-</nav>
+           
+   <h1 class="page-header">My Feeds</h1>
+      <ol class="breadcrumb">
+     <li><a href="#">My Feeds</a></li>
+     <li class="active">blabla</li>
+   </ol> 
+   
 
-<div>
     <ul class="well">
-
     	@foreach($feeds as $feed)
 			<div class="well">
 				<ul class="list-inline">
@@ -36,10 +34,14 @@
 				<label>Number of tweets: </label><br>
 				<label>Tweets perhour: </label><br>
 				<label>Credentials: </label><br>
+				<a href="#"><h4>Analytics</h4></a>
+				<a href="#"><h4>Alerts</h4></a>
 			</div>			
 		@endforeach
 	</ul>
-</div>
 
+ 
+ </div>
+</div>
 
 @stop

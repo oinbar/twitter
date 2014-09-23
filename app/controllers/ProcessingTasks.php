@@ -41,11 +41,10 @@ class ProcessingTasks extends BaseController {
 			             ->buildOauth($url, $requestMethod)
 			             ->performRequest();	             
 
-			// LOOP OVER THE RESULTS COLLECTION, AND STORE IN CACHE FOR DATA PIPELINE
 			$data = json_decode($json, true);
 			$redis = Redis::connection();
 
-
+			// LOOP OVER THE RESULTS COLLECTION, AND STORE IN CACHE FOR DATA PIPELINE
 			$max_id = 0;
 			foreach ($data['statuses'] as $status){					
 				$status['_id'] = $status['id']; //add mongoID
@@ -103,6 +102,7 @@ class ProcessingTasks extends BaseController {
 		}
 	}
 
+
 	public function runJsonThroughCalais ($calais_key = '',
 										  $cache_list_origin = 'PendingCalaisList', 
 										  $cache_list_destination = 'PendingSUTimeList', 
@@ -111,13 +111,11 @@ class ProcessingTasks extends BaseController {
 		pulls a batch of documents off the cache_list_origin list, runs each doc through the opencalais
 		service with a delay in between, and then deposits the reformed document in the cache_list_destination list. 
 		*/
-
 		include __DIR__.'/../open_calais_dg/opencalais.php';
 		$redis = Redis::connection();
 		$batch_size = min($redis->llen($cache_list_origin), $batch_size);
 		$contents = $redis->lrange($cache_list_origin, 0, $batch_size-1);
 		$redis->ltrim($cache_list_origin, $batch_size, -1);
-
 
 		foreach ($contents as $content) {						
 			try{

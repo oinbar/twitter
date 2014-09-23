@@ -74,21 +74,22 @@ class FeedController extends BaseController {
 		return Redirect::to('feeds');
 	}
 
-	public function getViewFeed ($feed_id, $skip = 0) {
-		$take = 20; // numbe of results to select
-		$data = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->orderBy('datetime', 'desc', 'natural')->skip($skip)->take($take)->get();
-	    $count = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->count();
+	public function getViewFeed ($feed_id, $page_num = 1) {
+		$take = 20; // number of results to select
+		$data = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->orderBy('datetime', 'desc', 'natural')->skip($page_num * $take - 1)->take($take)->get();
+	    $total_records = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->count();
 
 		$feed = DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->first();
-		
+		$feeds = DB::connection('mysql')->table('users_feeds')->where('user_id', Auth::user()->id)
+			->select('feed_id','feed_name')->get();
+
 		return View::make('feed')
+		->with('feeds', $feeds)
 		->with('feed', $feed)
-		->with('num_records', $count)
+		->with('total_records', $total_records)
 		->with('data', $data)
-		->with('feed_id', $feed_id)
-		->with('start', $skip)
-		->with('end', $skip + $take)
-		->with('prev', max(0, $skip-$take));
+		->with('page_num', $page_num)
+		->with('take', $take);
 	}
 
 	public function showTweet ($id) {

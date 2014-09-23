@@ -56,8 +56,7 @@ def fix_time(time):
             time = time[:10]
     return time
 
-    
-    
+      
 text = [item['_id'] for item in json]
 partial_text = [make_partial_tweet(item) for item in text]
 location = [', '.join(item['location']) for item in json]

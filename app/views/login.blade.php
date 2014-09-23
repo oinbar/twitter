@@ -11,10 +11,9 @@
 	<div class='error'>{{ $message }}</div>
 @endforeach 
 
-<br><br>
 
-{{ Form::open(array('url' => '/login', 'class' => 'well')) }}
-	<h1>Login</h1>
+<h1 class="sub-header">Login</h1>
+{{ Form::open(array('url' => '/login', 'class' => 'form-horizontal', 'role' => 'form')) }}
 
     {{ Form::label('username', 'Username:') }} <br>
     {{ Form::text('username') }}<br><br>
