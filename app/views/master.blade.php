@@ -34,7 +34,7 @@
              <span class="icon-bar"></span>
              <span class="icon-bar"></span>
            </button> -->
-           <a class="navbar-brand" href="/about">Up2Data</a>
+           <a class="navbar-brand" href="/">Up2Data</a>
            <a class="navbar-brand" href="/about">About Us</a>
          </div>
          <div class="navbar-collapse collapse">           	

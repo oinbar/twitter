@@ -44,7 +44,9 @@ Route::get('/alerts/{feed_id}', array('uses' => 'FeedController@getAlerts'));
 
 
 
-Route::get('/trends/{feed_id}/{timepoints?}/{num_features?}/{timeframe?}', array('uses' => 'AnalyticsController@trends'));
+Route::get('/analytics/{feed_id}/{timepoints?}/{num_features?}/{timeframe?}', array('uses' => 'AnalyticsController@trends'));
+
+Route::get('/analytics/', array('uses' => 'AnalyticsController@showAnalytics'));
 
 
 Route::get('/signup', array('before' => 'guest', 'uses' => 'UserController@getSignup'));

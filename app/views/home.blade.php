@@ -16,12 +16,12 @@
 <h4>How we do it:</h4>
 
 <h5>1. UNDERSTAND</h5>
-	<p>Our team of software engineers, data scientists and business analysts get together with the people who drive your organization. We try
-	to understand your strategic needs, as we build a context and parametrize the problem. <p>
+	<p>Our team of software engineers, data scientists and business analysts get together with the people who drive your organization. Together 
+	we shed light on your strategic needs, as we build context and parametrize the problem. <p>
 
 <h5>2. MODEL</h5>
- <p>We design a data collection mechanism that is supported by an analytical model, all of which is geared towards answering specific,
-    goal driven questions defined by your needs.</p>
+ <p>We design an explanatory model, powered by a data collection engine. The result is a big data system geared towards answering your specific,
+ 	goal driven questions.
 
 <h5>3. COLLECT</h5>
 <p>We use open source and propietary big data technologies to crawl sites such as twitter, facebook, university newspapers and other sources
@@ -30,13 +30,13 @@ in order to consrtruct a comprehensive picture of the people and events that com
 <h5>4. ANALYZE</h5>
 <p>We normalize, mash up, and combine the data into a uniform database. We then use techniques from social network analysis, natural language processing, 
 machine learning, and some good old common sense to derive meaning from the data. We discover influencial individuals, predict future events, uncover 
-trends and explain behaviors, all in way that allows your organization to maximize its goals.<p>
+trends and explain behaviors, all in a way that allows your organization to maximize its goals.<p>
 
 <h5>5. REPORT & ALERT</h5>
 <p>Once the first batch of data is in and fully analyzed, we deliver an intuitive report that allows you to act on our insights.
 More importantly, by this point we have a built a full data collection and analysis platform that is speficially tailored to your needs, and capable of
 delivering those same insights in real time. The models all update based on incoming data, and we chime in every once in a while
-and give our own two cents in a fresh report.<p>
+to give our own interpretation in a fresh report.<p>
 </div>
 
 @stop

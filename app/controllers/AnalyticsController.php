@@ -64,16 +64,30 @@ class AnalyticsController extends BaseController {
 				throw new Exception(Pre::render($err));
 			}			
 						
-			$im = imagecreatefrompng($temp_file_out);
-			header('Content-Type: image/png');
-			imagepng($im);
+			// $im = imagecreatefrompng($temp_file_out);
+			// header('Content-Type: image/png');
+			// imagepng($im);
 
 			unset($temp_file_in);
-			unset($temp_file_out);			
+			// unset($temp_file_out);			
+
+			return $temp_file_out;
 		}		
 		catch (Exception $e){
 			Log::error('ALERTS AGGREGATOR :  '. $e);
 			echo $e;
 		}
+	}
+
+	public function showAnalytics() {
+		$protest_hour_trend = $this->trends('1', '24', '5', 'hour');	
+		$protest_day_trend = $this->trends('1', '2', '5', 'day');
+
+		view::Make('analytics')
+			->with('protest_hour_trend', $protest_hour_trend)
+			->with('protest_day_trend', $protest_day_trend);
+
+		unset($protest_hour_trend);
+		unset($protest_day_trend);
 	}
 }

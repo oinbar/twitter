@@ -34,8 +34,8 @@
 				<label>Number of tweets: </label><br>
 				<label>Tweets perhour: </label><br>
 				<label>Credentials: </label><br>
-				<a href="#"><h4>Analytics</h4></a>
-				<a href="#"><h4>Alerts</h4></a>
+				<a href="/analytics"><h4>Analytics</h4></a>
+				<a href="/alerts"><h4>Alerts</h4></a>
 			</div>			
 		@endforeach
 	</ul>
