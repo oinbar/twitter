@@ -3,7 +3,7 @@
 <!-- @section('main-content') -->
 
 	
-	<img src="{{asset('images/' . $temp_file_out)}}" >
+	<img src="{{ asset('images/' . $protest_hour_trend) }}" >
 
 
 
