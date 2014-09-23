@@ -59,6 +59,7 @@ class AnalyticsController extends BaseController {
 			$temp_file_out = tempnam(base_path() . '/app/assets/images/', 'emergingTrendsOut') . '.png';		
 
 			echo $temp_file_out;
+			die();
 			
 			file_put_contents($temp_file_in, json_encode($results['retval']));
 			
