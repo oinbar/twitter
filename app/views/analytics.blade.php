@@ -2,8 +2,8 @@
 
 @section('main-content')
 
-	my image 
-	<img src="/images/{{ $protest_hour_trend }}" style="width:128px;height:128px">
+	my image<br>
+	<img src="/images/{{ $protest_hour_trend }}" style="width:500px;height:500px">
 
 
 
