@@ -56,8 +56,9 @@ class AnalyticsController extends BaseController {
 			$db = DB::connection('mongodb')->getMongoDB();								
 			$results = $db->execute('return ' . $query . ';');
 			$temp_file_in = tempnam(__DIR__ . '/temp/', 'emergingTrendsIn');
-			$temp_file_out = tempnam(__DIR__ . '/temp/', 'emergingTrendsOut') . '.jpg';
+			$temp_file_out = tempnam(__DIR__ . '/temp/', 'emergingTrendsOut') . '.png';
 			file_put_contents($temp_file_in, json_encode($results['retval']));
+			
 			
 			exec(base_path() . '/../python_venv/bin/python ' . __DIR__ .  '/python_scripts/emerging_trends.py ' . $temp_file_in . ' ' . $temp_file_out . ' ' . $num_features . ' ' . $timeframe . ' 2>&1', $err);
 			if ($err){
@@ -67,12 +68,10 @@ class AnalyticsController extends BaseController {
 			$im = imagecreatefrompng($temp_file_out);
 			header('Content-Type: image/png');
 			imagepng($temp_file_out);
-			// $temp_file_out = imagepng($im);
-			// return $temp_file_out;
 			
 
-			// unset($temp_file_in);
-			// unset($temp_file_out);			
+			unset($temp_file_in);
+			unset($temp_file_out);			
 		}		
 		catch (Exception $e){
 			Log::error('ALERTS AGGREGATOR :  '. $e);
