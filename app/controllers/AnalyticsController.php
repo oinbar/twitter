@@ -75,9 +75,7 @@ class AnalyticsController extends BaseController {
 			// header('Content-Type: image/png');
 			// imagepng($im, $temp_file_out);	
 				
-			
 			$temp_file_out_name = basename($temp_file_out);
-
 			return $temp_file_out_name;
 			
 
