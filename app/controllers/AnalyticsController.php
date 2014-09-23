@@ -56,7 +56,7 @@ class AnalyticsController extends BaseController {
 			$db = DB::connection('mongodb')->getMongoDB();								
 			$results = $db->execute('return ' . $query . ';');
 			$temp_file_in = tempnam(__DIR__ . '/temp/', 'emergingTrendsIn');
-			$temp_file_out = tempnam(__DIR__ . '/temp/', 'emergingTrendsOut') . '.png';
+			$temp_file_out = tempnam(__DIR__ . '/temp/', 'emergingTrendsOut') . '.jpeg';
 			file_put_contents($temp_file_in, json_encode($results['retval']));
 			
 			exec(base_path() . '/../python_venv/bin/python ' . __DIR__ .  '/python_scripts/emerging_trends.py ' . $temp_file_in . ' ' . $temp_file_out . ' ' . $num_features . ' ' . $timeframe . ' 2>&1', $err);
@@ -66,7 +66,7 @@ class AnalyticsController extends BaseController {
 						
 			$im = imagecreatefrompng($temp_file_out);
 			header('Content-Type: image/png');
-			return $im;
+			return $temp_file_out;
 			// imagepng($im);
 
 			// unset($temp_file_in);

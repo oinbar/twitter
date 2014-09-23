@@ -95,4 +95,4 @@ for feature in y_vectors_dict:
 
 plt.ylim((0,1))
 plt.legend(loc='best')
-plt.savefig(output_file)
+plt.savefig(output_file, format='jpeg')
