@@ -91,7 +91,7 @@ x_vector = df.window.apply(lambda x: str(x))
 
 for feature in y_vectors_dict:
     plt.plot(range(len(y_vectors_dict[feature])), y_vectors_dict[feature], label=feature)
-    plt.xticks(range(len(x_vector)), x_vector, rotation=60)
+    plt.xticks(range(len(x_vector)), x_vector, rotation=30)
 
 plt.ylim((0,1))
 plt.legend(loc='best')
