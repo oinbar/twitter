@@ -56,8 +56,7 @@ class AnalyticsController extends BaseController {
 			$db = DB::connection('mongodb')->getMongoDB();								
 			$results = $db->execute('return ' . $query . ';');
 			$temp_file_in = tempnam(__DIR__ . '/temp/', 'emergingTrendsIn');
-			// $temp_file_out = tempnam(__DIR__ . '/temp/', 'emergingTrendsOut') . '.png';
-			$temp_file_out = tempnam(base_path() . '/public/images/', 'emergingTrendsOut') . '.png';
+			$temp_file_out = tempnam(basepath() . '/app/assets/images', 'emergingTrendsOut') . '.png';			
 			file_put_contents($temp_file_in, json_encode($results['retval']));
 			
 
@@ -75,8 +74,7 @@ class AnalyticsController extends BaseController {
 			$a = new AdminController();
 			$response = $a->getImage($temp_file_out);
 
-			echo $response;
-			die();									
+			return Redirect::to('/images/' . $temp_file_out_name);
 			
 
 			// unset($temp_file_in);
