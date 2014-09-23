@@ -202,6 +202,23 @@ class AdminController extends BaseController {
 		return $date_str;
 	}
 
+	public function getImage($file_name_path) {
+        // Initialize an instance of Symfony's File class.
+        // This is a dependency of Laravel so it is readily available.
+		$file = new Symfony\Component\HttpFoundation\File\File($file_name_path);
+
+		// Make a new response out of the contents of the file
+		// Set the response status code to 200 OK
+		$response = Response::make(File::get($file_name_path), 200);
+
+		// Modify our output's header.
+		// Set the content type to the mime of the file.
+		// In the case of a .jpeg this would be image/jpeg
+		$response->header('Content-Type: image/png', $file->getMimeType());
+
+		return $response;
+	}
+
 	public function dateTimeDiffDays ($date_str1, $date_str2){
 		// echo $this->fixSUTime($date_str1).'<br>';
 		// $date_str1 = new DateTime(date('Y-m-d H:i:s', strtotime($this->fixSUTime($date_str1))));

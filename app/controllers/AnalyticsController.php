@@ -70,7 +70,13 @@ class AnalyticsController extends BaseController {
 			// header('Content-Type: image/png');
 			// imagepng($im, $temp_file_out);	
 				
-			return asset($temp_file_out);									
+			
+			$temp_file_out_name = basename($temp_file_out);
+			$a = new AdminController();
+			$response = $a->getImage($temp_file_out);
+
+			echo $response;
+			die();									
 			
 
 			// unset($temp_file_in);
