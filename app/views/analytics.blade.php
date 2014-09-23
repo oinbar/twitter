@@ -2,7 +2,10 @@
 
 @section('main-content')
 
-	{{ $protest_hour_trend}}	
-	<img src="{{ $protest_hour_trend }}">
+	<?php
+
+		imagepng('protest_hour_trend');
+		imagepng('protest_hour_trend');
+	?>
 
 @stop
