@@ -209,7 +209,7 @@ class AdminController extends BaseController {
 
 		// Make a new response out of the contents of the file
 		// Set the response status code to 200 OK
-		$response = Response::make('/assets/images/' . $filename), 200);
+		$response = Response::make('/assets/images/' . $filename, 200);
 
 		// Modify our output's header.
 		// Set the content type to the mime of the file.
