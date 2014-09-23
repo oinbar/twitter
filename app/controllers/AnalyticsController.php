@@ -56,11 +56,11 @@ class AnalyticsController extends BaseController {
 			$db = DB::connection('mongodb')->getMongoDB();								
 			$results = $db->execute('return ' . $query . ';');
 			$temp_file_in = tempnam(__DIR__ . '/temp/', 'emergingTrendsIn');
-			$temp_file_out = tempnam(Config::get('assets.images'), 'emergingTrendsOut') . '.png';		
+			$temp_file_out = tempnam(base_path() . '/app/assets/images/', 'emergingTrendsOut') . '.png';		
 
 			echo $temp_file_out;
 			die();
-			
+
 			file_put_contents($temp_file_in, json_encode($results['retval']));
 			
 
