@@ -3,6 +3,8 @@
 class ProcessingTasks extends BaseController {
 
 	public function searchTwitterFeedCriteria($feed_id, $cache_list_destination = 'PendingCalaisList') {	
+		Log::error('TWITTER CALLED');
+
 		/*
 		This is the first stage in the data processing pipeline.  Finds the criteria based on the feed_id, and searches twitter api.
 		
