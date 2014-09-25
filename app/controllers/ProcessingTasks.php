@@ -76,6 +76,9 @@ class ProcessingTasks extends BaseController {
 		any duplicates.
 		*/
 
+		Log::error('INSERTDB CALLED');
+
+
 		$redis = Redis::connection();
 		$batch_size = min($redis->llen($cache_list_origin), $batch_size);		
 		$records = $redis->lrange($cache_list_origin, 0, $batch_size-1);
@@ -113,6 +116,9 @@ class ProcessingTasks extends BaseController {
 		pulls a batch of documents off the cache_list_origin list, runs each doc through the opencalais
 		service with a delay in between, and then deposits the reformed document in the cache_list_destination list. 
 		*/
+
+		Log::error('CALAIS CALLED');
+
 		include __DIR__.'/../open_calais_dg/opencalais.php';
 		$redis = Redis::connection();
 		$batch_size = min($redis->llen($cache_list_origin), $batch_size);
@@ -156,6 +162,8 @@ class ProcessingTasks extends BaseController {
 		SUTime module (packaged into a jar file), attempting to find any mentions of dates and times in the text.
 		currently this is done by using an intermediary json file and calling the jar directly.
 		*/		
+
+		Log::error('SUTIME CALLED');
 
 		try{
 			$redis = Redis::connection();
