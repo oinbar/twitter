@@ -30,7 +30,7 @@ class ProcessingTasks extends BaseController {
 				$since_id = '&since_id=' . $since_id;
 			}			
 
-			$getfield = '?count=100' . $since_id . '&q=' . urlencode(DB::connection('mysql')
+			$getfield = '?count=30' . $since_id . '&q=' . urlencode(DB::connection('mysql')
 											->table('feeds')->where('id', $feed_id)->orderBy('created_at', 'desc')
 											->first()->criteria);
 
