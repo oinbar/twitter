@@ -43,9 +43,9 @@ class ProcessingTasks extends BaseController {
 			             ->buildOauth($url, $requestMethod)
 			             ->performRequest();	             
 
-			$data = json_decode($json, true);
-			$redis = Redis::connection();
+			Log::error('TWITTER RESULTS LEN: ' .sizeof($data));
 
+			$data = json_decode($json, true);
 			// LOOP OVER THE RESULTS COLLECTION, AND STORE IN CACHE FOR DATA PIPELINE
 			$max_id = 0;
 			foreach ($data['statuses'] as $status){					
@@ -125,6 +125,8 @@ class ProcessingTasks extends BaseController {
 		$contents = $redis->lrange($cache_list_origin, 0, $batch_size-1);
 		$redis->ltrim($cache_list_origin, $batch_size, -1);
 
+		Log::error('CALAIS INPUT SIZE: ' .sizeof($contents));
+
 		foreach ($contents as $content) {						
 			try{
 				$record = json_decode($content, true);
@@ -173,6 +175,9 @@ class ProcessingTasks extends BaseController {
 			
 			// add the normalized datetime field so that SUTime has a reference point 
 			$array = array();
+
+			Log::error('SUTIME INPUT SIZE: ' . sizeof($contents));
+
 			foreach ($contents as $record){
 				$record = json_decode($record, true);
 				$record['datetime'] = date("Y-m-d H:i:s" , strtotime($record['created_at']));
