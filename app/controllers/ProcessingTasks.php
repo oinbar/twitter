@@ -48,7 +48,8 @@ class ProcessingTasks extends BaseController {
 			$data = json_decode($json, true);
 
 			Log::error('TWITTER RESULTS LEN: ' .sizeof($data));
-			
+			Log::error(Pre::render($data));
+
 			// LOOP OVER THE RESULTS COLLECTION, AND STORE IN CACHE FOR DATA PIPELINE
 			$max_id = 0;
 			foreach ($data['statuses'] as $status){					
@@ -58,10 +59,10 @@ class ProcessingTasks extends BaseController {
 					$max_id = ($status['_id']);
 				}
 				// TEST TO SEE IF IN DB - this is also tested for in the insertion phase, but using it here helps reduce the volume on the pipeline
-				// $db_record = DB::connection('mongodb')->collection('data1')->where('_id', $status['_id'])->first();
-				// if (!$db_record) {
-				// 	$redis->rpush($cache_list_destination, json_encode($status));		
-				// }
+				$db_record = DB::connection('mongodb')->collection('data1')->where('_id', $status['_id'])->first();
+				if (!$db_record) {
+					$redis->rpush($cache_list_destination, json_encode($status));		
+				}
 
 			$redis->del('since_id-feedID-' . $feed_id);
 			$redis->append('since_id-feedID-' . $feed_id, $max_id);	
