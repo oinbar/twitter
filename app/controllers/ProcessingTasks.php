@@ -185,7 +185,7 @@ class ProcessingTasks extends BaseController {
 			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' 2>&1', $err);			
 			if ($err){
 				
-				$err = implode("\r\n", $err);
+				$err = implode("\n", $err);
 				
 				throw new Exception($err);
 			}
