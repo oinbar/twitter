@@ -182,18 +182,18 @@ class ProcessingTasks extends BaseController {
 			}
 
 
-			$descriptorspec = array(
-				   0 => array("pipe", "r"),  // stdin
-				   1 => array("pipe", "w"),  // stdout
-				   2 => array("pipe", "w"),  // stderr
-				);
-			$process = proc_open('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename, $descriptorspec, $pipes);
-			$stderr = stream_get_contents($pipes[2]);
-			if ($stderr) {
-				throw new Exception($stderr);
-			}
-			fclose($pipes[2]);
-			proc_close($process);
+			// $descriptorspec = array(
+			// 	   0 => array("pipe", "r"),  // stdin
+			// 	   1 => array("pipe", "w"),  // stdout
+			// 	   2 => array("pipe", "w"),  // stderr
+			// 	);
+			// $process = proc_open('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename, $descriptorspec, $pipes);
+			// $stderr = stream_get_contents($pipes[2]);
+			// if ($stderr) {
+			// 	throw new Exception($stderr);
+			// }
+			// fclose($pipes[2]);
+			// proc_close($process);
 
 
 			
