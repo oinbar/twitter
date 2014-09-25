@@ -223,7 +223,7 @@ class ProcessingTasks extends BaseController {
 				}
 				$redis->rpush($cache_list_destination, json_encode($file[$i]));
 			}			
-			unlink(__DIR__ . '/temp/' . $filename);			
+			unset($file);			
 		} 
 		catch (Exception $e) {
 			Log::error($e);
