@@ -170,9 +170,9 @@ class ProcessingTasks extends BaseController {
 			}
 			$array = json_encode($array);
 
-			// save the data to an intermediate file, run SUTime, and save the new data back to the file
-			$filename = 'jsonForSUTime' . iterator_count(new DirectoryIterator(__DIR__ . '/temp/')) . '.json';
-			file_put_contents(__DIR__ . '/temp/' . $filename, $array);
+			// save the data to an intermediate file, run SUTime, and save the new data back to the file		
+			$file = tempnam(__DIR__ . '/temp/', 'jsonForSUTime') . '.json';
+			file_put_contents($file, $array);
 			$path ='';
 			if (App::environment() == 'local') {
 				$jarpath = '/Users/Orr/Desktop/SUTime.jar';
@@ -182,29 +182,29 @@ class ProcessingTasks extends BaseController {
 			}
 
 
-			// $descriptorspec = array(
-			// 	   0 => array("pipe", "r"),  // stdin
-			// 	   1 => array("pipe", "w"),  // stdout
-			// 	   2 => array("pipe", "w"),  // stderr
-			// 	);
-			// $process = proc_open('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename, $descriptorspec, $pipes);
-			// $stderr = stream_get_contents($pipes[2]);
-			// if ($stderr) {
-			// 	throw new Exception($stderr);
-			// }
-			// fclose($pipes[2]);
-			// proc_close($process);
+			$descriptorspec = array(
+				   0 => array("pipe", "r"),  // stdin
+				   1 => array("pipe", "w"),  // stdout
+				   2 => array("pipe", "w"),  // stderr
+				);
+			$process = proc_open('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename, $descriptorspec, $pipes);
+			$stderr = stream_get_contents($pipes[2]);
+			if ($stderr) {
+				throw new Exception($stderr);
+			}
+			fclose($pipes[2]);
+			proc_close($process);
 
 
 			
-			// $result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' 3>&1 1>&2 2>&3', $err);			
-			// if ($err){
-			// 	throw new Exception(Pre::render($err));				
-			// }
+			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' 3>&1 1>&2 2>&3', $err);			
+			if ($err){
+				throw new Exception(Pre::render($err));				
+			}
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put
 			// the record in the cache
-			$file = file_get_contents(__DIR__ . '/temp/' . $filename);
+			$file = file_get_contents($file);
 			$file = json_decode($file, true);			
 
 			for ($i = 0; $i < sizeof($file); $i++) {
