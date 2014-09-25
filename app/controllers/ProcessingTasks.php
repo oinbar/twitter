@@ -190,7 +190,7 @@ class ProcessingTasks extends BaseController {
 			$process = proc_open('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename, $descriptorspec, $pipes);
 			$stderr = stream_get_contents($pipes[2]);
 			if ($stderr) {
-				throw new Exception(implode("\r\n", $stderr));
+				throw new Exception($stderr);
 			}
 			fclose($pipes[2]);
 			proc_close($process);
