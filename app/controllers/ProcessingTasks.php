@@ -181,11 +181,26 @@ class ProcessingTasks extends BaseController {
 				$jarpath = '/home/upupup/prod/lib/SUTime.jar';
 			}
 
-			
-			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' 3>&1 1>&2 2>&3', $err);			
-			if ($err){
-				throw new Exception(Pre::render($err));				
+
+			$descriptorspec = array(
+				   0 => array("pipe", "r"),  // stdin
+				   1 => array("pipe", "w"),  // stdout
+				   2 => array("pipe", "w"),  // stderr
+				);
+			$process = proc_open('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename, $descriptorspec, $pipes);
+			$stderr = stream_get_contents($pipes[2]);
+			if ($stderr) {
+				throw new Exception(Pre::render($stderr))
 			}
+			fclose($pipes[2]);
+			proc_close($process);
+
+
+			
+			// $result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' 3>&1 1>&2 2>&3', $err);			
+			// if ($err){
+			// 	throw new Exception(Pre::render($err));				
+			// }
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put
 			// the record in the cache
