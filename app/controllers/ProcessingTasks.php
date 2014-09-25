@@ -187,7 +187,7 @@ class ProcessingTasks extends BaseController {
 				   1 => array("pipe", "w"),  // stdout
 				   2 => array("pipe", "w"),  // stderr
 				);
-			$process = proc_open('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename, $descriptorspec, $pipes);
+			$process = proc_open('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file, $descriptorspec, $pipes);
 			$stderr = stream_get_contents($pipes[2]);
 			if ($stderr) {
 				throw new Exception($stderr);
@@ -197,10 +197,10 @@ class ProcessingTasks extends BaseController {
 
 
 			
-			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' 3>&1 1>&2 2>&3', $err);			
-			if ($err){
-				throw new Exception(Pre::render($err));				
-			}
+			// $result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' 3>&1 1>&2 2>&3', $err);			
+			// if ($err){
+			// 	throw new Exception(Pre::render($err));				
+			// }
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put
 			// the record in the cache
