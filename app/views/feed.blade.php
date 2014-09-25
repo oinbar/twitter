@@ -14,40 +14,12 @@
   	<center>Status: OFF</center>
   	<center> <a href="{{ url('/startfetch/' . $feed->feed_id) }}" >Start Fetching</a> </center>
   @endif
+          
 
-
-
-  	{{-- Pagination --}}
-  	<center>
-      <ul class="pagination">
-  	@if($page_num > 1)
-  		<li class="enabled"><a href="{{ url('/view_feed/'.$feed->feed_id.'/' . 1) }}">&laquo;</a></li>
-  	@else
-  		<li class="disabled"><a href="{{ url('/view_feed/'.$feed->feed_id.'/' . 1) }}">&laquo;</a></li>
-  	@endif	
-  	<?php 
-  	$total_pages = $total_records/$take;
-  	$remainder = 0;
-  	if ($page_num < 5) {
-  		$remainder = 6 - $page_num; 
-  	} elseif ($page_num > $total_pages - 5) {
-  		$remainder = $total_records/$take - $page_num - 6;
-  	}
-  	?>
-      @for($i = $page_num - 5 + $remainder; $i <= $page_num + 5 + $remainder; $i++)   	
-      	@if($i == $page_num)
-      		<li class="active"><a href="{{ url('/view_feed/'.$feed->feed_id.'/' . $i) }}"> {{ $i }}<span class="sr-only">(current)</span></a></li>
-      	@else
-      		<li><a href="{{ url('/view_feed/'.$feed->feed_id.'/' . $i) }}">{{ $i }}</a></li>
-      	@endif
-      @endfor
-      @if($page_num == $total_pages-1)
-      	<li class="disabled"><a href="{{ url('/view_feed/'.$feed->feed_id.'/' . ($total_pages-1)) }}">&raquo;</a></li>
-      @else
-      	<li class="enabled"><a href="{{ url('/view_feed/'.$feed->feed_id.'/' . ($total_pages-1)) }}">&raquo;</a></li>
-      @endif
-     </ul>
-  </center>
+   <form class="navbar-form">
+     <label for="searchbox" class="col-sm-2 control-label">Search Tweets:</label>
+     <input id="searchbox" ype="text" class="form-control" placeholder="Search">
+   </form>
 
   {{-- Table --}}
   <div class="table-responsive">
@@ -73,8 +45,43 @@
    </table>
 
   </div>
+
+    {{-- Pagination --}}
+    <center>
+      <ul class="pagination">
+    @if($page_num > 1)
+      <li class="enabled"><a href="{{ url('/view_feed/'.$feed->feed_id.'/' . 1) }}">&laquo;</a></li>
+    @else
+      <li class="disabled"><a href="{{ url('/view_feed/'.$feed->feed_id.'/' . 1) }}">&laquo;</a></li>
+    @endif  
+    <?php 
+    $total_pages = $total_records/$take;
+    $remainder = 0;
+    if ($page_num < 5) {
+      $remainder = 6 - $page_num; 
+    } elseif ($page_num > $total_pages - 5) {
+      $remainder = $total_records/$take - $page_num - 6;
+    }
+    ?>
+      @for($i = $page_num - 5 + $remainder; $i <= $page_num + 5 + $remainder; $i++)     
+        @if($i == $page_num)
+          <li class="active"><a href="{{ url('/view_feed/'.$feed->feed_id.'/' . $i) }}"> {{ $i }}<span class="sr-only">(current)</span></a></li>
+        @else
+          <li><a href="{{ url('/view_feed/'.$feed->feed_id.'/' . $i) }}">{{ $i }}</a></li>
+        @endif
+      @endfor
+      @if($page_num == $total_pages-1)
+        <li class="disabled"><a href="{{ url('/view_feed/'.$feed->feed_id.'/' . ($total_pages-1)) }}">&raquo;</a></li>
+      @else
+        <li class="enabled"><a href="{{ url('/view_feed/'.$feed->feed_id.'/' . ($total_pages-1)) }}">&raquo;</a></li>
+      @endif
+     </ul>
+  </center>
+
 </div>
   	
+
+
 
 @stop
 

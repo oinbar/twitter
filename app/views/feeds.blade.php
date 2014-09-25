@@ -10,9 +10,9 @@
    </ol> 
    
 
-    <ul class="well">
+    <ul class=>
     	@foreach($feeds as $feed)
-			<div class="well">
+			<div class="row">
 				<ul class="list-inline">
 					<li>
 						<div class="button1">				
@@ -25,9 +25,7 @@
 						</div>
 					</li>
 					<li>
-						<div class="button1">
-							<button class="btn btn-sm btn-block btn-danger glyphicon glyphicon-trash" href="{{ url('/delete_feed/'.$feed->feed_id) }}">Delete </button>
-						</div>
+							<button class="btn button-default" href="{{ url('/delete_feed/'.$feed->feed_id) }}">Delete </button>
 					</li>
 
 				</ul>
@@ -38,9 +36,7 @@
 				<a href="/alerts/{{ $feed->feed_id }}"><h4>Alerts</h4></a>
 			</div>			
 		@endforeach
-	</ul>
-
-	 
+	</ul> 
 </div>
 
 @stop
