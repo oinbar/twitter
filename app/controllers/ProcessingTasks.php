@@ -184,7 +184,7 @@ class ProcessingTasks extends BaseController {
 			
 			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' 2>&1', $err);			
 			if ($err){
-				Log::error($err);
+				throw new Exception($err);
 			}
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put
