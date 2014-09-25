@@ -43,9 +43,12 @@ class ProcessingTasks extends BaseController {
 			             ->buildOauth($url, $requestMethod)
 			             ->performRequest();	             
 
-			Log::error('TWITTER RESULTS LEN: ' .sizeof($data));
+			
 
 			$data = json_decode($json, true);
+
+			Log::error('TWITTER RESULTS LEN: ' .sizeof($data));
+			
 			// LOOP OVER THE RESULTS COLLECTION, AND STORE IN CACHE FOR DATA PIPELINE
 			$max_id = 0;
 			foreach ($data['statuses'] as $status){					
