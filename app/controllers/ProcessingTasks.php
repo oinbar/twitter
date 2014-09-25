@@ -182,22 +182,22 @@ class ProcessingTasks extends BaseController {
 			}
 
 
-			$descriptorspec = array(
-				   0 => array("pipe", "r"),  // stdin
-				   1 => array("pipe", "w"),  // stdout
-				   2 => array("pipe", "w"),  // stderr
-				);
-			$process = proc_open('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file, $descriptorspec, $pipes);
-			$stderr = stream_get_contents($pipes[2]);
-			if ($stderr) {
-				throw new Exception($stderr);
-			}
-			fclose($pipes[2]);
-			proc_close($process);
+			// $descriptorspec = array(
+			// 	   0 => array("pipe", "r"),  // stdin
+			// 	   1 => array("pipe", "w"),  // stdout
+			// 	   2 => array("pipe", "w"),  // stderr
+			// 	);
+			// $process = proc_open('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file, $descriptorspec, $pipes);
+			// $stderr = stream_get_contents($pipes[2]);
+			// if ($stderr) {
+			// 	throw new Exception($stderr);
+			// }
+			// fclose($pipes[2]);
+			// proc_close($process);
 
 
 			
-			// $result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' 3>&1 1>&2 2>&3', $err);			
+			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file . ' 2>&1', $err);			
 			// if ($err){
 			// 	throw new Exception(Pre::render($err));				
 			// }
