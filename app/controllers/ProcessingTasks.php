@@ -27,7 +27,7 @@ class ProcessingTasks extends BaseController {
 			$use_since_id = false;
 
 			$since_id = '';			
-			if ($use_since_id && $redis->exists('since_id-feedID-' . $feed_id)) {
+			if ($use_since_id == true && $redis->exists('since_id-feedID-' . $feed_id)) {
 				$since_id = $redis->get('since_id-feedID-' . $feed_id);
 				$since_id = '&since_id=' . $since_id;
 			}			
