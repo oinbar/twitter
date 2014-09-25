@@ -30,7 +30,7 @@ class ProcessingTasks extends BaseController {
 				$since_id = '&since_id=' . $since_id;
 			}			
 
-			$getfield = '?count=30' . $since_id . '&q=' . urlencode(DB::connection('mysql')
+			$getfield = '?count=100' . $since_id . '&q=' . urlencode(DB::connection('mysql')
 											->table('feeds')->where('id', $feed_id)->orderBy('created_at', 'desc')
 											->first()->criteria);
 
@@ -182,7 +182,7 @@ class ProcessingTasks extends BaseController {
 			}
 
 			
-			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . ' 2>&1', $err);			
+			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $filename . '1>/dev/null 2>&1', $err);			
 			if ($err){
 				throw new Exception(Pre::render($err));				
 			}
