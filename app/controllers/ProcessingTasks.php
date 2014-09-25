@@ -187,6 +187,7 @@ class ProcessingTasks extends BaseController {
 				
 				foreach($err as $line){
 					Log::error($line);
+					throw new Exception(print_r($err));
 				}
 				
 
