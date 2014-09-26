@@ -2,6 +2,24 @@
 
 class ProcessingTasks extends BaseController {
 
+	// application level
+	private $twitter_consumer = array(
+			$key1 => array(
+				$consumer_key => 'x393VwuVLnnixX6Ld7panxSp8',
+				$consumer_secret => 'qglHdDR9gcwpyhdFSF37hPpMwXSrIchkmp9DV8TZ8iOzLNt95u'
+			)
+		);
+
+	// user level
+	private $twitter_tokens = array(
+			$key1 = array(
+				$oauth_access_token => '2492151342-mRMDlwJGaij2yZQB5CHyU2FbaymXnIcEhYnhcgC',
+				$oauth_access_token_secret => 'sDCCPbYt39Uii76de2HcSMbcTFffby1BwxjAEheL6b4dk'
+			)
+		);
+
+	private function returnActive()
+
 	public function searchTwitterFeedCriteria($feed_id, $cache_list_destination = 'PendingCalaisList') {	
 		Log::error('TWITTER CALLED');
 

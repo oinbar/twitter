@@ -6,9 +6,10 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
-    'AddMongoIndexes' => $baseDir . '/app/database/migrations/2014_08_25_180153_add_mongo_indexes.php',
     'AddTableReferences' => $baseDir . '/app/database/migrations/2014_07_31_184514_add_table_references.php',
+    'AddUserTwitterKeys' => $baseDir . '/app/database/migrations/2014_09_26_003308_add_user_twitter_keys.php',
     'AdminController' => $baseDir . '/app/controllers/AdminController.php',
+    'AnalyticsController' => $baseDir . '/app/controllers/AnalyticsController.php',
     'BaseController' => $baseDir . '/app/controllers/BaseController.php',
     'Boris\\Boris' => $vendorDir . '/d11wtq/boris/lib/Boris/Boris.php',
     'Boris\\CLIOptionsHandler' => $vendorDir . '/d11wtq/boris/lib/Boris/CLIOptionsHandler.php',
