@@ -4,17 +4,17 @@ class ProcessingTasks extends BaseController {
 
 	// application level
 	private $twitter_consumer = array(
-			$key1 => array(
-				$consumer_key => 'x393VwuVLnnixX6Ld7panxSp8',
-				$consumer_secret => 'qglHdDR9gcwpyhdFSF37hPpMwXSrIchkmp9DV8TZ8iOzLNt95u'
+			'key1' => array(
+				'consumer_key' => 'x393VwuVLnnixX6Ld7panxSp8',
+				'consumer_secret' => 'qglHdDR9gcwpyhdFSF37hPpMwXSrIchkmp9DV8TZ8iOzLNt95u'
 			)
 		);
 
 	// user level
 	private $twitter_tokens = array(
-			$key1 = array(
-				$oauth_access_token => '2492151342-mRMDlwJGaij2yZQB5CHyU2FbaymXnIcEhYnhcgC',
-				$oauth_access_token_secret => 'sDCCPbYt39Uii76de2HcSMbcTFffby1BwxjAEheL6b4dk'
+			'key1' = array(
+				'oauth_access_token' => '2492151342-mRMDlwJGaij2yZQB5CHyU2FbaymXnIcEhYnhcgC',
+				'oauth_access_token_secret' => 'sDCCPbYt39Uii76de2HcSMbcTFffby1BwxjAEheL6b4dk'
 			)
 		);
 
@@ -37,9 +37,9 @@ class ProcessingTasks extends BaseController {
 			$settings = array(
 			    'oauth_access_token' => Auth::user()->twitter_oauth_access_token;
 			    'oauth_access_token_secret' => Auth::user()->twitter_oauth_access_token_secret;
-			    'consumer_key' => $this->twitter_consumer->key1->consumer_key;
-			    'consumer_secret' => $this->twitter_consumer->key1->consumer_secret;
-			);				
+			    'consumer_key' => $this->twitter_consumer['key1']->consumer_key;
+			    'consumer_secret' => $this->twitter_consumer['key1']->consumer_secret;
+			);
 
 			// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
 			$use_since_id = false;
