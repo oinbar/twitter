@@ -264,12 +264,17 @@ class AdminController extends BaseController {
 			from users_feeds
 			left join feeds on users_feeds.feed_id = feeds.id			
 			where user_id = 1 and feed_status = 1'
-			));		
-		$num_active_feeds_per_user = get_object_vars($num_active_feeds_per_user['0'])['count'];
+			));
 
-		echo $num_active_feeds_per_user;
+		$num_active_feeds_per_user = DB::connection('mysql')->table('users_feeds')										
+						->join('feeds', 'users_feeds.feed_id', '=', 'feeds.id')						
+						->where('user_id', '=', '1')
+						->where('feed_status', '=', 1)
+						->select('twitter_oauth_access_token', 'twitter_oauth_access_token_secret')
+						->distinct()->count();
 
-		
+		// $num_active_feeds_per_user = get_object_vars($num_active_feeds_per_user['0'])['count'];
+		echo $num_active_feeds_per_user;		
 
 
 		

@@ -19,24 +19,21 @@ class QueueTasks {
 
 		$feed_status = DB::connection('mysql')->table('feeds')->where('id', $data['feed_id'])->first()->feed_status;
 
-		$user_twitter_credentials = DB::select(DB::raw(
-			'select twitter_oauth_access_token, twitter_oauth_access_token_secret
-			from users_feeds
-			left join feeds on users_feeds.feed_id = feeds.id
-			left join users on users_feeds.user_id = users.id
-			where feed_id = 5
-			limit 1'
-		));		
-		$access_token = get_object_vars($user_twitter_credentials['0'])['twitter_oauth_access_token'];
-		$access_token_secret = 	get_object_vars($user_twitter_credentials['0'])['twitter_oauth_access_token_secret'];
+		$user_twitter_credentials = DB::connection('mysql')->table('feeds')										
+						->join('users_feeds', 'feeds.id', '=', 'users_feeds.feed_id')
+						->join('users', 'users_feeds.user_id', '=', 'users.id')
+						->where('feed_id', '=', $data['feed_id'])
+						->select('twitter_oauth_access_token', 'twitter_oauth_access_token_secret')
+						->first();
+		$access_token = get_object_vars($user_twitter_credentials)['twitter_oauth_access_token'];
+		$access_token_secret = get_object_vars($user_twitter_credentials)['twitter_oauth_access_token_secret'];
 
-		$num_active_feeds_per_user = DB::select(DB::raw(
-			'select count(distinct user_id, feed_id, feed_status) as count
-			from users_feeds
-			left join feeds on users_feeds.feed_id = feeds.id			
-			where user_id = ' . $data['feed_id'] . ' and feed_status = 1'
-			));		
-		$num_active_feeds_per_user = get_object_vars($num_active_feeds_per_user['0'])['count'];
+		$num_active_feeds_per_user = DB::connection('mysql')->table('users_feeds')										
+						->join('feeds', 'users_feeds.feed_id', '=', 'feeds.id')						
+						->where('user_id', '=', '1')
+						->where('feed_status', '=', 1)
+						->select('twitter_oauth_access_token', 'twitter_oauth_access_token_secret')
+						->distinct()->count();		
 
 		if ($feed_status == 1) {
 			$p = new ProcessingTasks();
