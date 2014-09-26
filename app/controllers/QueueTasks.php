@@ -38,9 +38,9 @@ class QueueTasks {
 			));		
 		$num_active_feeds_per_user = get_object_vars($num_active_feeds_per_user['0'])['count'];
 
-		if ($feed_status == 'on') {
+		if ($feed_status == 1) {
 			$p = new ProcessingTasks();
-			$p->searchTwitterFeedCriteria($data['feed_id',
+			$p->searchTwitterFeedCriteria($data['feed_id'],
 												'PendingCalaisList',
 												$access_token,
 												$access_token_secret]);		
