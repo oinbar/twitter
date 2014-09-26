@@ -10,13 +10,13 @@ class ProcessingTasks extends BaseController {
 			)
 		);
 
-	// user level
-	private $twitter_tokens = array(
-			'key1' => array(
-				'oauth_access_token' => '2492151342-mRMDlwJGaij2yZQB5CHyU2FbaymXnIcEhYnhcgC',
-				'oauth_access_token_secret' => 'sDCCPbYt39Uii76de2HcSMbcTFffby1BwxjAEheL6b4dk'
-			)
-		);
+	// FETCH FROM DATABASE
+	// private $twitter_tokens = array(
+	// 		'key1' => array(
+	// 			'oauth_access_token' => '2492151342-mRMDlwJGaij2yZQB5CHyU2FbaymXnIcEhYnhcgC',
+	// 			'oauth_access_token_secret' => 'sDCCPbYt39Uii76de2HcSMbcTFffby1BwxjAEheL6b4dk'
+	// 		)
+	// 	);
 
 
 	public function searchTwitterFeedCriteria($feed_id, 
