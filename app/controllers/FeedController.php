@@ -80,7 +80,9 @@ class FeedController extends BaseController {
 		$data = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->orderBy('datetime', 'desc', 'natural')->skip($page_num * $take - 1)->take($take)->get();
 	    $total_records = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->count();
 
-		$feed = DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->first();
+		$feed = DB::connection('mysql')->table('users_feeds')
+			->join('feeds', 'users_feeds.feed_id', '=', 'feeds.id')
+			->where('feed_id', $feed_id)->first();
 		$feeds = DB::connection('mysql')->table('users_feeds')
 			->join('feeds', 'users_feeds.feed_id', '=', 'feeds.id')
 			->where('user_id', Auth::user()->id)
