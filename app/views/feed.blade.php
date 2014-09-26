@@ -7,7 +7,7 @@
 
 
 
-  @if ($feed->feed_status == 'on')
+  @if ($feed->feed_status == 1)
   	<center>Status: ON</center>
   	<center> <a href="{{ url('/stopfetch/' . $feed->feed_id) }}" >Stop Fetching</a> </center>
   @else
