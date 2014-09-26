@@ -34,10 +34,10 @@ class ProcessingTasks extends BaseController {
 			include __DIR__.'/../twitter-api-php/TwitterAPIExchange.php';
 			$redis = Redis::Connection();
 			$settings = array(
-			    'oauth_access_token' => Auth::user()->twitter_oauth_access_token;
-			    'oauth_access_token_secret' => Auth::user()->twitter_oauth_access_token_secret;
-			    'consumer_key' => $this->twitter_consumer['key1']->consumer_key;
-			    'consumer_secret' => $this->twitter_consumer['key1']->consumer_secret;
+			    'oauth_access_token' => Auth::user()->twitter_oauth_access_token,
+			    'oauth_access_token_secret' => Auth::user()->twitter_oauth_access_token_secret,
+			    'consumer_key' => $this->twitter_consumer['key1']->consumer_key,
+			    'consumer_secret' => $this->twitter_consumer['key1']->consumer_secret,
 			);
 
 			// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
