@@ -22,7 +22,7 @@ class FeedController extends BaseController {
 			return View::make('edit_feed')
 				->with('feed_id', $feed1->feed_id)
 				->with('name', $feed1->feed_name)
-				->with('status', $feed1->feed_status)
+				->with('status', $feed2->feed_status)
 				->with('criteria', $feed2->criteria)
 				->with('update_rate', $feed2->update_rate)				
 				->with('new_feed', false);				
@@ -43,11 +43,11 @@ class FeedController extends BaseController {
 		
 		if ($feed_id) {
 			DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array(
-				'feed_name' => Input::get('name'),
-				'feed_status' => Input::get('status')
+				'feed_name' => Input::get('name'),				
 			));
 			DB::connection('mysql')->table('feeds')->where('id', $feed_id)->update(array(
 				'id' => $feed_id,
+				'feed_status' => Input::get('status'),
 				'update_rate' => Input::get('update_rate'),
 				'criteria' => Input::get('criteria'),
 				'created_at' => new DateTime
@@ -57,10 +57,10 @@ class FeedController extends BaseController {
 		} else {
 			$id = DB::connection('mysql')->table('users_feeds')->insertGetId(array(
 				'user_id' => Auth::user()->id,
-				'feed_name' => Input::get('name'),
-				'feed_status' => 'off'));
+				'feed_name' => Input::get('name'),				
 			DB::connection('mysql')->table('feeds')->insert(array(
 				'id' => $id,
+				'feed_status' => 0));
 				'update_rate' => Input::get('update_rate'),
 				'criteria' => Input::get('criteria'),
 				'created_at' => new DateTime));
