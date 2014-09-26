@@ -43,7 +43,7 @@ class QueueTasks {
 			$p->searchTwitterFeedCriteria($data['feed_id'],
 												'PendingCalaisList',
 												$access_token,
-												$access_token_secret]);		
+												$access_token_secret);		
 
 			$job->release(10 * $num_active_feeds_per_user)
 			
