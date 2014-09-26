@@ -60,7 +60,7 @@ class FeedController extends BaseController {
 				'feed_name' => Input::get('name')));				
 			DB::connection('mysql')->table('feeds')->insert(array(
 				'id' => $id,
-				'feed_status' => 0;
+				'feed_status' => 0,
 				'update_rate' => Input::get('update_rate'),
 				'criteria' => Input::get('criteria'),
 				'created_at' => new DateTime));
