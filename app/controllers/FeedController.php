@@ -82,7 +82,7 @@ class FeedController extends BaseController {
 
 		$feed = DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->first();
 		$feeds = DB::connection('mysql')->table('users_feeds')
-			->join('feeds', 'users_feeds.feed_id', '=', 'feeds.id')f
+			->join('feeds', 'users_feeds.feed_id', '=', 'feeds.id')
 			->where('user_id', Auth::user()->id)
 			->select('feed_id','feed_name')->get();
 
