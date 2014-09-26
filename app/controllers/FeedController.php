@@ -46,7 +46,7 @@ class FeedController extends BaseController {
 				'feed_name' => Input::get('name'),
 				'feed_status' => Input::get('status')
 			));
-			DB::connection('mysql')->table('feeds')->where('id', $feed_id)->insert(array(
+			DB::connection('mysql')->table('feeds')->where('id', $feed_id)->update(array(
 				'id' => $feed_id,
 				'update_rate' => Input::get('update_rate'),
 				'criteria' => Input::get('criteria'),

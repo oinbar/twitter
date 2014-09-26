@@ -258,7 +258,23 @@ class AdminController extends BaseController {
 		echo date(DATE_RFC2822, strtotime("2014-09-10 17:00"));
 	}
 	public function test () {
-		echo app_path() . '../../';
-	}
+		
+		$num_active_feeds_per_user = DB::select(DB::raw(
+			'select count(distinct user_id, feed_id, feed_status) as count
+			from users_feeds
+			left join feeds on users_feeds.feed_id = feeds.id			
+			where user_id = 1 and feed_status = 1'
+			));		
+		$num_active_feeds_per_user = get_object_vars($num_active_feeds_per_user['0'])['count'];
+
+		echo $num_active_feeds_per_user;
+
+		
+
+
+		
+
+	}		
 }
+
 

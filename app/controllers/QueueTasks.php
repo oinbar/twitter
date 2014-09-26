@@ -18,13 +18,34 @@ class QueueTasks {
 		Log::error('TWITTER QUEUE JOB');
 
 		$feed_status = DB::connection('mysql')->table('users_feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
-		
+
+		$user_twitter_credentials = DB::select(DB::raw(
+			'select twitter_oauth_access_token, twitter_oauth_access_token_secret
+			from users_feeds
+			left join feeds on users_feeds.feed_id = feeds.id
+			left join users on users_feeds.user_id = users.id
+			where feed_id = 5
+			limit 1'
+		));		
+		$access_token = get_object_vars($user_twitter_credentials['0'])['twitter_oauth_access_token'];
+		$access_token_secret = 	get_object_vars($user_twitter_credentials['0'])['twitter_oauth_access_token_secret'];
+
+		$num_active_feeds_per_user = DB::select(DB::raw(
+			'select count(distinct user_id, feed_id, feed_status) as count
+			from users_feeds
+			left join feeds on users_feeds.feed_id = feeds.id			
+			where user_id = ' . $data['feed_id'] . ' and feed_status = 1'
+			));		
+		$num_active_feeds_per_user = get_object_vars($num_active_feeds_per_user['0'])['count'];
+
 		if ($feed_status == 'on') {
 			$p = new ProcessingTasks();
-			$p->searchTwitterFeedCriteria($data['feed_id']);
-			$job->delete();
+			$p->searchTwitterFeedCriteria($data['feed_id',
+												'PendingCalaisList',
+												$access_token,
+												$access_token_secret]);		
 
-			$job->release(10);
+			$job->release(10 * $num_active_feeds_per_user)
 			
 		} else {
 			$job->delete();
