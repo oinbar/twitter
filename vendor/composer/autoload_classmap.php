@@ -50,6 +50,7 @@ return array(
     'Crypt_TripleDES' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/TripleDES.php',
     'Crypt_Twofish' => $vendorDir . '/phpseclib/phpseclib/phpseclib/Crypt/Twofish.php',
     'DatabaseSeeder' => $baseDir . '/app/database/seeds/DatabaseSeeder.php',
+    'EditTableReferences' => $baseDir . '/app/database/migrations/2014_09_26_210525_edit_table_references.php',
     'Feed' => $baseDir . '/app/models/Feed.php',
     'FeedController' => $baseDir . '/app/controllers/FeedController.php',
     'File_ANSI' => $vendorDir . '/phpseclib/phpseclib/phpseclib/File/ANSI.php',

@@ -55,13 +55,9 @@ class FeedController extends BaseController {
 			return Redirect::to('/view_feed/'.$feed_id);
 
 		} else {
-			// $id = DB::connection('mysql')->table('users_feeds')->insertGetId(array(
-			// 	'user_id' => Auth::user()->id));
-
-			DB::connection('mysql')->table('feeds')->insert(array(
-				'id' => Auth::user()->id,
+			$id = DB::connection('mysql')->table('feeds')->insert(array(				
 				'feed_name' => Input::get('name'),				
-				'feed_status' => 0,
+				'feed_status' => Input::get('status'),
 				'update_rate' => Input::get('update_rate'),
 				'criteria' => Input::get('criteria'),
 				'created_at' => new DateTime));
