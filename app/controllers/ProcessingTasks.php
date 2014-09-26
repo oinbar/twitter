@@ -18,7 +18,6 @@ class ProcessingTasks extends BaseController {
 			)
 		);
 
-	private function returnActive()
 
 	public function searchTwitterFeedCriteria($feed_id, $cache_list_destination = 'PendingCalaisList') {	
 		Log::error('TWITTER CALLED');
