@@ -32,7 +32,7 @@ class AddTableReferences extends Migration {
 			$table->dropForeign('users_feeds_user_id_foreign');
 		});
 
-		Schema::connection('mysql')->table('feeds', function($table){
+		Schema::connection('mysql')->table('users_feeds', function($table){
 			$table->dropForeign('users_feeds_feed_id_foreign');
 		});
 	}
