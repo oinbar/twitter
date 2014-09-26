@@ -68,7 +68,7 @@ class ProcessingTasks extends BaseController {
 			$data = json_decode($json, true);
 
 			Log::error('TWITTER RESULTS LEN: ' .sizeof($data));
-			Log::error(implode("\n", $data));
+			Log::error(implode('\n', $data));
 
 			// LOOP OVER THE RESULTS COLLECTION, AND STORE IN CACHE FOR DATA PIPELINE
 			$max_id = 0;
