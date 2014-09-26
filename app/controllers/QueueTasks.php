@@ -45,9 +45,10 @@ class QueueTasks {
 												$access_token,
 												$access_token_secret);		
 
-			$job->release(10 * $num_active_feeds_per_user)
+			$job->release(10 * $num_active_feeds_per_user);
 			
-		} else {
+		} 
+		else {
 			$job->delete();
 		}
 	} 
