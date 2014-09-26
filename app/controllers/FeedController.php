@@ -101,7 +101,7 @@ class FeedController extends BaseController {
 	public function startFetching ($feed_id) {
 		//turn feed status on
 		try {
-			DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array('feed_status' => 1));
+			DB::connection('mysql')->table('feeds')->where('id', $feed_id)->update(array('feed_status' => 1));
 
 			Queue::connection('PendingTwitterQueue')->push('QueueTasks@searchTwitterFeedCriteriaJob', array('feed_id' => $feed_id)); 
 		}
@@ -113,7 +113,7 @@ class FeedController extends BaseController {
 
 	public function stopFetching ($feed_id) {
 		//turn feed status off
-		DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array('feed_status' => 0));
+		DB::connection('mysql')->table('feeds')->where('id', $feed_id)->update(array('feed_status' => 0));
 		return Redirect::to('/view_feed/' .$feed_id);
 	}
 
