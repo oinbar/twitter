@@ -3,7 +3,9 @@
 class FeedController extends BaseController {
 
 	public function getFeeds () {
-		$feeds = DB::connection('mysql')->table('users_feeds')->where('user_id', Auth::user()->id)
+		$feeds = DB::connection('mysql')->table('users_feeds')
+			->join('feeds', 'users_feeds.feed_id', '=', 'feeds.id')
+			->where('user_id', Auth::user()->id)
 			->select('feed_id','feed_name')->get();
 
 		return View::make('feeds')
@@ -21,7 +23,7 @@ class FeedController extends BaseController {
 
 			return View::make('edit_feed')
 				->with('feed_id', $feed1->feed_id)
-				->with('name', $feed1->feed_name)
+				->with('name', $feed2->feed_name)
 				->with('status', $feed2->feed_status)
 				->with('criteria', $feed2->criteria)
 				->with('update_rate', $feed2->update_rate)				
@@ -42,11 +44,9 @@ class FeedController extends BaseController {
 	public function postEditFeed ($feed_id = null) {
 		
 		if ($feed_id) {
-			DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->update(array(
-				'feed_name' => Input::get('name'),				
-			));
 			DB::connection('mysql')->table('feeds')->where('id', $feed_id)->update(array(
 				'id' => $feed_id,
+				'feed_name' => Input::get('name'),
 				'feed_status' => Input::get('status'),
 				'update_rate' => Input::get('update_rate'),
 				'criteria' => Input::get('criteria'),
@@ -55,11 +55,12 @@ class FeedController extends BaseController {
 			return Redirect::to('/view_feed/'.$feed_id);
 
 		} else {
-			$id = DB::connection('mysql')->table('users_feeds')->insertGetId(array(
-				'user_id' => Auth::user()->id,
-				'feed_name' => Input::get('name')));				
+			// $id = DB::connection('mysql')->table('users_feeds')->insertGetId(array(
+			// 	'user_id' => Auth::user()->id));
+
 			DB::connection('mysql')->table('feeds')->insert(array(
-				'id' => $id,
+				'id' => Auth::user()->id,
+				'feed_name' => Input::get('name'),				
 				'feed_status' => 0,
 				'update_rate' => Input::get('update_rate'),
 				'criteria' => Input::get('criteria'),
@@ -80,7 +81,9 @@ class FeedController extends BaseController {
 	    $total_records = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->count();
 
 		$feed = DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->first();
-		$feeds = DB::connection('mysql')->table('users_feeds')->where('user_id', Auth::user()->id)
+		$feeds = DB::connection('mysql')->table('users_feeds')
+			->join('feeds', 'users_feeds.feed_id', '=', 'feeds.id')f
+			->where('user_id', Auth::user()->id)
 			->select('feed_id','feed_name')->get();
 
 		return View::make('feed')
