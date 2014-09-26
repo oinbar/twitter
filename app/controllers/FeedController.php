@@ -6,7 +6,7 @@ class FeedController extends BaseController {
 		$feeds = DB::connection('mysql')->table('users_feeds')
 			->join('feeds', 'users_feeds.feed_id', '=', 'feeds.id')
 			->where('user_id', Auth::user()->id)
-			->select('feed_id','feed_name')->get();
+			->get();
 
 		return View::make('feeds')
 			->with('feeds', $feeds);
