@@ -21,8 +21,8 @@ class ProcessingTasks extends BaseController {
 
 	public function searchTwitterFeedCriteria($feed_id, 
 											  $cache_list_destination = 'PendingCalaisList', 
-											  $oauth_access_token = '',
-											  $oauth_access_token_secret = '') {	
+											  $access_token = '',
+											  $access_token_secret = '') {	
 		Log::error('TWITTER CALLED');
 
 		/*
@@ -37,10 +37,10 @@ class ProcessingTasks extends BaseController {
 			include __DIR__.'/../twitter-api-php/TwitterAPIExchange.php';
 			$redis = Redis::Connection();
 			$settings = array(
-			    'oauth_access_token' => $oauth_access_token,
-			    'oauth_access_token_secret' => $oauth_access_token_secret,
-			    'consumer_key' => $this->twitter_consumer['key1']->consumer_key,
-			    'consumer_secret' => $this->twitter_consumer['key1']->consumer_secret,
+			    'oauth_access_token' => $access_token,
+			    'oauth_access_token_secret' => $access_token_secret,
+			    'consumer_key' => $this->twitter_consumer['key1']['consumer_key'],
+			    'consumer_secret' => $this->twitter_consumer['key1']['consumer_secret'],
 			);
 
 			// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
