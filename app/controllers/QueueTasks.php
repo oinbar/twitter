@@ -17,7 +17,7 @@ class QueueTasks {
 
 		Log::error('TWITTER QUEUE JOB');
 
-		$feed_status = DB::connection('mysql')->table('feeds')->where('feed_id', $data['feed_id'])->first()->feed_status;
+		$feed_status = DB::connection('mysql')->table('feeds')->where('id', $data['feed_id'])->first()->feed_status;
 
 		$user_twitter_credentials = DB::select(DB::raw(
 			'select twitter_oauth_access_token, twitter_oauth_access_token_secret
