@@ -57,14 +57,7 @@ class AnalyticsController extends BaseController {
 			$results = $db->execute('return ' . $query . ';');
 			$temp_file_in = tempnam(__DIR__ . '/temp/', 'emergingTrendsIn');
 			$temp_file_out = base_path() . '/app/assets/images/trends_Feed_' . $feed_id . '_timepts_' . $timepoints . '_features_' . $num_features . '_timeframe_' . $timeframe . '.png';		
-
-			// echo Config::get('assets.images'). '<br>';
-			// echo base_path(). '<br>';			
-			// echo $temp_file_out. '<br>';
-			// die();
-
-			file_put_contents($temp_file_in, json_encode($results['retval']));
-			
+			file_put_contents($temp_file_in, json_encode($results['retval']));			
 
 			exec(base_path() . '/../python_venv/bin/python ' . __DIR__ .  '/python_scripts/emerging_trends.py ' . $temp_file_in . ' ' . $temp_file_out . ' ' . $num_features . ' ' . $timeframe . ' 2>&1', $err);
 			if ($err){
@@ -83,7 +76,9 @@ class AnalyticsController extends BaseController {
 			// unset($temp_file_out);			
 		}		
 		catch (Exception $e){
-			Log::error('ALERTS AGGREGATOR :  '. $e);
+			foreach($e as $line) {
+				Log::error($line);
+			}
 			echo $e;
 		}
 	}
