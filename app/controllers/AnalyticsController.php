@@ -77,7 +77,7 @@ class AnalyticsController extends BaseController {
 		}		
 		catch (Exception $e){
 			Log::error($e);
-			return echo $e;
+			echo $e;
 		}
 	}
 
