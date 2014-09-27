@@ -61,7 +61,7 @@ class AnalyticsController extends BaseController {
 
 			exec(base_path() . '/../python_venv/bin/python ' . __DIR__ .  '/python_scripts/emerging_trends.py ' . $temp_file_in . ' ' . $temp_file_out . ' ' . $num_features . ' ' . $timeframe . ' 2>&1', $err);
 			if ($err){
-				throw new Exception(Pre::render($err));
+				throw new Exception($err);
 			}			
 						
 			// $im = imagecreatefrompng($temp_file_out);
@@ -79,7 +79,7 @@ class AnalyticsController extends BaseController {
 			foreach($e as $line) {
 				Log::error($line);
 			}
-			echo $e;
+			echo Pre::render($e);
 		}
 	}
 
