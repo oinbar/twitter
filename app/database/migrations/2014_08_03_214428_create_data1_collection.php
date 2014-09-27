@@ -22,7 +22,9 @@ class CreateData1Collection extends Migration {
 	 */
 	public function down()
 	{
-		Schema::connection('mongodb')->drop('data1');
+		// ARE YOU SURE????
+
+		// Schema::connection('mongodb')->drop('data1');
 	}
 
 }

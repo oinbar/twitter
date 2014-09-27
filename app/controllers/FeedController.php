@@ -15,7 +15,6 @@ class FeedController extends BaseController {
 	public function getEditFeed ($feed_id = null) {
 
 		if ($feed_id){	
-			//figure out how to do joins with eloquent and replace this garbage
 			$feed1 = DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->first();		
 			$feed2 = DB::connection('mysql')->table('feeds')
 				->where('id', $feed_id)
@@ -45,7 +44,6 @@ class FeedController extends BaseController {
 		
 		if ($feed_id) {
 			DB::connection('mysql')->table('feeds')->where('id', $feed_id)->update(array(
-				'id' => $feed_id,
 				'feed_name' => Input::get('name'),
 				'feed_status' => Input::get('status'),
 				'update_rate' => Input::get('update_rate'),
@@ -55,14 +53,19 @@ class FeedController extends BaseController {
 			return Redirect::to('/view_feed/'.$feed_id);
 
 		} else {
-			$id = DB::connection('mysql')->table('feeds')->insert(array(				
-				'feed_name' => Input::get('name'),				
-				'feed_status' => Input::get('status'),
+
+			$feed_id = DB::connection('mysql')->table('users_feeds')->insertGetId(array(
+				'user_id' => Auth::user()->id));
+
+			DB::connection('mysql')->table('feeds')->insert(array(
+				'id' => $feed_id,
 				'update_rate' => Input::get('update_rate'),
 				'criteria' => Input::get('criteria'),
+				'feed_name' => Input::get('name'),
+				'feed_status' => 0,
 				'created_at' => new DateTime));
 
-			return Redirect::to('/view_feed/'.$id);			
+			return Redirect::to('/view_feed/'.$feed_id);			
 		}
 	}
 

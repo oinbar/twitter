@@ -271,9 +271,7 @@ class AdminController extends BaseController {
 						->where('user_id', '=', '1')
 						->where('feed_status', '=', 1)
 						->select('twitter_oauth_access_token', 'twitter_oauth_access_token_secret')
-						->distinct()->count();
-
-		// $num_active_feeds_per_user = get_object_vars($num_active_feeds_per_user['0'])['count'];
+						->distinct()->count();		
 		echo $num_active_feeds_per_user;		
 
 

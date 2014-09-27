@@ -16,8 +16,8 @@ class AddTableReferences extends Migration {
 			$table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
 		});
 
-		Schema::connection('mysql')->table('users_feeds', function(Blueprint $table){
-			$table->foreign('feed_id')->references('id')->on('feeds')->onDelete('cascade');
+		Schema::connection('mysql')->table('feeds', function(Blueprint $table){
+			$table->foreign('id')->references('feed_id')->on('users_feeds')->onDelete('cascade');
 		});
 	}
 
@@ -32,8 +32,8 @@ class AddTableReferences extends Migration {
 			$table->dropForeign('users_feeds_user_id_foreign');
 		});
 
-		Schema::connection('mysql')->table('users_feeds', function($table){
-			$table->dropForeign('users_feeds_feed_id_foreign');
+		Schema::connection('mysql')->table('feeds', function($table){
+			$table->dropForeign('feeds_id_foreign');
 		});
 	}
 }

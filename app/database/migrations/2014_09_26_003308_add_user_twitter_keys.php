@@ -25,9 +25,6 @@ class AddUserTwitterKeys extends Migration {
 	 */
 	public function down()
 	{
-		Schema::connection('mysql')->table('users', function(Blueprint $table){			
-			$table->dropColumn('twitter_oauth_access_token');
-			$table->dropColumn('twitter_oauth_access_token_secret');			
-		});
+
 	}
 }

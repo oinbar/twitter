@@ -52,7 +52,7 @@
              @else
              <ul class="nav navbar-nav navbar-right">
 	           <li><a href="/login">Login</a></li>
-               <li><a href="/singup">Signup</a></li>
+               <li><a href="/signup">Signup</a></li>
 			 </ul>
              @endif
 

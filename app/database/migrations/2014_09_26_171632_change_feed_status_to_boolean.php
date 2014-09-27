@@ -28,12 +28,7 @@ class ChangeFeedStatusToBoolean extends Migration {
 	 */
 	public function down()
 	{
-		Schema::connection('mysql')->table('feeds', function(Blueprint $table){			
-			$table->dropColumn('feed_status');						
-		});
-		Schema::connection('mysql')->table('feeds', function(Blueprint $table){			
-			$table->string('feed_status');						
-		});
+
 	}
 
 }
