@@ -239,8 +239,8 @@ class ProcessingTasks extends BaseController {
 
 			// SUTIME returns stdout with stderr.  Currently this checks to see if there actually was a java excption by checking
 			// for the word "Exception"...  Since the error is in an array, it is printed to the log line by line
-			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file . ' 2>&1', $err);			
-			if ($err && (strpos(implode(' ', $err),'Exception') !== false)){
+			exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file . ' 2>&1', $err);			
+			if ($err && (strpos(implode(' ', $err),'Exception') !== false)) {
 				foreach($err as $line) {
 					Log::error($line);
 				}

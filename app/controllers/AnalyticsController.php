@@ -60,9 +60,12 @@ class AnalyticsController extends BaseController {
 			file_put_contents($temp_file_in, json_encode($results['retval']));			
 
 			exec(base_path() . '/../python_venv/bin/python ' . __DIR__ .  '/python_scripts/emerging_trends.py ' . $temp_file_in . ' ' . $temp_file_out . ' ' . $num_features . ' ' . $timeframe . ' 2>&1', $err);
-			if ($err){
+			if ($err && (strpos(implode(' ', $err),'Exception') !== false)) {
+				foreach($err as $line) {
+					Log::error($line);
+				}
 				throw new Exception(Pre::render($err));
-			}			
+			}
 						
 			// $im = imagecreatefrompng($temp_file_out);
 			// header('Content-Type: image/png');
