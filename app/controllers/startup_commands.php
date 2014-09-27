@@ -41,19 +41,19 @@ $out = array();
 
 // elseif ($argv[1] == 'production') {
 	// START QUEUE LISTENERS
-array_push($out, exec('sudo -u www-data nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingTwitterQueue --timeout=600 &> /dev/null &'));
+array_push($out, exec('sudo -u www-data -nice 10 nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingTwitterQueue --timeout=600 &> /dev/null &'));
 exec('disown');
-array_push($out, exec('sudo -u www-data nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingCalaisQueue --timeout=600 &> /dev/null &'));
+array_push($out, exec('sudo -u www-data -nice 10 nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingCalaisQueue --timeout=600 &> /dev/null &'));
 exec('disown');
-array_push($out, exec('sudo -u www-data nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingCalaisQueue --timeout=600 &> /dev/null &'));
+array_push($out, exec('sudo -u www-data -nice 10 nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingCalaisQueue --timeout=600 &> /dev/null &'));
 exec('disown');
-array_push($out, exec('sudo -u www-data nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingSUTimeQueue --timeout=600 --memory=256 &> /dev/null &'));
+array_push($out, exec('sudo -u www-data -nice 10 nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingSUTimeQueue --timeout=600 &> /dev/null &'));
 exec('disown');
-array_push($out, exec('sudo -u www-data nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingSUTimeQueue --timeout=600 &> /dev/null &'));
+array_push($out, exec('sudo -u www-data -nice 10 nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingSUTimeQueue --timeout=600 &> /dev/null &'));
 exec('disown');
-array_push($out, exec('sudo -u www-data nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingPersistenceQueue --timeout=600 &> /dev/null &'));
+array_push($out, exec('sudo -u www-data -nice 10 nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingPersistenceQueue --timeout=600 &> /dev/null &'));
 // START REDIS
-array_push($out, exec('sudo -u www-data nohup /usr/bin/redis-server /etc/redis/redis.conf &'));
+array_push($out, exec('sudo -u www-data -nice 10 nohup /usr/bin/redis-server /etc/redis/redis.conf &'));
 exec('disown');
 // }
 
