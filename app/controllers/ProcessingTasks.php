@@ -184,7 +184,7 @@ class ProcessingTasks extends BaseController {
 
 	public function runJsonThroughSUTime ($cache_list_origin = 'PendingSUTimeList', 
 										  $cache_list_destination = 'PendingPersistenceList', 
-										  $batch_size = 50) {
+										  $batch_size = 100) {
 		/*
 		pulls a batch of documents off the cache_list_origin list, and runs them through StanfordNLP's
 		SUTime module (packaged into a jar file), attempting to find any mentions of dates and times in the text.
@@ -239,7 +239,7 @@ class ProcessingTasks extends BaseController {
 
 			// SUTIME returns stdout with stderr.  Currently this checks to see if there actually was a java excption by checking
 			// for the word "Exception"...  Since the error is in an array, it is printed to the log line by line
-			exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file . ' 2>&1', $err);			
+			exec('/usr/bin/java -Xmx512m -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file . ' 2>&1', $err);			
 			if ($err && (strpos(implode(' ', $err),'Exception') !== false)) {
 				foreach($err as $line) {
 					Log::error($line);

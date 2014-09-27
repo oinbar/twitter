@@ -47,7 +47,7 @@ array_push($out, exec('sudo -u www-data nohup php /home/upupup/prod/twitterintel
 exec('disown');
 array_push($out, exec('sudo -u www-data nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingCalaisQueue --timeout=600 &> /dev/null &'));
 exec('disown');
-array_push($out, exec('sudo -u www-data nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingSUTimeQueue --timeout=600 &> /dev/null &'));
+array_push($out, exec('sudo -u www-data nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingSUTimeQueue --timeout=600 --memory=256 &> /dev/null &'));
 exec('disown');
 array_push($out, exec('sudo -u www-data nohup php /home/upupup/prod/twitterintel/artisan queue:listen PendingSUTimeQueue --timeout=600 &> /dev/null &'));
 exec('disown');
