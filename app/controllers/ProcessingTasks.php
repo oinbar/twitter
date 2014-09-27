@@ -245,7 +245,6 @@ class ProcessingTasks extends BaseController {
 					Log::error($line);
 				}
 				throw new Exception(Pre::render($err));
-				}
 			}
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put

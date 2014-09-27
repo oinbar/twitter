@@ -259,21 +259,17 @@ class AdminController extends BaseController {
 	}
 	public function test () {
 		
-		$num_active_feeds_per_user = DB::select(DB::raw(
-			'select count(distinct user_id, feed_id, feed_status) as count
-			from users_feeds
-			left join feeds on users_feeds.feed_id = feeds.id			
-			where user_id = 1 and feed_status = 1'
-			));
+		// DO SOME CODE
+		 
+		try {
+			// $x = 4/0;
+			$error = array('1'=>'1', '2'=>'2');
+			throw new Exception(Pre::render($error));
 
-		$num_active_feeds_per_user = DB::connection('mysql')->table('users_feeds')										
-						->join('feeds', 'users_feeds.feed_id', '=', 'feeds.id')						
-						->where('user_id', '=', '1')
-						->where('feed_status', '=', 1)
-						->select('twitter_oauth_access_token', 'twitter_oauth_access_token_secret')
-						->distinct()->count();		
-		echo $num_active_feeds_per_user;		
-
+		}
+		catch (Exception $e) {
+			Log::error($error);
+		}
 
 		
 
