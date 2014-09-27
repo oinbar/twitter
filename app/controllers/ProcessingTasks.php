@@ -239,13 +239,13 @@ class ProcessingTasks extends BaseController {
 
 			// SUTIME returns stdout with stderr.  Currently this checks to see if there actually was a java excption by checking
 			// for the word "Exception"...  Since the error is in an array, it is printed to the log line by line
-			exec('/usr/bin/java -Xmx512m -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file . ' 2>&1', $err);			
-			if ($err && (strpos(implode(' ', $err),'Exception') !== false)) {
-				foreach($err as $line) {
-					Log::error($line);
-				}
-				throw new Exception(Pre::render($err));
-			}
+			exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file . ' 2>&1', $err);			
+			// if ($err && (strpos(implode(' ', $err),'Exception') !== false)) {
+			// 	foreach($err as $line) {
+			// 		Log::error($line);
+			// 	}
+			// 	throw new Exception(Pre::render($err));
+			// }
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put
 			// the record in the cache
