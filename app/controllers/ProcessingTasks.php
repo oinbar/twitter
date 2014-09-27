@@ -192,6 +192,7 @@ class ProcessingTasks extends BaseController {
 		*/		
 
 		Log::error('SUTIME CALLED');
+		$errors = null;
 
 		try{
 			$redis = Redis::connection();
@@ -222,7 +223,7 @@ class ProcessingTasks extends BaseController {
 				$jarpath = '/home/upupup/prod/lib/SUTime.jar';
 			}
 
-
+			// THIS CODE SEPARATES STDOUT FROM STDERR.  BUT IT DID NOT WORK AS INTENDED
 			// $descriptorspec = array(
 			// 	   0 => array("pipe", "r"),  // stdin
 			// 	   1 => array("pipe", "w"),  // stdout
@@ -237,12 +238,14 @@ class ProcessingTasks extends BaseController {
 			// proc_close($process);
 
 
-			
+			// SUTIME returns stdout with stderr.  Currently this checks to see if there actually was a java excption by checking
+			// for the word "Exception"...  Since the error is in an array, it is stored in $errors and the catch loops over it and 
+			// prints line by line to the logfile. 
 			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file . ' 2>&1', $err);			
 			if ($err){
-				// throw new Exception(Pre::render($err));				
-				foreach($err as $line) {
-					Log::error($line);
+				if (strpos(implode(' ', $err),'Exception') !== false) {
+    				$errors = $err;
+    				throw new Exception();
 				}
 			}
 
@@ -270,7 +273,10 @@ class ProcessingTasks extends BaseController {
 			unset($file);			
 		} 
 		catch (Exception $e) {
-			Log::error($e);
+			Log::error(Pre::render($e));
+			foreach($errors as $line) {
+				Log::error($line);
+			}
 		}
 	}
 }
