@@ -102,7 +102,7 @@ class ProcessingTasks extends BaseController {
 		any duplicates.
 		*/
 
-		Log::error('INSERTDB CALLED');
+		// Log::error('INSERTDB CALLED');
 
 
 		$redis = Redis::connection();
@@ -127,7 +127,7 @@ class ProcessingTasks extends BaseController {
 					DB::connection('mongodb')->collection('data1')->insert($record);
 				}
 			}
-			catch (Exceotion $e) {
+			catch (Exception $e) {
 				Log::error($e);
 			}
 		}
@@ -192,7 +192,6 @@ class ProcessingTasks extends BaseController {
 		*/		
 
 		Log::error('SUTIME CALLED');
-		$errors = null;
 
 		try{
 			$redis = Redis::connection();
@@ -239,13 +238,13 @@ class ProcessingTasks extends BaseController {
 
 
 			// SUTIME returns stdout with stderr.  Currently this checks to see if there actually was a java excption by checking
-			// for the word "Exception"...  Since the error is in an array, it is stored in $errors and the catch loops over it and 
-			// prints line by line to the logfile. 
+			// for the word "Exception"...  Since the error is in an array, it is printed to the log line by line
 			$result=exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file . ' 2>&1', $err);			
-			if ($err){
-				if (strpos(implode(' ', $err),'Exception') !== false) {
-    				$errors = $err;
-    				throw new Exception();
+			if ($err && (strpos(implode(' ', $err),'Exception') !== false)){
+				foreach($err as $line) {
+					Log::error($line);
+				}
+				throw new Exception(Pre::render($err));
 				}
 			}
 
@@ -270,13 +269,10 @@ class ProcessingTasks extends BaseController {
 				}
 				$redis->rpush($cache_list_destination, json_encode($file[$i]));
 			}			
-			unset($file);			
+			unlink($file);			
 		} 
 		catch (Exception $e) {
 			Log::error(Pre::render($e));
-			foreach($errors as $line) {
-				Log::error($line);
-			}
 		}
 	}
 }

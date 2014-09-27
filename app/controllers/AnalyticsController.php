@@ -72,8 +72,8 @@ class AnalyticsController extends BaseController {
 			return $temp_file_out_name;
 			
 
-			// unset($temp_file_in);
-			// unset($temp_file_out);			
+			// unlink($temp_file_in);
+			// unlink($temp_file_out);			
 		}		
 		catch (Exception $e){
 			Log::error($e);
