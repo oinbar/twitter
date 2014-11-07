@@ -51,15 +51,18 @@ class AnalyticsController extends BaseController {
 		try {			
 
 			ini_set('memory_limit','256M');
-
 			
 			$db = DB::connection('mongodb')->getMongoDB();								
 			$results = $db->execute('return ' . $query . ';');
+
 			$temp_file_in = tempnam(__DIR__ . '/temp/', 'emergingTrendsIn');
 			$temp_file_out = base_path() . '/app/assets/images/trends_Feed_' . $feed_id . '_timepts_' . $timepoints . '_features_' . $num_features . '_timeframe_' . $timeframe . '.png';		
 			file_put_contents($temp_file_in, json_encode($results['retval']));			
 
 			exec(base_path() . '/../python_venv/bin/python ' . __DIR__ .  '/python_scripts/emerging_trends.py ' . $temp_file_in . ' ' . $temp_file_out . ' ' . $num_features . ' ' . $timeframe . ' 2>&1', $err);
+
+            Pre::render(file_get_contents($temp_file_out));
+
 			if ($err && (strpos(implode(' ', $err),'Exception') !== false)) {
 				foreach($err as $line) {
 					Log::error($line);

@@ -25,17 +25,17 @@
 $out = array();
 // if  ($argv[1] == 'local') {
 	// START QUEUE LISTENERS	
-	// array_push($out, exec('php artisan queue:listen PendingTwitterQueue --timeout=600 &'));
+	// array_push($out, exec('php artisan queue:listen PendingTwitterQueue --timeout=0 &> /dev/null &'));
 	// // exec('disown');
-	// array_push($out, exec('php artisan queue:listen PendingCalaisQueue --timeout=600 &'));
+	// array_push($out, exec('php artisan queue:listen PendingCalaisQueue --timeout=0 &> /dev/null &'));
 	// // exec('disown');
-	// array_push($out, exec('php artisan queue:listen PendingCalaisQueue --timeout=600 &'));
+	// array_push($out, exec('php artisan queue:listen PendingCalaisQueue --timeout=0 &> /dev/null &'));
 	// // exec('disown');
-	// array_push($out, exec('php artisan queue:listen PendingSUTimeQueue --timeout=600 &'));
+	// array_push($out, exec('php artisan queue:listen PendingSUTimeQueue --timeout=0 &> /dev/null &'));
 	// // exec('disown');
-	// array_push($out, exec('php artisan queue:listen PendingSUTimeQueue --timeout=600 &'));
+	// array_push($out, exec('php artisan queue:listen PendingSUTimeQueue --timeout=0 &> /dev/null &'));
 	// // exec('disown');
-	// array_push($out, exec('php artisan queue:listen PendingPersistenceQueue --timeout=600 &'));
+	// array_push($out, exec('php artisan queue:listen PendingPersistenceQueue --timeout=0 &> /dev/null &'));
 	// exec('disown');
 // }
 
@@ -49,7 +49,7 @@ array_push($out, exec('sudo -u www-data nice -10 php /home/upupup/prod/twitterin
 exec('disown');
 array_push($out, exec('sudo -u www-data nice -10 php /home/upupup/prod/twitterintel/artisan queue:listen PendingSUTimeQueue --timeout=600 &> /dev/null &> /dev/null &'));
 exec('disown');
-array_push($out, exec('sudo -u www-data nice -10 php /home/upupup/prod/twitterintel/artisan queue:listen PendingSUTimeQueue --timeout=600 &> /dev/null &> /dev/null &'));
+array_push($out, exec('sudo -u www-data nice -19 php /home/upupup/prod/twitterintel/artisan queue:listen PendingSUTimeQueue --timeout=600 &> /dev/null &> /dev/null &'));
 exec('disown');
 array_push($out, exec('sudo -u www-data nice -10 php /home/upupup/prod/twitterintel/artisan queue:listen PendingPersistenceQueue --timeout=600 &> /dev/null &> /dev/null &'));
 // START REDIS

@@ -1,6 +1,3 @@
-@extends('master')
-
-@section('main-content')
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
  <html>
@@ -14,26 +11,51 @@
  	</script>
 
 	<script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js" type="text/javascript"></script>
-	 	
+	<script src="/ui1/jquery.min.js"></script>	
 
     </head>
     
     <body onload="onLoad();" onresize="onResize();">
     	
-    	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
-		    <h1 class="page-header">Feed: Protest > Alerts</h1>
-	   		<p class="lead"><i>Here are upcomming events:</i></p>
+    	<!-- <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+		  <div class="collapsableContainer">
+		    <div class="collapsableHeader"><span><h2 class="sub-header">+ Data Overview</h2></span></div>
+		 -->    
 
-		    <div id="my-timeline" style="height: 150px; border: 1px solid #aaa"></div>
+    	<div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+		    <div class="collapsableContainer">
+			    <div class="collapsableHeader"><span><h2 class="page-header">- Alerts</h2></span></div>
+			    	<div class="collapsableContent">
+		   				<p class="lead"><i>Here are your upcomming events:</i></p>		   
+		    			<div id="my-timeline" style="height: 150px; border: 1px solid #aaa"></div>
+		    		</div>
+		    	</div>
+		    </div>
 		</div>
-		<noscript>
-			This page uses Javascript to show you a Timeline. Please enable Javascript in your browser to see the full page. Thank you.
-		</noscript>
 
     </body>
 
 
-    	<script>	
+		
+    <script>
+
+    	$(".collapsableHeader").click(function () {
+			$header = $(this);
+			//getting the next element
+			$content = $header.next();
+			//open up the content needed - toggle the slide- if visible, slide up, if not slidedown.
+			$content.slideToggle(500, function () {
+			  //execute this after slideToggle is done
+			  //change text of header based on visibility of content div
+			  $header.text(function () {
+			      //change text based on condition
+			      return $content.is(":visible") ? "- Alerts" : "+ Alerts";
+			      }).wrapInner('<span><h2 class="sub-header"></h2></span>');
+			});
+
+		});
+
+
 		var tl;
 		function onLoad() {	
 
@@ -48,7 +70,7 @@
 
 			eventSource.add(evt);
 
-			var data = {{ $data }}	
+			var data = {{ $alerts_data }}	
 			for (var key in data) {
 				if (data.hasOwnProperty(key)) {
 					var evt = new Timeline.DefaultEventSource.Event ({			    	
@@ -100,5 +122,8 @@
 		    }
 		}
 	</script>
+
     
  </html>
+
+ 

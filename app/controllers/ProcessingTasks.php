@@ -19,75 +19,76 @@ class ProcessingTasks extends BaseController {
 	// 	);
 
 
-	public function searchTwitterFeedCriteria($feed_id, 
-											  $cache_list_destination = 'PendingCalaisList', 
-											  $access_token = '',
-											  $access_token_secret = '') {	
-		Log::error('TWITTER CALLED');
-
-		/*
-		This is the first stage in the data processing pipeline.  Finds the criteria based on the feed_id, and searches twitter api.
-		
-		Note that each call retrieves up to 100 results,
-		so there is no need for any time delay here, since all results are returned at once.
-
-		NOTE: must still implement since_id, to make sure tweets are not fetched redundantly.  
-		*/	
+	public function searchTwitterFeedCriteria($feed_id) {
 		try {
-			include __DIR__.'/../twitter-api-php/TwitterAPIExchange.php';
 			$redis = Redis::Connection();
-			$settings = array(
-			    'oauth_access_token' => $access_token,
-			    'oauth_access_token_secret' => $access_token_secret,
-			    'consumer_key' => $this->twitter_consumer['key1']['consumer_key'],
-			    'consumer_secret' => $this->twitter_consumer['key1']['consumer_secret'],
-			);
 
-			// GET THE SEARCH CRITERIA FROM THE DB TO ADD INTO THE QUERY
-			$use_since_id = false;
+            $user_twitter_credentials = DB::connection('mysql')->table('feeds')
+                ->join('users_feeds', 'feeds.id', '=', 'users_feeds.feed_id')
+                ->join('users', 'users_feeds.user_id', '=', 'users.id')
+                ->where('feed_id', '=', $feed_id)
+                ->select('twitter_oauth_access_token', 'twitter_oauth_access_token_secret')
+                ->first();
+            $access_token = get_object_vars($user_twitter_credentials)['twitter_oauth_access_token'];
+            $access_token_secret = get_object_vars($user_twitter_credentials)['twitter_oauth_access_token_secret'];
 
-			$since_id = '';			
-			if ($use_since_id == true && $redis->exists('since_id-feedID-' . $feed_id)) {
-				$since_id = $redis->get('since_id-feedID-' . $feed_id);
-				$since_id = '&since_id=' . $since_id;
-			}			
+            $consumer_key = $this->twitter_consumer['key1']['consumer_key'];
+            $consumer_secret = $this->twitter_consumer['key1']['consumer_secret'];
+            $search_criteria = urlencode(DB::connection('mysql')
+											->table('feeds')->where('id', $feed_id)
+											->first()->params);
 
-			$getfield = '?count=100' . $since_id . '&q=' . urlencode(DB::connection('mysql')
-											->table('feeds')->where('id', $feed_id)->orderBy('created_at', 'desc')
-											->first()->criteria);
+            // build the array $transformations_params = array('transformation' => 'param')
+            $transformations = DB::connection('mysql')->table('transformations_feeds')->where('feed_id', $feed_id)->lists('transformation');
+            $params = DB::connection('mysql')->table('transformations_feeds')->where('feed_id', $feed_id)->lists('params');
+            $transformations_params = array();
+            foreach($transformations as $key=>$trans) {
+                $transformations_params[$trans] = $params[$key];
+            }
 
-			$url = 'https://api.twitter.com/1.1/search/tweets.json';
-			$requestMethod = 'GET';
-			$twitter = new TwitterAPIExchange($settings);
-			$json = $twitter->setGetfield($getfield)
-			             ->buildOauth($url, $requestMethod)
-			             ->performRequest();	             
+//            Log::error($transformations_params);
+//            Log::error('feedId: '. $feed_id);
+//            Log::error($access_token);
+//            Log::error($access_token_secret);
+//            Log::error($consumer_key);
+//            Log::error($consumer_secret);
+//            Log::error($search_criteria);
 
-			
+            $twitterSearchInitializer = new TwitterSearchInitializer($transformations_params, $feed_id, $access_token, $access_token_secret, $consumer_key, $consumer_secret, $search_criteria);
 
-			$data = json_decode($json, true);
+            // oauth credentials should go in intializer criteria/params.
+            // since_ID should go into the initializer criteria/params. or should it? its redis dependent
+            $use_since_id = false;
+            $since_id = '';
+            if ($use_since_id == true && $redis->exists('since_id-feedID-' . $feed_id)) {
+                $since_id = $redis->get('since_id-feedID-' . $feed_id);
+                $since_id = '&since_id=' . $since_id;
+            }
 
-			Log::error('TWITTER RESULTS LEN: ' .sizeof($data));
-			// foreach($data as $line) {
-			// 	Log::error($line);
-			// }
+            $data = $twitterSearchInitializer->run($since_id);
+            $data = json_decode($data, true);
 
-			// LOOP OVER THE RESULTS COLLECTION, AND STORE IN CACHE FOR DATA PIPELINE
+            Log::error(gettype($data));
+            Log::error(sizeof($data));
+//            Log::error($data);
+//            error_log($data, 3, app_path().'/storage/logs/logfile1.log');
+
+            // test to see if in DB, and push to next transformation list
+            // MAX_ID IS A PARAMETER RETURNED IN THE TWITTER RESULTS!!
 			$max_id = 0;
-			foreach ($data['statuses'] as $status){					
-				$status['_id'] = $status['id']; //add mongoID
-				$status['feeds'] = array($feed_id); //add reference to feed	
+			foreach ($data['statuses'] as $status){
 				if ($status['_id'] > $max_id) {
 					$max_id = ($status['_id']);
 				}
 				// TEST TO SEE IF IN DB - this is also tested for in the insertion phase, but using it here helps reduce the volume on the pipeline
 				$db_record = DB::connection('mongodb')->collection('data1')->where('_id', $status['_id'])->first();
 				if (!$db_record) {
-					$redis->rpush($cache_list_destination, json_encode($status));		
+					$transformation = $twitterSearchInitializer->getNextTransformation();
+                    $redis->rpush('pending' . $transformation . 'list', json_encode($status));
 				}
 
 			$redis->del('since_id-feedID-' . $feed_id);
-			$redis->append('since_id-feedID-' . $feed_id, $max_id);	
+			$redis->append('since_id-feedID-' . $feed_id, $max_id);
 			}
 		}
 		catch (Exception $e) {
@@ -95,14 +96,14 @@ class ProcessingTasks extends BaseController {
 		} 	
 	}
 
-	public function insertJsonToDB ($cache_list_origin = 'PendingPersistenceList', $batch_size = 1000) {
+	public function insertJsonToDB ($cache_list_origin = 'pendingpersistencelist', $batch_size = 1000) {
 		/*
 		This is the final stage in the data processing pipeline.  It pops data from a cache list in batches, 
 		and inserts the records into the database, while making sure to deal appropriately with
 		any duplicates.
 		*/
 
-		// Log::error('INSERTDB CALLED');
+		 Log::error('INSERTDB CALLED');
 
 
 		$redis = Redis::connection();

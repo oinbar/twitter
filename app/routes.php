@@ -31,7 +31,13 @@ Route::put('/edit_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'Feed
 
 Route::get('/delete_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@getDeleteFeed'));
 
-Route::get('/view_feed/{feed_id}/{skip?}', array('before' => 'has_feed', 'uses' => 'FeedController@getViewFeed'));
+Route::get('/getFeedStatus/{feed_id}', array('uses' => 'FeedController@getFeedStatus'));
+
+Route::get('/get_feed_data_json/{feed_id}/{page_num}/{results_per_page?}', array('before' => 'has_feed', 'uses' => 'FeedController@getFeedDataJson'));
+
+
+
+
 
 Route::get('/startfetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@startFetching'));
 
@@ -39,8 +45,12 @@ Route::get('/stopfetch/{feed_id}', array('before' => 'has_feed', 'uses' => 'Feed
 
 Route::get('/tweet/{id}', array('uses' => 'FeedController@showTweet')); 
 
-// Route::get('/alerts/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@getAlerts'));
-Route::get('/alerts/{feed_id}', array('uses' => 'FeedController@getAlerts'));
+
+Route::get('/view_feed/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@getViewFeed'));
+
+Route::get('/alerts/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedController@getAlerts'));
+
+Route::get('/view_feed_data/{feed_id}/{skip?}', array('before' => 'has_feed', 'uses' => 'FeedController@getViewFeedData'));
 
 
 

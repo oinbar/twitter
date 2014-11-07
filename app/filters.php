@@ -89,16 +89,20 @@ Route::filter('csrf', function()
 	}
 });
 
-Route::filter('has_feed', function($route) {
+Route::filter('has_feed', function($route, $request) {
 
 	$feed_id = $route->getParameter('feed_id');
 	if ($feed_id){
 		$exists = DB::connection('mysql')->table('users_feeds')
 			->where('user_id', Auth::user()->id)
 			->where('feed_id', $feed_id)->first();
-		
+
+        Log::error("FEED ID ". $feed_id);
+        Log::error("USER ID ". Auth::user()->id);
+
 		if (! $exists) {
-			throw new Exception('you do not have access to that feed');
+            Log::error($request);
+			throw new Exception('you do not have access to feedId '. $feed_id);
 		}
 	}
 });

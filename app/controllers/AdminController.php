@@ -170,7 +170,7 @@ class AdminController extends BaseController {
 		return View::make('adminViews/cache_view')
 			->with('sizePendingCalaisList',$redis->llen('PendingCalaisList'))
 			->with('sizePendingSUTimeList',$redis->llen('PendingSUTimeList'))
-			->with('sizePendingPersistenceList',$redis->llen('PendingPersistenceList'));
+			->with('sizePendingPersistenceList',$redis->llen('pendingpersistencelist'));
 	}
 
 	public function testCalaisKeys () {
@@ -257,23 +257,10 @@ class AdminController extends BaseController {
 
 		echo date(DATE_RFC2822, strtotime("2014-09-10 17:00"));
 	}
-	public function test () {
-		
-		// DO SOME CODE
-		 
-		try {
-			// $x = 4/0;
-			$error = array('1'=>'1', '2'=>'2');
-			throw new Exception(Pre::render($error));
-
-		}
-		catch (Exception $e) {
-			Log::error($error);
-		}
-
-		
-
-	}		
+	public function test (){
+        $data = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array('2'))->orderBy('datetime', 'desc', 'natural')->get();
+        echo Pre::render($data);
+    }
 }
 
 

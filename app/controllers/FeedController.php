@@ -15,29 +15,58 @@ class FeedController extends BaseController {
 	public function getEditFeed ($feed_id = null) {
 
 		if ($feed_id){	
-			$feed1 = DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->first();		
-			$feed2 = DB::connection('mysql')->table('feeds')
+			$users_feeds = DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->first();
+			$feeds = DB::connection('mysql')->table('feeds')
 				->where('id', $feed_id)
 				->orderBy('created_at', 'desc')->first();
+            $transformations = DB::connection('mysql')->table('transformations_feeds')->where('feed_id', $feed_id)->lists('transformation');
+            $transformations_params = DB::connection('mysql')->table('transformations_feeds')->where('feed_id', $feed_id)->lists('params');
+            $views = DB::connection('mysql')->table('views_feeds')->where('feed_id', $feed_id)->lists('view');
+            $views_params = DB::connection('mysql')->table('views_feeds')->where('feed_id', $feed_id)->lists('params');
+
+
+//            echo print_r($transformations);
+//            echo print_r($transformations_params);
+//            echo array_search('calais', $transformations);
+//            die();
 
 			return View::make('edit_feed')
-				->with('feed_id', $feed1->feed_id)
-				->with('name', $feed2->feed_name)
-				->with('status', $feed2->feed_status)
-				->with('criteria', $feed2->criteria)
-				->with('update_rate', $feed2->update_rate)				
-				->with('new_feed', false);				
+				->with('feed_id', $users_feeds->feed_id)
+				->with('name', $feeds->feed_name)
+				->with('status', $feeds->feed_status)
+				->with('params', $feeds->params)
+				->with('new_feed', false)
+                ->with('calais', (in_array('calais', $transformations) ? true : false))
+                ->with('calais_params', (in_array('calais', $transformations) ? $transformations_params[array_search('calais', $transformations)] : ''))
+                ->with('sutime', (in_array('sutime', $transformations) ? true : false))
+                ->with('sutime_params', (in_array('sutime', $transformations) ? $transformations_params[array_search('sutime', $transformations)] : ''))
+
+                ->with('data_overview', (in_array('data_overview', $views) ? true : false))
+                ->with('data_overview_params', (in_array('data_overview', $views) ? $views_params[array_search('data_overview', $views)] : ''))
+                ->with('alerts_overview', (in_array('alerts_overview', $views) ? true : false))
+                ->with('alerts_overview_params', (in_array('alerts_overview', $views) ? $views_params[array_search('alerts_overview', $views)] : ''))
+                ->with('alerts_timeline', (in_array('alerts_timeline', $views) ? true : false))
+                ->with('alerts_timeline_params', (in_array('alerts_timeline', $views) ? $views_params[array_search('alerts_timeline', $views)] : ''));
 		}
 		else {
 			return View::make('edit_feed')
 				->with('feed_id', '')
 				->with('name', '')
 				->with('status', '')
-				->with('criteria', '')
-				->with('update_rate', '')
+				->with('params', '')
 				->with('method', 'post')
-				->with('new_feed', true);				
-		}				
+				->with('new_feed', true)
+                ->with('calais', false)
+                ->with('calais_params', '')
+                ->with('sutime', false)
+                ->with('sutime_params', '')
+                ->with('data_overview', false)
+                ->with('data_overview_params', '')
+                ->with('alerts_overview', false)
+                ->with('alerts_overview_params', '')
+                ->with('alerts_timeline', false)
+                ->with('alerts_timeline_params', '');
+		}
 	}
 
 	public function postEditFeed ($feed_id = null) {
@@ -46,10 +75,32 @@ class FeedController extends BaseController {
 			DB::connection('mysql')->table('feeds')->where('id', $feed_id)->update(array(
 				'feed_name' => Input::get('name'),
 				'feed_status' => Input::get('status'),
-				'update_rate' => Input::get('update_rate'),
-				'criteria' => Input::get('criteria'),
-				'created_at' => new DateTime
+				'params' => Input::get('params'),
 			));
+
+
+            foreach(Input::only('calais', 'sutime') as $transformation=>$val) {
+                DB::connection('mysql')->table('transformations_feeds')->where('feed_id', $feed_id)->where('transformation', $transformation)->delete();
+                if ($transformation==$val) {
+                    DB::connection('mysql')->table('transformations_feeds')->insert(array(
+                        'feed_id' => $feed_id,
+                        'transformation' => $transformation,
+                        'params' => Input::get($transformation . '_params'),
+                    ));
+                }
+            }
+
+            foreach(Input::only('data_overview', 'alerts_overview', 'alerts_timeline') as $view=>$val) {
+                DB::connection('mysql')->table('views_feeds')->where('feed_id', $feed_id)->where('view', $view)->delete();
+                if ($view == $val) {
+                    DB::connection('mysql')->table('views_feeds')->insert(array(
+                        'feed_id' => $feed_id,
+                        'view' => $view,
+                        'params' => Input::get($view . '_params'),
+                    ));
+                }
+            }
+
 			return Redirect::to('/view_feed/'.$feed_id);
 
 		} else {
@@ -59,11 +110,31 @@ class FeedController extends BaseController {
 
 			DB::connection('mysql')->table('feeds')->insert(array(
 				'id' => $feed_id,
-				'update_rate' => Input::get('update_rate'),
-				'criteria' => Input::get('criteria'),
+				'params' => Input::get('params'),
 				'feed_name' => Input::get('name'),
 				'feed_status' => 0,
+                'type' => 'twitter',
 				'created_at' => new DateTime));
+
+            foreach(Input::only('calais', 'sutime') as $transformation=>$val) {
+                if ($transformation == $val) {
+                    DB::connection('mysql')->table('transformations_feeds')->Insert(array(
+                        'feed_id' => $feed_id,
+                        'transformation' => $transformation,
+                        'params' => Input::get($transformation . '_params'),
+                    ));
+                }
+            }
+
+            foreach(Input::only('data_overview', 'alerts_overview', 'alerts_timeline') as $view=>$val) {
+                if ($view == $val) {
+                    DB::connection('mysql')->table('views_feeds')->Insert(array(
+                        'feed_id' => $feed_id,
+                        'view' => $view,
+                        'params' => Input::get($view . '_params'),
+                    ));
+                }
+            }
 
 			return Redirect::to('/view_feed/'.$feed_id);			
 		}
@@ -71,12 +142,39 @@ class FeedController extends BaseController {
 
 	public function getDeleteFeed ($feed_id) {
 		DB::connection('mongodb')->collection('data1')->where('_id', $feed_id)->delete();
+        DB::connection('mysql')->table('feeds')->where('id', $feed_id)->delete();
+        DB::connection('mysql')->table('users_feeds')->where('feed_id', $feed_id)->delete();
+        DB::connection('mysql')->table('views_feeds')->where('feed_id', $feed_id)->delete();
 		return Redirect::to('feeds');
 	}
 
-	public function getViewFeed ($feed_id, $page_num = 1) {
-		$take = 20; // number of results to select
-		$data = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->orderBy('datetime', 'desc', 'natural')->skip($page_num * $take - 1)->take($take)->get();
+
+	public function getViewFeed($feed_id, $page_num=1) {
+
+		$feed_data = $this->getFeedData($feed_id, $page_num);
+		$alerts_data = $this->getAlerts($feed_id);
+
+		return View::make('feed')
+			// FEED DATA
+			->with('feeds', $feed_data['feeds'])
+			->with('feed', $feed_data['feed'])
+			->with('total_records', $feed_data['total_records'])
+			->with('tweets', $feed_data['data'])
+			->with('take', $feed_data['take'])
+			->with('page_num', $page_num)
+
+			// ALERTS
+			->with('alerts_data', $alerts_data['data']);
+	}
+
+
+
+
+	private function getFeedData ($feed_id, $page_num, $results_per_page=5) {
+		// $page_num should get a default value of 1
+
+		$data = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))
+                                         ->orderBy('datetime', 'desc', 'natural')->skip($page_num * $results_per_page - 1)->take($results_per_page)->get();
 	    $total_records = DB::connection('mongodb')->collection('data1')->whereIn('feeds', array($feed_id))->count();
 
 		$feed = DB::connection('mysql')->table('users_feeds')
@@ -87,14 +185,21 @@ class FeedController extends BaseController {
 			->where('user_id', Auth::user()->id)
 			->select('feed_id','feed_name')->get();
 
-		return View::make('feed')
-		->with('feeds', $feeds)
-		->with('feed', $feed)
-		->with('total_records', $total_records)
-		->with('data', $data)
-		->with('page_num', $page_num)
-		->with('take', $take);
+		return array(
+			'feeds' => $feeds,
+			'feed' => $feed,
+			'total_records' => $total_records,
+			'data' => $data,
+			'take' => $results_per_page
+		);
 	}
+
+    public function getFeedDataJson ($feed_id, $page_num, $results_per_page=5) {
+        // $page_num should get a default value of 1
+
+        return json_encode($this->getFeedData($feed_id, $page_num, $results_per_page));
+    }
+
 
 	public function showTweet ($id) {
 		$db = DB::connection('mongodb')->getMongoDB();								
@@ -103,26 +208,43 @@ class FeedController extends BaseController {
 	}
 
 	public function startFetching ($feed_id) {
-		//turn feed status on
+
 		try {
+            //turn feed status on
 			DB::connection('mysql')->table('feeds')->where('id', $feed_id)->update(array('feed_status' => 1));
 
-			Queue::connection('PendingTwitterQueue')->push('QueueTasks@searchTwitterFeedCriteriaJob', array('feed_id' => $feed_id)); 
+            //get initializer type
+            $initializer_type = DB::connection('mysql')->table('feeds')->where('id', $feed_id)->first()->type;
+
+            //push initializer onto the queue
+			Queue::connection('PendingTwitterQueue')->push('QueueTasks@' . $initializer_type . 'Job', array('feed_id' => $feed_id));
 		}
 		catch (Exception $e) {
-			Log::error(e);
+			Log::error($e);
 		}
-		return Redirect::to('/view_feed/' . $feed_id);
+//		return Redirect::to('view_feed/' . $feed_id);
 	}
 
-	public function stopFetching ($feed_id) {
-		//turn feed status off
-		DB::connection('mysql')->table('feeds')->where('id', $feed_id)->update(array('feed_status' => 0));
-		return Redirect::to('/view_feed/' .$feed_id);
-	}
+    public function stopFetching ($feed_id) {
+        //turn feed status off
+        try {
+            DB::connection('mysql')->table('feeds')->where('id', $feed_id)->update(array('feed_status' => 0));
+        }
+        catch (Exception $e) {
+            Log::error($e);
+        }
+    }
 
-	public function getAlerts ($feed_id) {
-		
+    public function getFeedStatus($feed_id) {
+        $status = DB::connection('mysql')->table('feeds')->where('id', $feed_id)->first()->feed_status;
+        return $status;
+    }
+
+	private function getAlerts ($feed_id) {
+
+
+		// CURRENTLY THE DATA IS ONLY DISPLAYED ON A TIMELINE
+
 		date_default_timezone_set("EST");
 		$current_date_time = date('Y-m-d', time());
 		$query = 
@@ -167,13 +289,15 @@ class FeedController extends BaseController {
 			for ($i = 0; $i < sizeof($timeline_data); $i++) {
 				$timeline_data[$i]['full_datetime'] = date(DATE_RFC2822, strtotime($timeline_data[$i]['future_time_norm']));
 			}
-			return View::make('timeline')
-				->with('data', json_encode($timeline_data));
 
-			// echo file_get_contents($temp_file_out);
 
-			unset($temp_file_in);
-			unset($temp_file_out);			
+			unlink($temp_file_in);
+			unlink($temp_file_out);			
+
+
+			return array(
+				'data' => json_encode($timeline_data)
+			);
 		}		
 		catch (Exception $e){
 			Log::error('ALERTS AGGREGATOR :  '. $e);

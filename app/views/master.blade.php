@@ -10,7 +10,7 @@
       <title>Up2Data</title>
       {{-- TODO: add <link rel="icon" href="../../favicon.ico"> tags --}}
 
-      {{ HTML::style('/ui1/bootstrap.min.css'); }}
+      {{ HTML::style('/ui1/bootstrap.min.css'); }}      
       {{-- Custom css for this site --}}
       {{ HTML::style('/ui1/ui1_inside.css'); }}
       {{-- IE10 viewport hack for surface/desktop Windows 8 bug --}}
@@ -51,9 +51,9 @@
              </ul> 
              @else
              <ul class="nav navbar-nav navbar-right">
-	           <li><a href="/login">Login</a></li>
+	             <li><a href="/login">Login</a></li>
                <li><a href="/signup">Signup</a></li>
-			 </ul>
+			       </ul>
              @endif
 
              		  

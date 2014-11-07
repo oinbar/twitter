@@ -5,6 +5,12 @@ body {
 	margin: 0px;
 }
 
+.collapsableContainer .collapsableContent {
+    /*display: none;*/
+    padding : 5px;
+}
+
+
 .header {
 	background-color: lightgrey;
 }
