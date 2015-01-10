@@ -48,9 +48,9 @@ return array(
 		    'driver'   => 'mongodb',
 		    'host'     => 'localhost',
 		    'port'     => '27017',
-		    'username' => 'admin',
-		    'password' => 'password',
-		    'database' => 'twitterintel',
+		    'username' => '',
+		    'password' => '',
+		    'database' => 'upd2data',
 		),
 
 		// OPENSHIFT
