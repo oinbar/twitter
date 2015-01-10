@@ -18,11 +18,13 @@ class TwitterSearchInitializer extends AbstractDataStreamInitializer{
     }
 
     public function run($since_id='') {
+
+        Log::error($this->searchCriteria);
+
         if ($since_id != '') {
             $since_id = '&since_id=' . $since_id;
         }
-//        $getfield = '?count=10' . $since_id . '&q=' . $this->searchCriteria;
-        $getfield = '?count=100' . '&lang=en&geocode=39.8,-95.583068847656,2500km' . $since_id . '&q=' . $this->searchCriteria;
+        $getfield = '?count=100' . $since_id . '&q=' . $this->searchCriteria;
 
 
         $url = 'https://api.twitter.com/1.1/search/tweets.json';

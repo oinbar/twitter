@@ -168,8 +168,8 @@ class AdminController extends BaseController {
 	public function cacheView () {		
 		$redis = Redis::connection();
 		return View::make('adminViews/cache_view')
-			->with('sizePendingCalaisList',$redis->llen('PendingCalaisList'))
-			->with('sizePendingSUTimeList',$redis->llen('PendingSUTimeList'))
+			->with('sizePendingCalaisList',$redis->llen('pendingcalaislist'))
+			->with('sizePendingSUTimeList',$redis->llen('pendingsutimelist'))
 			->with('sizePendingPersistenceList',$redis->llen('pendingpersistencelist'));
 	}
 

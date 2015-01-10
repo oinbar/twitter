@@ -52,6 +52,10 @@ Route::get('/alerts/{feed_id}', array('before' => 'has_feed', 'uses' => 'FeedCon
 
 Route::get('/view_feed_data/{feed_id}/{skip?}', array('before' => 'has_feed', 'uses' => 'FeedController@getViewFeedData'));
 
+Route::get('/get_trends_data/{feed_id}/{timepoints?}/{num_features?}/{timeframe?}/{make_lower_case?}', array('before' => 'has_feed', 'uses' => 'AnalyticsController@getTrendsData'));
+
+Route::get('get_alerts_data/{feed_id}', array('before' => 'has_feed', 'uses' => 'AnalyticsController@getAlertsData'));
+
 
 
 Route::get('/trends/{feed_id}/{timepoints?}/{num_features?}/{timeframe?}', array('uses' => 'AnalyticsController@trends'));

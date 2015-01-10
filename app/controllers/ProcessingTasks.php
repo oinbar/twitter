@@ -58,18 +58,15 @@ class ProcessingTasks extends BaseController {
 
             // oauth credentials should go in intializer criteria/params.
             // since_ID should go into the initializer criteria/params. or should it? its redis dependent
-            $use_since_id = false;
+            $use_since_id = true;
             $since_id = '';
             if ($use_since_id == true && $redis->exists('since_id-feedID-' . $feed_id)) {
                 $since_id = $redis->get('since_id-feedID-' . $feed_id);
-                $since_id = '&since_id=' . $since_id;
             }
 
             $data = $twitterSearchInitializer->run($since_id);
             $data = json_decode($data, true);
 
-            Log::error(gettype($data));
-            Log::error(sizeof($data));
 //            Log::error($data);
 //            error_log($data, 3, app_path().'/storage/logs/logfile1.log');
 
@@ -103,7 +100,7 @@ class ProcessingTasks extends BaseController {
 		any duplicates.
 		*/
 
-		 Log::error('INSERTDB CALLED');
+//		 Log::error('INSERTDB CALLED');
 
 
 		$redis = Redis::connection();
@@ -114,8 +111,8 @@ class ProcessingTasks extends BaseController {
 		foreach($records as $record) {
 			try{
 				//check if record already exists in db
-				$record = json_decode($record, true);				
-				$db_record = DB::connection('mongodb')->collection('data1')->where('_id', $record['_id'])->first();
+				$record = json_decode($record, true);
+                $db_record = DB::connection('mongodb')->collection('data1')->where('_id', $record['_id'])->first();
 				if ($db_record) {
 					// IF ALREADY EXISTS IN DB COMBINE REFERENCES TO FEED AND UPDATE RECORD
 					$record['feeds'] = array_merge($db_record['feeds'], $record['feeds']);				
@@ -136,8 +133,8 @@ class ProcessingTasks extends BaseController {
 
 
 	public function runJsonThroughCalais ($calais_key = '',
-										  $cache_list_origin = 'PendingCalaisList', 
-										  $cache_list_destination = 'PendingSUTimeList', 
+										  $cache_list_origin = 'pendingcalaislist',
+										  $cache_list_destination = 'pendingsutimelist',
 										  $batch_size = 100) {
 		/*
 		pulls a batch of documents off the cache_list_origin list, runs each doc through the opencalais
@@ -183,9 +180,9 @@ class ProcessingTasks extends BaseController {
 		}
 	}
 
-	public function runJsonThroughSUTime ($cache_list_origin = 'PendingSUTimeList', 
-										  $cache_list_destination = 'PendingPersistenceList', 
-										  $batch_size = 100) {
+	public function runJsonThroughSUTime ($cache_list_origin = 'pendingsutimelist',
+										  $cache_list_destination = 'pendingpersistencelist',
+										  $batch_size = 10) {
 		/*
 		pulls a batch of documents off the cache_list_origin list, and runs them through StanfordNLP's
 		SUTime module (packaged into a jar file), attempting to find any mentions of dates and times in the text.
@@ -195,6 +192,10 @@ class ProcessingTasks extends BaseController {
 		Log::error('SUTIME CALLED');
 
 		try{
+
+            ini_set('memory_limit', '1024M');
+
+
 			$redis = Redis::connection();
 			$batch_size = min($redis->llen($cache_list_origin), $batch_size);
 			$contents = $redis->lrange($cache_list_origin, 0, $batch_size-1);
@@ -213,8 +214,8 @@ class ProcessingTasks extends BaseController {
 			$array = json_encode($array);
 
 			// save the data to an intermediate file, run SUTime, and save the new data back to the file		
-			$file = tempnam(__DIR__ . '/temp/', 'jsonForSUTime') . '.json';
-			file_put_contents($file, $array);
+			$input_file = tempnam(__DIR__ . '/temp/', 'jsonForSUTime') . '.json';
+			file_put_contents($input_file, $array);
 			$path ='';
 			if (App::environment() == 'local') {
 				$jarpath = '/Users/Orr/Desktop/SUTime.jar';
@@ -240,17 +241,16 @@ class ProcessingTasks extends BaseController {
 
 			// SUTIME returns stdout with stderr.  Currently this checks to see if there actually was a java excption by checking
 			// for the word "Exception"...  Since the error is in an array, it is printed to the log line by line
-			exec('/usr/bin/java -jar ' . $jarpath . ' ' . __DIR__ . '/temp/' . $file . ' 2>&1', $err);			
-			// if ($err && (strpos(implode(' ', $err),'Exception') !== false)) {
-			// 	foreach($err as $line) {
-			// 		Log::error($line);
-			// 	}
-			// 	throw new Exception(Pre::render($err));
-			// }
+			exec('/usr/bin/java -jar ' . $jarpath . ' ' . $input_file . ' 2>&1', $err);
+//			 if ($err && (strpos(implode(' ', $err),'Exception') !== false)) {
+//			 	foreach($err as $line) {
+//			 		Log::error($line);
+//			 	}
+//			 }
 
 			// retrieve data from file, and for each SUTime instance, normalize and check for is_future, then put
 			// the record in the cache
-			$file = file_get_contents($file);
+			$file = file_get_contents($input_file);
 			$file = json_decode($file, true);			
 
 			for ($i = 0; $i < sizeof($file); $i++) {
@@ -268,8 +268,9 @@ class ProcessingTasks extends BaseController {
 					}
 				}
 				$redis->rpush($cache_list_destination, json_encode($file[$i]));
-			}			
-			unlink($file);			
+			}
+
+			unlink($input_file);
 		} 
 		catch (Exception $e) {
 			Log::error(Pre::render($e));

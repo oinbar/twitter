@@ -152,7 +152,6 @@ class FeedController extends BaseController {
 	public function getViewFeed($feed_id, $page_num=1) {
 
 		$feed_data = $this->getFeedData($feed_id, $page_num);
-		$alerts_data = $this->getAlerts($feed_id);
 
 		return View::make('feed')
 			// FEED DATA
@@ -161,10 +160,7 @@ class FeedController extends BaseController {
 			->with('total_records', $feed_data['total_records'])
 			->with('tweets', $feed_data['data'])
 			->with('take', $feed_data['take'])
-			->with('page_num', $page_num)
-
-			// ALERTS
-			->with('alerts_data', $alerts_data['data']);
+			->with('page_num', $page_num);
 	}
 
 
@@ -240,68 +236,4 @@ class FeedController extends BaseController {
         return $status;
     }
 
-	private function getAlerts ($feed_id) {
-
-
-		// CURRENTLY THE DATA IS ONLY DISPLAYED ON A TIMELINE
-
-		date_default_timezone_set("EST");
-		$current_date_time = date('Y-m-d', time());
-		$query = 
-		'db.data1.aggregate([
-	    { $match : { feeds : { $in : [ "' . $feed_id . '" ] }, 
-                   "opencalais._type" : { $in : [ "City", "Facility" ] }, 
-                   "SUTime.future" : { $exists : true },
-                   "SUTime.normalized" : { $gt : "' . $current_date_time . '" },
-                   text : { $regex : /^((?!(yesterday)|(ago)).)*$/ } } },
-	    { $unwind : "$opencalais" }, 
-        { $unwind : "$SUTime" }, 
-	    { $match : { "opencalais._type" : { $in : [ "City", "Facility" ] }, 
-                   "SUTime.future" : {$exists : true} } },
-	    { $project : { text : 1, 
-                     opencalais : 1, 
-                     SUTime : 1, 
-                     retweet_count : 1, 
-                     id : 1 } },
-	    { $group: { _id : "$text" ,
-                id : { $addToSet : "$id" },
-                future_time_norm : { $addToSet : "$SUTime.normalized" },
-                future_time_original : { $addToSet : "$SUTime.original" },
-                location : { $addToSet : "$opencalais.name" },
-                location_type : { $addToSet : "$opencalais._type" },
-    	        retweet_count : { $max : "$retweet_count" } } },    
-		]).toArray()';	
-	
-		try {			
-			$db = DB::connection('mongodb')->getMongoDB();								
-			$results = $db->execute('return ' . $query . ';');
-			$temp_file_in = tempnam(__DIR__ . '/temp/', 'alertsAggIn');
-			$temp_file_out = tempnam(__DIR__ . '/temp/', 'alertsAggOut');
-			file_put_contents($temp_file_in, json_encode($results['retval']));
-			
-			exec(base_path() . '/../python_venv/bin/python ' . __DIR__ .  '/python_scripts/twitter_alerts_aggregator.py ' . $temp_file_in . ' ' . $temp_file_out . ' 2>&1', $err);
-			if ($err){
-				throw new Exception(Pre::render($err));
-			}			
-
-			// add full datetime format for timeline display
-			$timeline_data = json_decode(file_get_contents($temp_file_out), true);
-			for ($i = 0; $i < sizeof($timeline_data); $i++) {
-				$timeline_data[$i]['full_datetime'] = date(DATE_RFC2822, strtotime($timeline_data[$i]['future_time_norm']));
-			}
-
-
-			unlink($temp_file_in);
-			unlink($temp_file_out);			
-
-
-			return array(
-				'data' => json_encode($timeline_data)
-			);
-		}		
-		catch (Exception $e){
-			Log::error('ALERTS AGGREGATOR :  '. $e);
-			echo $e;
-		}
-	}
 }

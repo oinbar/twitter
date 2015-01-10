@@ -30,15 +30,15 @@ return array(
 		//     'password' => 'password',
 		//     'database' => 'twitterintel',
 		// ),
+
 		'mongodb' => array(
 		    'driver'   => 'mongodb',
 		    'host'     => 'localhost',
 		    'port'     => 27017,
-		    'username' => 'username',
-		    'password' => 'password',
-		    'database' => 'twitterintelDB',
+		    'username' => '',
+		    'password' => '',
+		    'database' => 'up2data',
 		),
-
 		
 		// 'mysql' => array(
 		// 	'driver'    => 'mysql',

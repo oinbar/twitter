@@ -6,22 +6,33 @@
 
 
         <div class="collapsableContent">
+        <div id="graphdiv"></div>
 
         <script type="text/javascript" src="/ui1/dygraph-combined.js"></script>
+        <script type="text/javascript" src="/ui1/jquery.min.js"></script>
         <div id="graphdiv"></div>
         <script type="text/javascript">
-          g = new Dygraph(
 
-            // containing div
-            document.getElementById("graphdiv"),
+        $(document).ready(function() {
+            var feed_id = "<?php echo $feed->feed_id; ?>";
+            $.getJSON("/get_trends_data/" + feed_id, function(data){
+                console.log(data);
+                var labels = [];
+                for (element in data.labels){
+                    labels.push(data.labels[element]);
+                }
+                var graphData = []
+                for (element in data.data){
+                    data.data[element][0] =new Date(Date.parse(data.data[element][0]));
+                    graphData.push(data.data[element]);
+                }
+                g = new Dygraph(
+                    document.getElementById("graphdiv"),
+                    graphData,
+                    {labels : labels});
+            });
+        });
 
-            // CSV or path to a CSV file.
-            "Date,Temperature\n" +
-            "2008-05-07,75\n" +
-            "2008-05-08,70\n" +
-            "2008-05-09,80\n"
-
-          );
         </script>
 
         </div>

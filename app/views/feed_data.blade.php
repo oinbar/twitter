@@ -68,7 +68,7 @@
            <thead>
              <tr>
                {{--<th>Tweets ({{ ($page_num-1) * $take }} - {{ ($page_num-1) * $take + $take }} / {{ $total_records }} ):</th>--}}
-               <th>Tweets </th>
+               <th>Tweets (total: {{$total_records}})</th>
                <th>Date</th>
                <th># of Retweets</th>
              </tr>
