@@ -50,18 +50,18 @@ return array(
 		    'port'     => '27017',
 		    'username' => '',
 		    'password' => '',
-		    'database' => 'upd2data',
+		    'database' => 'twitterintel',
 		),
 
-		// OPENSHIFT
-		// 'mysql' => array(
-		// 	'driver'    => 'mysql',
-		// 	'host'      => '127.3.231.2',
-		// 	'port'		=> '3306',
-		// 	'database'  => 'twitterintel',
-		// 	'username'  => 'admin4nSCiYX',
-		// 	'password'  => '4NeDJtqkssj3',
-		// ),
+
+		'mysql' => array(
+			'driver'    => 'mysql',
+			'host'      => 'localhost',
+			'port'		=> '3306',
+			'database'  => 'twitterintel',
+			'username'  => 'root',
+			'password'  => '',
+		),
 
 		// AWS
 		// 'mysql' => array(
