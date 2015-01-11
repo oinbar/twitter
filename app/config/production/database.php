@@ -60,7 +60,7 @@ return array(
 			'port'		=> '3306',
 			'database'  => 'twitterintel',
 			'username'  => 'root',
-			'password'  => '',
+			'password'  => 'admin',
 		),
 
 		// AWS
@@ -74,14 +74,14 @@ return array(
 		// ),
 
 		// PRIVATE SERVER
-		'mysql' => array(
-			'driver'    => 'mysql',
-			'host'      => 'localhost',
-			'port'		=> '3306',
-			'database'  => 'twitterintel',
-			'username'  => 'root',
-			'password'  => 'jewbacca',		
-		),
+		// 'mysql' => array(
+		// 	'driver'    => 'mysql',
+		// 	'host'      => 'localhost',
+		// 	'port'		=> '3306',
+		// 	'database'  => 'twitterintel',
+		// 	'username'  => 'root',
+		// 	'password'  => 'jewbacca',		
+		// ),
 		
 	),
 
