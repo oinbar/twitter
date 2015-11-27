@@ -1,6 +1,5 @@
 <?php namespace Illuminate\Http;
 
-use SplFileInfo;
 use Symfony\Component\HttpFoundation\ParameterBag;
 use Symfony\Component\HttpFoundation\Request as SymfonyRequest;
 
@@ -121,7 +120,7 @@ class Request extends SymfonyRequest {
 	/**
 	 * Determine if the current request URI matches a pattern.
 	 *
-	 * @param  mixed  string
+	 * @param  dynamic  string
 	 * @return bool
 	 */
 	public function is()
@@ -155,26 +154,6 @@ class Request extends SymfonyRequest {
 	public function secure()
 	{
 		return $this->isSecure();
-	}
-
-	/**
-	 * Returns the client IP address.
-	 *
-	 * @return string
-	 */
-	public function ip()
-	{
-		return $this->getClientIp();
-	}
-
-	/**
-	 * Returns the client IP addresses.
-	 *
-	 * @return array
-	 */
-	public function ips()
-	{
-		return $this->getClientIps();
 	}
 
 	/**
@@ -268,7 +247,7 @@ class Request extends SymfonyRequest {
 
 		foreach ($keys as $key)
 		{
-			array_set($results, $key, array_get($input, $key));
+			array_set($results, $key, array_get($input, $key, null));
 		}
 
 		return $results;
@@ -346,25 +325,9 @@ class Request extends SymfonyRequest {
 	 */
 	public function hasFile($key)
 	{
-		if ( ! is_array($files = $this->file($key))) $files = array($files);
+		if (is_array($file = $this->file($key))) $file = head($file);
 
-		foreach ($files as $file)
-		{
-			if ($this->isValidFile($file)) return true;
-		}
-
-		return false;
-	}
-
-	/**
-	 * Check that the given file is a valid file instance.
-	 *
-	 * @param  mixed  $file
-	 * @return bool
-	 */
-	protected function isValidFile($file)
-	{
-		return $file instanceof SplFileInfo && $file->getPath() != '';
+		return $file instanceof \SplFileInfo && $file->getPath() != '';
 	}
 
 	/**
@@ -420,7 +383,7 @@ class Request extends SymfonyRequest {
 	/**
 	 * Flash only some of the input to the session.
 	 *
-	 * @param  mixed  string
+	 * @param  dynamic  string
 	 * @return void
 	 */
 	public function flashOnly($keys)
@@ -433,7 +396,7 @@ class Request extends SymfonyRequest {
 	/**
 	 * Flash only some of the input to the session.
 	 *
-	 * @param  mixed  string
+	 * @param  dynamic  string
 	 * @return void
 	 */
 	public function flashExcept($keys)
@@ -467,8 +430,10 @@ class Request extends SymfonyRequest {
 		{
 			return $this->$source->all();
 		}
-
-		return $this->$source->get($key, $default, true);
+		else
+		{
+			return $this->$source->get($key, $default, true);
+		}
 	}
 
 	/**

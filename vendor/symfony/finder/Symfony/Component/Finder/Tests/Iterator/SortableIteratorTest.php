@@ -54,17 +54,12 @@ class SortableIteratorTest extends RealIteratorTestCase
 
         $iterator = new SortableIterator($inner, $mode);
 
-        if ($mode === SortableIterator::SORT_BY_ACCESSED_TIME
-            || $mode === SortableIterator::SORT_BY_CHANGED_TIME
-            || $mode === SortableIterator::SORT_BY_MODIFIED_TIME) {
-            $this->assertOrderedIteratorForGroups($expected, $iterator);
-        } else {
-            $this->assertOrderedIterator($expected, $iterator);
-        }
+        $this->assertOrderedIterator($expected, $iterator);
     }
 
     public function getAcceptData()
     {
+
         $sortByName = array(
             '.bar',
             '.foo',
@@ -108,53 +103,45 @@ class SortableIteratorTest extends RealIteratorTestCase
         );
 
         $sortByAccessedTime = array(
-            // For these two files the access time was set to 2005-10-15
-            array('foo/bar.tmp', 'test.php'),
-            // These files were created more or less at the same time
-            array(
-                '.git',
-                '.foo',
-                '.foo/.bar',
-                '.foo/bar',
-                'test.py',
-                'foo',
-                'toto',
-                'foo bar',
-            ),
-            // This file was accessed after sleeping for 1 sec
-            array('.bar'),
+            'foo/bar.tmp',
+            'test.php',
+            'toto',
+            'foo bar',
+            'foo',
+            'test.py',
+            '.foo',
+            '.foo/.bar',
+            '.foo/bar',
+            '.git',
+            '.bar'
         );
 
         $sortByChangedTime = array(
-            array(
-                '.git',
-                '.foo',
-                '.foo/.bar',
-                '.foo/bar',
-                '.bar',
-                'foo',
-                'foo/bar.tmp',
-                'toto',
-                'foo bar',
-            ),
-            array('test.php'),
-            array('test.py'),
+            'foo',
+            'foo/bar.tmp',
+            'toto',
+            '.git',
+            '.bar',
+            '.foo',
+            'foo bar',
+            '.foo/.bar',
+            '.foo/bar',
+            'test.php',
+            'test.py'
         );
 
         $sortByModifiedTime = array(
-            array(
-                '.git',
-                '.foo',
-                '.foo/.bar',
-                '.foo/bar',
-                '.bar',
-                'foo',
-                'foo/bar.tmp',
-                'toto',
-                'foo bar',
-            ),
-            array('test.php'),
-            array('test.py'),
+            'foo/bar.tmp',
+            'foo',
+            'toto',
+            '.git',
+            '.bar',
+            '.foo',
+            'foo bar',
+            '.foo/.bar',
+            '.foo/bar',
+            'test.php',
+            'test.py'
         );
 
         return array(

@@ -77,7 +77,7 @@ class Builder {
 			return $this->findMany($id, $columns);
 		}
 
-		$this->query->where($this->model->getQualifiedKeyName(), '=', $id);
+		$this->query->where($this->model->getKeyName(), '=', $id);
 
 		return $this->first($columns);
 	}
@@ -93,10 +93,10 @@ class Builder {
 	{
 		if (empty($id)) return $this->model->newCollection();
 
-		$this->query->whereIn($this->model->getQualifiedKeyName(), $id);
+		$this->query->whereIn($this->model->getKeyName(), $id);
 
 		return $this->get($columns);
-	}
+    }
 
 	/**
 	 * Find a model by its primary key or throw an exception.
@@ -105,7 +105,7 @@ class Builder {
 	 * @param  array  $columns
 	 * @return \Illuminate\Database\Eloquent\Model|static
 	 *
-	 * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+	 * @throws ModelNotFoundException
 	 */
 	public function findOrFail($id, $columns = array('*'))
 	{
@@ -131,7 +131,7 @@ class Builder {
 	 * @param  array  $columns
 	 * @return \Illuminate\Database\Eloquent\Model|static
 	 *
-	 * @throws \Illuminate\Database\Eloquent\ModelNotFoundException
+	 * @throws ModelNotFoundException
 	 */
 	public function firstOrFail($columns = array('*'))
 	{
@@ -242,8 +242,10 @@ class Builder {
 		{
 			return $this->groupedPaginate($paginator, $perPage, $columns);
 		}
-
-		return $this->ungroupedPaginate($paginator, $perPage, $columns);
+		else
+		{
+			return $this->ungroupedPaginate($paginator, $perPage, $columns);
+		}
 	}
 
 	/**
@@ -372,8 +374,10 @@ class Builder {
 		{
 			return call_user_func($this->onDelete, $this);
 		}
-
-		return $this->query->delete();
+		else
+		{
+			return $this->query->delete();
+		}
 	}
 
 	/**
@@ -401,7 +405,7 @@ class Builder {
 	 * Get the hydrated models without eager loading.
 	 *
 	 * @param  array  $columns
-	 * @return \Illuminate\Database\Eloquent\Model[]
+	 * @return array|static[]
 	 */
 	public function getModels($columns = array('*'))
 	{
@@ -707,7 +711,7 @@ class Builder {
 	/**
 	 * Set the relationships that should be eager loaded.
 	 *
-	 * @param  mixed  $relations
+	 * @param  dynamic  $relations
 	 * @return $this
 	 */
 	public function with($relations)
@@ -904,8 +908,10 @@ class Builder {
 		{
 			return $this->callScope($scope, $parameters);
 		}
-
-		$result = call_user_func_array(array($this->query, $method), $parameters);
+		else
+		{
+			$result = call_user_func_array(array($this->query, $method), $parameters);
+		}
 
 		return in_array($method, $this->passthru) ? $result : $this;
 	}

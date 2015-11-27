@@ -3,6 +3,8 @@
 use FilesystemIterator;
 use Symfony\Component\Finder\Finder;
 
+class FileNotFoundException extends \Exception {}
+
 class Filesystem {
 
 	/**
@@ -82,8 +84,10 @@ class Filesystem {
 		{
 			return $this->put($path, $data.$this->get($path));
 		}
-
-		return $this->put($path, $data);
+		else
+		{
+			return $this->put($path, $data);
+		}
 	}
 
 	/**
@@ -293,8 +297,10 @@ class Filesystem {
 		{
 			return @mkdir($path, $mode, $recursive);
 		}
-
-		return mkdir($path, $mode, $recursive);
+		else
+		{
+			return mkdir($path, $mode, $recursive);
+		}
 	}
 
 	/**

@@ -6,7 +6,7 @@
  * @link https://github.com/iron-io/iron_mq_php
  * @link http://www.iron.io/products/mq
  * @link http://dev.iron.io/
- * @version 1.5.2
+ * @version 1.5.1
  * @package IronMQPHP
  * @copyright Feel free to copy, steal, take credit for, or whatever you feel like doing with this code. ;)
  */
@@ -140,7 +140,7 @@ class IronMQ_Message
 class IronMQ extends IronCore
 {
 
-    protected $client_version = '1.5.2';
+    protected $client_version = '1.5.1';
     protected $client_name    = 'iron_mq_php';
     protected $product_name   = 'iron_mq';
     protected $default_values = array(
@@ -151,8 +151,7 @@ class IronMQ extends IronCore
     );
 
     const LIST_QUEUES_PER_PAGE = 30;
-    const GET_MESSAGE_TIMEOUT  = 60;
-    const GET_MESSAGE_WAIT     = 0;  // Seconds to wait until request finds a Message (Max is 30)
+    const GET_MESSAGE_TIMEOUT = 60;
 
     /**
      * @param string|array $config
@@ -315,10 +314,9 @@ class IronMQ extends IronCore
      * @param string $queue_name Queue name
      * @param int $count
      * @param int $timeout
-     * @param int $wait
      * @return array|null array of messages or null
      */
-    public function getMessages($queue_name, $count = 1, $timeout = self::GET_MESSAGE_TIMEOUT, $wait = self::GET_MESSAGE_WAIT)
+    public function getMessages($queue_name, $count = 1, $timeout = self::GET_MESSAGE_TIMEOUT)
     {
         $queue = rawurlencode($queue_name);
         $url = "projects/{$this->project_id}/queues/$queue/messages";
@@ -328,9 +326,6 @@ class IronMQ extends IronCore
         }
         if ($timeout !== self::GET_MESSAGE_TIMEOUT) {
             $params['timeout'] = (int) $timeout;
-        }
-        if ($wait !== 0) {
-            $params['wait'] = (int) $wait;
         }
         $this->setJsonHeaders();
         $response = $this->apiCall(self::GET, $url, $params);
@@ -347,12 +342,11 @@ class IronMQ extends IronCore
      *
      * @param string $queue_name Queue name
      * @param int $timeout
-     * @param int $wait
      * @return mixed|null single message or null
      */
-    public function getMessage($queue_name, $timeout = self::GET_MESSAGE_TIMEOUT, $wait = self::GET_MESSAGE_WAIT)
+    public function getMessage($queue_name, $timeout = self::GET_MESSAGE_TIMEOUT)
     {
-        $messages = $this->getMessages($queue_name, 1, $timeout, $wait);
+        $messages = $this->getMessages($queue_name, 1, $timeout);
         if ($messages) {
             return $messages[0];
         } else {

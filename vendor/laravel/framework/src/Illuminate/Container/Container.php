@@ -5,6 +5,8 @@ use ArrayAccess;
 use ReflectionClass;
 use ReflectionParameter;
 
+class BindingResolutionException extends \Exception {}
+
 class Container implements ArrayAccess {
 
 	/**
@@ -103,7 +105,7 @@ class Container implements ArrayAccess {
 	/**
 	 * Register a binding with the container.
 	 *
-	 * @param  string|array  $abstract
+	 * @param  string  $abstract
 	 * @param  \Closure|string|null  $concrete
 	 * @param  bool  $shared
 	 * @return void
@@ -198,7 +200,7 @@ class Container implements ArrayAccess {
 	 * Wrap a Closure such that it is shared.
 	 *
 	 * @param  \Closure  $closure
-	 * @return \Closure
+	 * @return Closure
 	 */
 	public function share(Closure $closure)
 	{
@@ -395,8 +397,10 @@ class Container implements ArrayAccess {
 		{
 			return $this->reboundCallbacks[$abstract];
 		}
-
-		return array();
+		else
+		{
+			return array();
+		}
 	}
 
 	/**
@@ -467,8 +471,10 @@ class Container implements ArrayAccess {
 
 			return $abstract;
 		}
-
-		return $this->bindings[$abstract]['concrete'];
+		else
+		{
+			return $this->bindings[$abstract]['concrete'];
+		}
 	}
 
 	/**
@@ -588,10 +594,12 @@ class Container implements ArrayAccess {
 		{
 			return $parameter->getDefaultValue();
 		}
+		else
+		{
+			$message = "Unresolvable dependency resolving [$parameter] in class {$parameter->getDeclaringClass()->getName()}";
 
-		$message = "Unresolvable dependency resolving [$parameter] in class {$parameter->getDeclaringClass()->getName()}";
-
-		throw new BindingResolutionException($message);
+			throw new BindingResolutionException($message);
+		}
 	}
 
 	/**
@@ -618,8 +626,10 @@ class Container implements ArrayAccess {
 			{
 				return $parameter->getDefaultValue();
 			}
-
-			throw $e;
+			else
+			{
+				throw $e;
+			}
 		}
 	}
 
@@ -760,7 +770,9 @@ class Container implements ArrayAccess {
 	 */
 	protected function dropStaleInstances($abstract)
 	{
-		unset($this->instances[$abstract], $this->aliases[$abstract]);
+		unset($this->instances[$abstract]);
+
+		unset($this->aliases[$abstract]);
 	}
 
 	/**
@@ -837,30 +849,9 @@ class Container implements ArrayAccess {
 	 */
 	public function offsetUnset($key)
 	{
-		unset($this->bindings[$key], $this->instances[$key]);
-	}
+		unset($this->bindings[$key]);
 
-	/**
-	 * Dynamically access container services.
-	 *
-	 * @param  string  $key
-	 * @return mixed
-	 */
-	public function __get($key)
-	{
-		return $this[$key];
-	}
-
-	/**
-	 * Dynamically set container services.
-	 *
-	 * @param  string  $key
-	 * @param  mixed   $value
-	 * @return void
-	 */
-	public function __set($key, $value)
-	{
-		$this[$key] = $value;
+		unset($this->instances[$key]);
 	}
 
 }

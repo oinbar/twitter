@@ -38,7 +38,9 @@ class MailServiceProvider extends ServiceProvider {
 				$app['view'], $app['swift.mailer'], $app['events']
 			);
 
-			$this->setMailerDependencies($mailer, $app);
+			$mailer->setLogger($app['log'])->setQueue($app['queue']);
+
+			$mailer->setContainer($app);
 
 			// If a "from" address is set, we will set it on the mailer so that all mail
 			// messages sent by the applications will utilize the same "from" address
@@ -59,28 +61,6 @@ class MailServiceProvider extends ServiceProvider {
 
 			return $mailer;
 		});
-	}
-
-	/**
-	 * Set a few dependencies on the mailer instance.
-	 *
-	 * @param  \Illuminate\Mail\Mailer  $mailer
-	 * @param  \Illuminate\Foundation\Application  $app
-	 * @return void
-	 */
-	protected function setMailerDependencies($mailer, $app)
-	{
-		$mailer->setContainer($app);
-
-		if ($app->bound('log'))
-		{
-			$mailer->setLogger($app['log']);
-		}
-
-		if ($app->bound('queue'))
-		{
-			$mailer->setQueue($app['queue']);
-		}
 	}
 
 	/**
@@ -244,7 +224,7 @@ class MailServiceProvider extends ServiceProvider {
 	{
 		$this->app->bindShared('swift.transport', function($app)
 		{
-			return new LogTransport($app->make('Psr\Log\LoggerInterface'));
+			return new LogTransport($app['log']->getMonolog());
 		});
 	}
 

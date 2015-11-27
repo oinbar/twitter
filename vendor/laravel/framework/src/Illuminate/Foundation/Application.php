@@ -1,7 +1,6 @@
 <?php namespace Illuminate\Foundation;
 
 use Closure;
-use Stack\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Config\FileLoader;
@@ -28,7 +27,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 	 *
 	 * @var string
 	 */
-	const VERSION = '4.2.11';
+	const VERSION = '4.2.8';
 
 	/**
 	 * Indicates if the application has "booted".
@@ -225,7 +224,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 	/**
 	 * Get or check the current application environment.
 	 *
-	 * @param  mixed
+	 * @param  dynamic
 	 * @return string
 	 */
 	public function environment()
@@ -234,8 +233,10 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 		{
 			return in_array($this['env'], func_get_args());
 		}
-
-		return $this['env'];
+		else
+		{
+			return $this['env'];
+		}
 	}
 
 	/**
@@ -481,7 +482,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 	 * (Overriding Container::extend)
 	 *
 	 * @param  string   $abstract
-	 * @param  \Closure  $closure
+	 * @param  Closure  $closure
 	 * @return void
 	 *
 	 * @throws \InvalidArgumentException
@@ -654,7 +655,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 	{
 		$sessionReject = $this->bound('session.reject') ? $this['session.reject'] : null;
 
-		$client = (new Builder)
+		$client = (new \Stack\Builder)
                     ->push('Illuminate\Cookie\Guard', $this['encrypter'])
                     ->push('Illuminate\Cookie\Queue', $this['cookie'])
                     ->push('Illuminate\Session\Middleware', $this['session'], $sessionReject);
@@ -670,7 +671,7 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 	 * @param  \Stack\Builder
 	 * @return void
 	 */
-	protected function mergeCustomMiddlewares(Builder $stack)
+	protected function mergeCustomMiddlewares(\Stack\Builder $stack)
 	{
 		foreach ($this->middlewares as $middleware)
 		{
@@ -908,8 +909,10 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 		{
 			throw new NotFoundHttpException($message);
 		}
-
-		throw new HttpException($code, $message, null, $headers);
+		else
+		{
+			throw new HttpException($code, $message, null, $headers);
+		}
 	}
 
 	/**
@@ -1136,6 +1139,29 @@ class Application extends Container implements HttpKernelInterface, TerminableIn
 		{
 			$this->alias($key, $alias);
 		}
+	}
+
+	/**
+	 * Dynamically access application services.
+	 *
+	 * @param  string  $key
+	 * @return mixed
+	 */
+	public function __get($key)
+	{
+		return $this[$key];
+	}
+
+	/**
+	 * Dynamically set application services.
+	 *
+	 * @param  string  $key
+	 * @param  mixed   $value
+	 * @return void
+	 */
+	public function __set($key, $value)
+	{
+		$this[$key] = $value;
 	}
 
 }

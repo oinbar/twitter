@@ -98,11 +98,13 @@ class WorkCommand extends Command {
 				$this->option('sleep'), $this->option('tries')
 			);
 		}
-
-		return $this->worker->pop(
-			$connection, $queue, $delay,
-			$this->option('sleep'), $this->option('tries')
-		);
+		else
+		{
+			return $this->worker->pop(
+				$connection, $queue, $delay,
+				$this->option('sleep'), $this->option('tries')
+			);
+		}
 	}
 
 	/**

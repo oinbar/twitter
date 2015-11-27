@@ -3,8 +3,7 @@
 class Swift_Mime_EmbeddedFileTest extends Swift_Mime_AttachmentTest
 {
     public function testNestingLevelIsAttachment()
-    {
-        //Overridden
+    { //Overridden
     }
 
     public function testNestingLevelIsEmbedded()

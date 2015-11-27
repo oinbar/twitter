@@ -36,6 +36,13 @@ class Connection implements ConnectionInterface {
 	protected $username;
 
 	/**
+	 * The authentication credential set.
+	 *
+	 * @var array
+	 */
+	protected $auth;
+
+	/**
 	 * All of the defined tasks.
 	 *
 	 * @var array

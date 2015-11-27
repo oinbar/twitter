@@ -17,15 +17,12 @@ class Fluent implements ArrayAccess, ArrayableInterface, JsonableInterface, Json
 	/**
 	 * Create a new fluent container instance.
 	 *
-	 * @param  array|object	$attributes
+	 * @param  array  $attributes
 	 * @return void
 	 */
 	public function __construct($attributes = array())
 	{
-		foreach ($attributes as $key => $value)
-		{
-			$this->attributes[$key] = $value;
-		}
+		$this->attributes = $attributes;
 	}
 
 	/**

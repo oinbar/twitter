@@ -401,8 +401,10 @@ class MySqlGrammar extends Grammar {
 		{
 			return "double({$column->total}, {$column->places})";
 		}
-
-		return 'double';
+		else
+		{
+			return 'double';
+		}
 	}
 
 	/**

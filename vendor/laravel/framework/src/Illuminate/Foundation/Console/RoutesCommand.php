@@ -176,7 +176,7 @@ class RoutesCommand extends Command {
 	/**
 	 * Get after filters
 	 *
-	 * @param  \Illuminate\Routing\Route  $route
+	 * @param  Route  $route
 	 * @return string
 	 */
 	protected function getAfterFilters($route)
@@ -197,8 +197,10 @@ class RoutesCommand extends Command {
 		{
 			return null;
 		}
-
-		return $route;
+		else
+		{
+			return $route;
+		}
 	}
 
 	/**

@@ -131,7 +131,7 @@ class RedisStore extends TaggableStore implements StoreInterface {
 	/**
 	 * Begin executing a new tags operation.
 	 *
-	 * @param  array|mixed  $names
+	 * @param  array|dynamic  $names
 	 * @return \Illuminate\Cache\RedisTaggedCache
 	 */
 	public function tags($names)

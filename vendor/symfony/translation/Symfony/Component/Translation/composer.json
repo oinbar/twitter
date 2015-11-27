@@ -20,7 +20,6 @@
     },
     "require-dev": {
         "symfony/config": "~2.0",
-        "symfony/intl": "~2.3",
         "symfony/yaml": "~2.2"
     },
     "suggest": {

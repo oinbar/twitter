@@ -176,8 +176,6 @@ class Arr {
 	 */
 	public static function forget(&$array, $keys)
 	{
-		$original =& $array;
-
 		foreach ((array) $keys as $key)
 		{
 			$parts = explode('.', $key);
@@ -193,9 +191,6 @@ class Arr {
 			}
 
 			unset($array[array_shift($parts)]);
-
-			// clean up after each pass
-			$array =& $original;
 		}
 	}
 
@@ -355,5 +350,4 @@ class Arr {
 
 		return $filtered;
 	}
-
 }

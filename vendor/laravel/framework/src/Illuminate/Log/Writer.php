@@ -248,7 +248,7 @@ class Writer {
 	/**
 	 * Dynamically pass log calls into the writer.
 	 *
-	 * @param  mixed (level, param, param)
+	 * @param  dynamic (level, param, param)
 	 * @return mixed
 	 */
 	public function write()

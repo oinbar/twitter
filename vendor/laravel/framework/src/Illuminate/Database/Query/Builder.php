@@ -279,7 +279,7 @@ class Builder {
 		// one condition, so we'll add the join and call a Closure with the query.
 		if ($one instanceof Closure)
 		{
-			$this->joins[] = new JoinClause($type, $table);
+			$this->joins[] = new JoinClause($this, $type, $table);
 
 			call_user_func($one, end($this->joins));
 		}
@@ -289,7 +289,7 @@ class Builder {
 		// this simple join clauses attached to it. There is not a join callback.
 		else
 		{
-			$join = new JoinClause($type, $table);
+			$join = new JoinClause($this, $type, $table);
 
 			$this->joins[] = $join->on(
 				$one, $operator, $two, 'and', $where
@@ -1262,7 +1262,7 @@ class Builder {
 	/**
 	 * Indicate that the results, if cached, should use the given cache tags.
 	 *
-	 * @param  array|mixed  $cacheTags
+	 * @param  array|dynamic  $cacheTags
 	 * @return $this
 	 */
 	public function cacheTags($cacheTags)
@@ -1385,8 +1385,10 @@ class Builder {
 		{
 			return $cache->rememberForever($key, $callback);
 		}
-
-		return $cache->remember($key, $minutes, $callback);
+		else
+		{
+			return $cache->remember($key, $minutes, $callback);
+		}
 	}
 
 	/**
@@ -1550,8 +1552,10 @@ class Builder {
 		{
 			return $this->groupedPaginate($paginator, $perPage, $columns);
 		}
-
-		return $this->ungroupedPaginate($paginator, $perPage, $columns);
+		else
+		{
+			return $this->ungroupedPaginate($paginator, $perPage, $columns);
+		}
 	}
 
 	/**

@@ -68,7 +68,7 @@ class Migrator {
 	{
 		$this->notes = array();
 
-		$files = $this->getMigrationFiles($path);
+		$this->requireFiles($path, $files = $this->getMigrationFiles($path));
 
 		// Once we grab all of the migration files for the path, we will compare them
 		// against the migrations that have already been run for this package then
@@ -76,8 +76,6 @@ class Migrator {
 		$ran = $this->repository->getRan();
 
 		$migrations = array_diff($files, $ran);
-
-		$this->requireFiles($path, $migrations);
 
 		$this->runMigrationList($migrations, $pretend);
 	}

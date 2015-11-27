@@ -100,7 +100,7 @@ class RedirectResponse extends \Symfony\Component\HttpFoundation\RedirectRespons
 	/**
 	 * Flash an array of input to the session.
 	 *
-	 * @param  mixed  string
+	 * @param  dynamic  string
 	 * @return \Illuminate\Http\RedirectResponse
 	 */
 	public function exceptInput()
@@ -138,8 +138,10 @@ class RedirectResponse extends \Symfony\Component\HttpFoundation\RedirectRespons
 		{
 			return $provider->getMessageBag();
 		}
-
-		return new MessageBag((array) $provider);
+		else
+		{
+			return new MessageBag((array) $provider);
+		}
 	}
 
 	/**

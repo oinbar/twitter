@@ -70,10 +70,7 @@ class TaggedCache implements StoreInterface {
 	{
 		$minutes = $this->getMinutes($minutes);
 
-		if ( ! is_null($minutes))
-		{
-			$this->store->put($this->taggedItemKey($key), $value, $minutes);
-		}
+		return $this->store->put($this->taggedItemKey($key), $value, $minutes);
 	}
 
 	/**
@@ -134,11 +131,11 @@ class TaggedCache implements StoreInterface {
 	 * Remove an item from the cache.
 	 *
 	 * @param  string  $key
-	 * @return bool
+	 * @return void
 	 */
 	public function forget($key)
 	{
-		return $this->store->forget($this->taggedItemKey($key));
+		$this->store->forget($this->taggedItemKey($key));
 	}
 
 	/**
@@ -210,7 +207,7 @@ class TaggedCache implements StoreInterface {
 	 */
 	public function taggedItemKey($key)
 	{
-		return sha1($this->tags->getNamespace()).':'.$key;
+		return $this->getPrefix().sha1($this->tags->getNamespace()).':'.$key;
 	}
 
 	/**
@@ -227,18 +224,16 @@ class TaggedCache implements StoreInterface {
 	 * Calculate the number of minutes with the given duration.
 	 *
 	 * @param  \DateTime|int  $duration
-	 * @return int|null
+	 * @return int
 	 */
 	protected function getMinutes($duration)
 	{
 		if ($duration instanceof DateTime)
 		{
-			$fromNow = Carbon::instance($duration)->diffInMinutes();
-
-			return $fromNow > 0 ? $fromNow : null;
+			return max(0, Carbon::instance($duration)->diffInMinutes());
 		}
 
-		return is_string($duration) ? (int) $duration : $duration;
+		return is_string($duration) ? intval($duration) : $duration;
 	}
 
 }
